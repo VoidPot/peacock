@@ -8,31 +8,152 @@ generator client {
 }
 
 model User {
-  id    String @id @default(cuid())
-  email String @unique
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  password Password?
-  notes    Note[]
+  id              Int           @id @default(autoincrement())
+  mobileNumber    String        @unique
+  email           String?
+  firstName       String?
+  lastName        String?
+  nickName        String        @unique
+  avatar          String?
+  type            USER_TYPE     @default(MEMBER)
+  joinedAt        DateTime      @default(now())
+  password        Extra?
+  links           Link[]
+  transactionFrom Transaction[] @relation("from")
+  transactionTo   Transaction[] @relation("to")
+  summaries       Summary[]
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  deleted         Boolean       @default(false)
+  deletedAt       DateTime?
 }
 
-model Password {
-  hash String
-
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  userId String @unique
+enum USER_TYPE {
+  MEMBER
+  VENDOR
 }
 
-model Note {
-  id    String @id @default(cuid())
-  title String
-  body  String
+model Extra {
+  password       String?
+  passcode       String?
+  mobileVerified Boolean   @default(false)
+  isPasswordSet  Boolean   @default(false)
+  isPasscodeSet  Boolean   @default(false)
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         Int       @unique
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  deleted        Boolean   @default(false)
+  deletedAt      DateTime?
+}
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model Group {
+  id           Int           @id @default(autoincrement())
+  name         String
+  slug         String        @unique
+  amount       Float         @default(0)
+  period       PERIOD        @default(MONTH)
+  startAt      DateTime      @default(now())
+  endAt        DateTime?
+  links        Link[]
+  transactions Transaction[]
+  summaries    Summary[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  deleted      Boolean       @default(false)
+  deletedAt    DateTime?
+}
 
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  userId String
+enum PERIOD {
+  DAY
+  WEEK
+  MONTH
+  YEAR
+}
+
+model Link {
+  id        Int       @id @default(autoincrement())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  group     Group     @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  groupId   Int
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deleted   Boolean   @default(false)
+  deletedAt DateTime?
+
+  @@unique([userId, groupId])
+}
+
+model Transaction {
+  id        Int                @id @default(autoincrement())
+  type      TRANSACTION_TYPE   @default(DEPOSIT)
+  method    TRANSACTION_METHOD @default(ACCOUNT)
+  mode      TRANSACTION_MODE   @default(MEMBERS_PERIODIC_DEPOSIT)
+  dot       DateTime           @default(now())
+  amount    Float              @default(0)
+  from      User               @relation(name: "from", fields: [fromId], references: [id])
+  fromId    Int
+  to        User               @relation(name: "to", fields: [toId], references: [id])
+  toId      Int
+  group     Group?             @relation(fields: [groupId], references: [id])
+  groupId   Int?
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+  deleted   Boolean            @default(false)
+  deletedAt DateTime?
+}
+
+enum TRANSACTION_TYPE {
+  TRANSFER
+  DEPOSIT
+  WITHDRAWAL
+}
+
+enum TRANSACTION_METHOD {
+  CASH
+  ACCOUNT
+  UPI
+  BANK
+}
+
+enum TRANSACTION_MODE {
+  MEMBERS_PERIODIC_DEPOSIT
+  MEMBERS_WITHDRAW
+  NEW_MEMBER_PAST_TALLY
+  INTER_CASH_TRANSFER
+  VENDOR_PERIODIC_INVEST
+  VENDOR_PERIODIC_RETURN
+  VENDOR_INVEST
+  VENDOR_RETURN
+  OTHER_EXPENDITURE
+}
+
+model Summary {
+  id        Int          @id @default(autoincrement())
+  type      SUMMARY_TYPE @default(DEFAULT)
+  deposit   Float        @default(0)
+  withdraw  Float        @default(0)
+  transfer  Float        @default(0)
+  holding   Float        @default(0)
+  payload   Json?
+  user      User?        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int?
+  group     Group?       @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  groupId   Int?
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  deleted   Boolean      @default(false)
+  deletedAt DateTime?
+}
+
+enum SUMMARY_TYPE {
+  DEFAULT
+  GROUPS
+  GROUP
+  USERS
+  USER
+  PERIODIC_DEFAULT
+  PERIODIC_GROUP
+  PERIODIC_USER
 }
