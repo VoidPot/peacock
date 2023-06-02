@@ -7,7 +7,7 @@ export default function Index() {
   return (
     <div className="flex h-auto min-h-screen w-full select-none flex-col-reverse items-center justify-end bg-[#b8e1d6] align-middle lg:flex-row lg:justify-center lg:gap-20 lg:bg-white">
       <div className="flex h-full w-full flex-col items-center justify-center gap-6 rounded-t-3xl bg-white lg:w-1/2 lg:items-end">
-        <div className="m-auto flex flex-col items-end gap-4 py-20 lg:mr-0">
+        <div className="m-auto flex flex-col items-end gap-4 pb-8 pt-20 lg:mr-0 lg:p-0">
           <h1 className="text-right font-serif text-3xl font-normal leading-normal text-gray-800 xl:text-5xl xl:leading-normal">
             Start your journey with <br />
             <span className="font-brand text-4xl font-black uppercase text-green-500 xl:text-6xl">
