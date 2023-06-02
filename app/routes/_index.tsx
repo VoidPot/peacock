@@ -1,115 +1,47 @@
-import { Link, NavLink, Outlet } from "@remix-run/react";
-import { Navbar, Footer } from "flowbite-react";
+import { Link } from "@remix-run/react";
 import type { V2_MetaFunction } from "@remix-run/node";
 
-export const meta: V2_MetaFunction = () => [{ title: "Remix Notes" }];
+export const meta: V2_MetaFunction = () => [{ title: "Peacock Club" }];
 
 export default function Index() {
   return (
-    <div className="flex h-full w-full items-center justify-center align-middle gap-12 lg:flex-row flex-col-reverse">
-      <div className="flex min-w-max gap-12 text-center lg:text-left">
-        <h1 className="font-normal text-3xl lg:text-5xl text-gray-900 dark:text-white font-serif leading-normal lg:leading-normal">
-          Start your journey with <br />
-          <span className="text-4xl lg:text-6xl font-brand font-black uppercase text-green-500">
-            Peacock Club
-          </span>
-        </h1>
+    <div className="flex h-auto min-h-screen w-full select-none flex-col-reverse items-center justify-end bg-[#b8e1d6] align-middle lg:flex-row lg:justify-center lg:gap-20 lg:bg-white">
+      <div className="flex h-full w-full flex-col items-center justify-center gap-6 rounded-t-3xl bg-white lg:w-1/2 lg:items-end">
+        <div className="m-auto flex flex-col items-end gap-4 py-20 lg:mr-0">
+          <h1 className="text-right font-serif text-3xl font-normal leading-normal text-gray-800 xl:text-5xl xl:leading-normal">
+            Start your journey with <br />
+            <span className="font-brand text-4xl font-black uppercase text-green-500 xl:text-6xl">
+              Peacock Club
+            </span>
+          </h1>
+          <Link
+            to={"/dashboard"}
+            type="button"
+            className="flex h-16 w-16 items-center justify-center rounded-full bg-[#349b7b] hover:bg-[#2a7d63]"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              className="h-10 w-10 text-white"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm4.28 10.28a.75.75 0 000-1.06l-3-3a.75.75 0 10-1.06 1.06l1.72 1.72H8.25a.75.75 0 000 1.5h5.69l-1.72 1.72a.75.75 0 101.06 1.06l3-3z"
+                clip-rule="evenodd"
+              />
+            </svg>
+
+            <span className="sr-only">Icon description</span>
+          </Link>
+        </div>
       </div>
-      <div className="w-3/5 lg:w-1/5 relative">
+      <div className="flex w-auto flex-grow items-center justify-center py-10 lg:w-1/2 lg:items-start lg:justify-start lg:py-0">
         <img
-          className="w-full rounded-md"
-          src="https://images.unsplash.com/photo-1536514900905-0d5511b9d489?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=700&h=800&q=80"
+          className="h-auto max-h-80 w-auto rounded-md lg:h-auto lg:max-h-full lg:w-3/4"
+          src="/peacock.png"
           alt="Peacock Bird"
         />
-
-          <div className="absolute bottom-0 left-0">
-            <svg
-              className="ml-auto h-auto w-2/3 text-white dark:text-gray-800"
-              width="630"
-              height="451"
-              viewBox="0 0 630 451"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <rect
-                x="531"
-                y="352"
-                width="99"
-                height="99"
-                fill="currentColor"
-              />
-              <rect
-                x="140"
-                y="352"
-                width="106"
-                height="99"
-                fill="currentColor"
-              />
-              <rect
-                x="482"
-                y="402"
-                width="64"
-                height="49"
-                fill="currentColor"
-              />
-              <rect
-                x="433"
-                y="402"
-                width="63"
-                height="49"
-                fill="currentColor"
-              />
-              <rect
-                x="384"
-                y="352"
-                width="49"
-                height="50"
-                fill="currentColor"
-              />
-              <rect
-                x="531"
-                y="328"
-                width="50"
-                height="50"
-                fill="currentColor"
-              />
-              <rect x="99" y="303" width="49" height="58" fill="currentColor" />
-              <rect x="99" y="352" width="49" height="50" fill="currentColor" />
-              <rect x="99" y="392" width="49" height="59" fill="currentColor" />
-              <rect x="44" y="402" width="66" height="49" fill="currentColor" />
-              <rect
-                x="234"
-                y="402"
-                width="62"
-                height="49"
-                fill="currentColor"
-              />
-              <rect
-                x="334"
-                y="303"
-                width="50"
-                height="49"
-                fill="currentColor"
-              />
-              <rect x="581" width="49" height="49" fill="currentColor" />
-              <rect x="581" width="49" height="64" fill="currentColor" />
-              <rect
-                x="482"
-                y="123"
-                width="49"
-                height="49"
-                fill="currentColor"
-              />
-              <rect
-                x="507"
-                y="124r"
-                width="49"
-                height="24"
-                fill="currentColor"
-              />
-              <rect x="531" y="49" width="99" height="99" fill="currentColor" />
-            </svg>
-          </div>
       </div>
     </div>
   );

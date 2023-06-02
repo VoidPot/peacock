@@ -1,6 +1,5 @@
 import { cssBundleHref } from "@remix-run/css-bundle";
-import type { LinksFunction, LoaderArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
+import type { LinksFunction } from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -11,7 +10,6 @@ import {
 } from "@remix-run/react";
 
 import stylesheet from "~/tailwind.css";
-import BottomNav from "~/components/organisms/bottom-nav";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
@@ -20,16 +18,15 @@ export const links: LinksFunction = () => [
 
 export default function App() {
   return (
-    <html lang="en" className="dark h-full">
+    <html lang="en" className="h-full w-full">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <Meta />
         <Links />
       </head>
-      <body className="container m-auto h-full bg-white dark:bg-gray-800">
+      <body className="m-auto h-full w-full bg-white dark:bg-gray-900">
         <Outlet />
-        <BottomNav />
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
