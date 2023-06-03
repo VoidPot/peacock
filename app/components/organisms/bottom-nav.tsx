@@ -1,17 +1,17 @@
-import type { V2_MetaFunction } from "@remix-run/node";
-
-export const meta: V2_MetaFunction = () => [{ title: "Remix Notes" }];
+import { Link } from "@remix-run/react";
 
 export default function BottomNav() {
   return (
-    <div className="fixed bottom-0 left-0 z-50 h-16 w-full border-t border-gray-200 bg-[#fbfbfb] dark:border-gray-600 dark:bg-gray-700">
-      <div className="mx-auto grid h-full max-w-lg grid-cols-4 font-medium">
-        <button
-          type="button"
-          className="group inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800"
+    <div className="fixed bottom-4 left-1/2 z-50 h-16 w-full max-w-lg -translate-x-1/2 rounded-full border border-gray-200 bg-white dark:border-gray-600 dark:bg-gray-700">
+      <div className="mx-auto grid h-full max-w-lg grid-cols-5">
+        <Link
+          to={"/"}
+          data-tooltip-target="tooltip-home"
+          type="Link"
+          className="group inline-flex flex-col items-center justify-center rounded-l-full px-5 hover:bg-gray-50 dark:hover:bg-gray-800"
         >
           <svg
-            className="mb-1 h-6 w-6 text-gray-500 group-hover:text-[#349b7b] dark:text-gray-400 dark:group-hover:text-blue-500"
+            className="mb-1 h-6 w-6 text-gray-500 group-hover:text-[#349b7b] dark:text-gray-400 dark:group-hover:text-[#2a7d63]"
             fill="currentColor"
             viewBox="0 0 20 20"
             xmlns="http://www.w3.org/2000/svg"
@@ -19,70 +19,136 @@ export default function BottomNav() {
           >
             <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
           </svg>
-          <span className="text-sm text-gray-500 group-hover:text-[#349b7b] dark:text-gray-400 dark:group-hover:text-blue-500">
-            Home
-          </span>
-        </button>
-        <button
-          type="button"
+          <span className="sr-only">Home</span>
+        </Link>
+        <div
+          id="tooltip-home"
+          role="tooltip"
+          className="tooltip invisible absolute z-10 inline-block rounded-lg bg-gray-900 px-3 py-2 text-sm font-medium text-white opacity-0 shadow-sm transition-opacity duration-300 dark:bg-gray-700"
+        >
+          Home
+          <div className="tooltip-arrow" data-popper-arrow></div>
+        </div>
+        <Link
+          to={"/dashboard"}
+          data-tooltip-target="tooltip-wallet"
+          type="Link"
           className="group inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800"
         >
           <svg
-            className="mb-1 h-6 w-6 text-gray-500 group-hover:text-[#349b7b] dark:text-gray-400 dark:group-hover:text-blue-500"
-            fill="currentColor"
-            viewBox="0 0 20 20"
             xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
-            <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"></path>
-            <path
-              clip-rule="evenodd"
-              fill-rule="evenodd"
-              d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z"
-            ></path>
-          </svg>
-          <span className="text-sm text-gray-500 group-hover:text-[#349b7b] dark:text-gray-400 dark:group-hover:text-blue-500">
-            Wallet
-          </span>
-        </button>
-        <button
-          type="button"
-          className="group inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800"
-        >
-          <svg
-            className="mb-1 h-6 w-6 text-gray-500 group-hover:text-[#349b7b] dark:text-gray-400 dark:group-hover:text-blue-500"
+            viewBox="0 0 24 24"
             fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
-            <path d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z"></path>
-          </svg>
-          <span className="text-sm text-gray-500 group-hover:text-[#349b7b] dark:text-gray-400 dark:group-hover:text-blue-500">
-            Settings
-          </span>
-        </button>
-        <button
-          type="button"
-          className="group inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800"
-        >
-          <svg
-            className="mb-1 h-6 w-6 text-gray-500 group-hover:text-[#349b7b] dark:text-gray-400 dark:group-hover:text-blue-500"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
+            className="mb-1 h-6 w-6 text-gray-500 group-hover:text-[#349b7b] dark:text-gray-400 dark:group-hover:text-[#2a7d63]"
           >
             <path
-              clip-rule="evenodd"
-              fill-rule="evenodd"
-              d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
-            ></path>
+              fillRule="evenodd"
+              d="M1.5 7.125c0-1.036.84-1.875 1.875-1.875h6c1.036 0 1.875.84 1.875 1.875v3.75c0 1.036-.84 1.875-1.875 1.875h-6A1.875 1.875 0 011.5 10.875v-3.75zm12 1.5c0-1.036.84-1.875 1.875-1.875h5.25c1.035 0 1.875.84 1.875 1.875v8.25c0 1.035-.84 1.875-1.875 1.875h-5.25a1.875 1.875 0 01-1.875-1.875v-8.25zM3 16.125c0-1.036.84-1.875 1.875-1.875h5.25c1.036 0 1.875.84 1.875 1.875v2.25c0 1.035-.84 1.875-1.875 1.875h-5.25A1.875 1.875 0 013 18.375v-2.25z"
+              clipRule="evenodd"
+            />
           </svg>
-          <span className="text-sm text-gray-500 group-hover:text-[#349b7b] dark:text-gray-400 dark:group-hover:text-blue-500">
-            Profile
-          </span>
-        </button>
+
+          <span className="sr-only">Group</span>
+        </Link>
+        <div
+          id="tooltip-wallet"
+          role="tooltip"
+          className="tooltip invisible absolute z-10 inline-block rounded-lg bg-gray-900 px-3 py-2 text-sm font-medium text-white opacity-0 shadow-sm transition-opacity duration-300 dark:bg-gray-700"
+        >
+          Groups
+          <div className="tooltip-arrow" data-popper-arrow></div>
+        </div>
+        <div className="flex items-center justify-center">
+          <Link
+            to="/"
+            data-tooltip-target="tooltip-new"
+            type="Link"
+            className="group inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#349b7b] font-medium hover:bg-[#2a7d63] focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800"
+          >
+            <svg
+              className="h-6 w-6 text-white"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <path
+                clip-rule="evenodd"
+                fill-rule="evenodd"
+                d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+              ></path>
+            </svg>
+            <span className="sr-only">New item</span>
+          </Link>
+        </div>
+        <div
+          id="tooltip-new"
+          role="tooltip"
+          className="tooltip invisible absolute z-10 inline-block rounded-lg bg-gray-900 px-3 py-2 text-sm font-medium text-white opacity-0 shadow-sm transition-opacity duration-300 dark:bg-gray-700"
+        >
+          Member
+          <div className="tooltip-arrow" data-popper-arrow></div>
+        </div>
+        <Link
+          to={"/dashboard/members"}
+          data-tooltip-target="tooltip-settings"
+          type="Link"
+          className="group inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            className="mb-1 h-6 w-6 text-gray-500 group-hover:text-[#349b7b] dark:text-gray-400 dark:group-hover:text-[#2a7d63]"
+          >
+            <path
+              fillRule="evenodd"
+              d="M8.25 6.75a3.75 3.75 0 117.5 0 3.75 3.75 0 01-7.5 0zM15.75 9.75a3 3 0 116 0 3 3 0 01-6 0zM2.25 9.75a3 3 0 116 0 3 3 0 01-6 0zM6.31 15.117A6.745 6.745 0 0112 12a6.745 6.745 0 016.709 7.498.75.75 0 01-.372.568A12.696 12.696 0 0112 21.75c-2.305 0-4.47-.612-6.337-1.684a.75.75 0 01-.372-.568 6.787 6.787 0 011.019-4.38z"
+              clipRule="evenodd"
+            />
+            <path d="M5.082 14.254a8.287 8.287 0 00-1.308 5.135 9.687 9.687 0 01-1.764-.44l-.115-.04a.563.563 0 01-.373-.487l-.01-.121a3.75 3.75 0 013.57-4.047zM20.226 19.389a8.287 8.287 0 00-1.308-5.135 3.75 3.75 0 013.57 4.047l-.01.121a.563.563 0 01-.373.486l-.115.04c-.567.2-1.156.349-1.764.441z" />
+          </svg>
+
+          <span className="sr-only">Members</span>
+        </Link>
+        <div
+          id="tooltip-settings"
+          role="tooltip"
+          className="tooltip invisible absolute z-10 inline-block rounded-lg bg-gray-900 px-3 py-2 text-sm font-medium text-white opacity-0 shadow-sm transition-opacity duration-300 dark:bg-gray-700"
+        >
+          Members
+          <div className="tooltip-arrow" data-popper-arrow></div>
+        </div>
+        <Link
+          to={"/dashboard/tranactio"}
+          data-tooltip-target="tooltip-profile"
+          type="Link"
+          className="group inline-flex flex-col items-center justify-center rounded-r-full px-5 hover:bg-gray-50 dark:hover:bg-gray-800"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            className="mb-1 h-6 w-6 text-gray-500 group-hover:text-[#349b7b] dark:text-gray-400 dark:group-hover:text-[#2a7d63]"
+          >
+            <path d="M4.5 3.75a3 3 0 00-3 3v.75h21v-.75a3 3 0 00-3-3h-15z" />
+            <path
+              fillRule="evenodd"
+              d="M22.5 9.75h-21v7.5a3 3 0 003 3h15a3 3 0 003-3v-7.5zm-18 3.75a.75.75 0 01.75-.75h6a.75.75 0 010 1.5h-6a.75.75 0 01-.75-.75zm.75 2.25a.75.75 0 000 1.5h3a.75.75 0 000-1.5h-3z"
+              clipRule="evenodd"
+            />
+          </svg>
+
+          <span className="sr-only">Transaction</span>
+        </Link>
+        <div
+          id="tooltip-profile"
+          role="tooltip"
+          className="tooltip invisible absolute z-10 inline-block rounded-lg bg-gray-900 px-3 py-2 text-sm font-medium text-white opacity-0 shadow-sm transition-opacity duration-300 dark:bg-gray-700"
+        >
+          Transaction
+          <div className="tooltip-arrow" data-popper-arrow></div>
+        </div>
       </div>
     </div>
   );

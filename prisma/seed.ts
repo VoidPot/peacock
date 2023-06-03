@@ -81,6 +81,7 @@ const transactionSeedMap = (users: any[], group: any) => {
   return transactions;
 };
 async function seed() {
+  await prisma.summary.deleteMany();
   await prisma.transaction.deleteMany();
   await prisma.link.deleteMany();
   await prisma.group.deleteMany();

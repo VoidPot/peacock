@@ -15,7 +15,7 @@ export default function NotesPage() {
           </NavLink>
         </div>
       </nav>
-      <article className="grow bg-transparent p-6 text-gray-800 lg:p-8">
+      <article className="h-full w-full grow bg-transparent p-6 text-gray-800 lg:p-8">
         <Outlet />
       </article>
       <BottomNav />
