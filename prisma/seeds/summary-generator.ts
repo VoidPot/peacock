@@ -31,15 +31,16 @@ const getTransactionData = async () => {
     const from = each.from;
     const to = each.to;
     const group = each?.group;
+    const groupId = group ? group?.id : 0;
 
     if (each.from.type === "MEMBER") {
-      if (!data[`member_${from.id}`]) {
-        data[`member_${from.id}`] = { ...initial };
+      if (!data[`member_${from.id}_${groupId}`]) {
+        data[`member_${from.id}_${groupId}`] = { ...initial };
       }
     }
     if (each.to.type === "MEMBER") {
-      if (!data[`member_${to.id}`]) {
-        data[`member_${to.id}`] = { ...initial };
+      if (!data[`member_${to.id}_${groupId}`]) {
+        data[`member_${to.id}_${groupId}`] = { ...initial };
       }
     }
 
@@ -61,11 +62,11 @@ const getTransactionData = async () => {
     }
 
     if (each.mode === "INTER_CASH_TRANSFER") {
-      data[`member_${to.id}`].hold += each.amount;
-      data[`member_${from.id}`].hold -= each.amount;
+      data[`member_${to.id}_${groupId}`].hold += each.amount;
+      data[`member_${from.id}_${groupId}`].hold -= each.amount;
 
-      data[`member_${to.id}`].transfer += each.amount;
-      data[`member_${from.id}`].transfer -= each.amount;
+      data[`member_${to.id}_${groupId}`].transfer += each.amount;
+      data[`member_${from.id}_${groupId}`].transfer -= each.amount;
 
       data["all"].transfer += each.amount;
 
@@ -77,9 +78,9 @@ const getTransactionData = async () => {
     }
 
     if (each.mode === "MEMBERS_PERIODIC_DEPOSIT") {
-      data[`member_${from.id}`].in += each.amount;
-      data[`member_${to.id}`].hold += each.amount;
-      data[`member_${from.id}`].month += 1;
+      data[`member_${from.id}_${groupId}`].in += each.amount;
+      data[`member_${to.id}_${groupId}`].hold += each.amount;
+      data[`member_${from.id}_${groupId}`].month += 1;
 
       data["all"].in += each.amount;
       data["all"].hold += each.amount;
@@ -96,8 +97,8 @@ const getTransactionData = async () => {
     }
 
     if (each.mode === "MEMBERS_WITHDRAW") {
-      data[`member_${from.id}`].hold -= each.amount;
-      data[`member_${to.id}`].out += each.amount;
+      data[`member_${from.id}_${groupId}`].hold -= each.amount;
+      data[`member_${to.id}_${groupId}`].out += each.amount;
 
       data["all"].out += each.amount;
       data["all"].hold -= each.amount;
@@ -114,8 +115,8 @@ const getTransactionData = async () => {
     }
 
     if (each.mode === "NEW_MEMBER_PAST_TALLY") {
-      data[`member_${from.id}`].in += each.amount;
-      data[`member_${to.id}`].hold += each.amount;
+      data[`member_${from.id}_${groupId}`].in += each.amount;
+      data[`member_${to.id}_${groupId}`].hold += each.amount;
 
       data["all"].in += each.amount;
       data["all"].hold += each.amount;
@@ -132,7 +133,7 @@ const getTransactionData = async () => {
     }
 
     if (each.mode === "VENDOR_PERIODIC_INVEST") {
-      data[`member_${from.id}`].hold -= each.amount;
+      data[`member_${from.id}_${groupId}`].hold -= each.amount;
       data[`vendor_${to.id}`].out += each.amount;
       data[`vendor_${to.id}`].month += 1;
 
@@ -151,7 +152,7 @@ const getTransactionData = async () => {
     }
 
     if (each.mode === "VENDOR_INVEST") {
-      data[`member_${from.id}`].hold -= each.amount;
+      data[`member_${from.id}_${groupId}`].hold -= each.amount;
       data[`vendor_${to.id}`].out += each.amount;
 
       data["all"].out += each.amount;
@@ -170,7 +171,7 @@ const getTransactionData = async () => {
 
     if (each.mode === "VENDOR_PERIODIC_RETURN") {
       data[`vendor_${from.id}`].in += each.amount;
-      data[`member_${to.id}`].hold += each.amount;
+      data[`member_${to.id}_${groupId}`].hold += each.amount;
       data[`vendor_${from.id}`].rMonth += 1;
 
       data["all"].in += each.amount;
@@ -189,7 +190,7 @@ const getTransactionData = async () => {
 
     if (each.mode === "VENDOR_RETURN") {
       data[`vendor_${from.id}`].in += each.amount;
-      data[`member_${to.id}`].hold += each.amount;
+      data[`member_${to.id}_${groupId}`].hold += each.amount;
 
       data["all"].in += each.amount;
       data["all"].hold += each.amount;
@@ -206,7 +207,7 @@ const getTransactionData = async () => {
     }
 
     if (each.mode === "OTHER_EXPENDITURE") {
-      data[`member_${from.id}`].hold -= each.amount;
+      data[`member_${from.id}_${groupId}`].hold -= each.amount;
       data[`vendor_${to.id}`].out += each.amount;
 
       data["all"].out += each.amount;
@@ -267,6 +268,10 @@ const generateSummary = async () => {
         if (keys[0] === "member") {
           itemData.type = "MEMBER";
           itemData.userId = Number(keys[1]);
+
+          if (keys[2] !== 0) {
+            itemData.groupId = Number(keys[2]);
+          }
         }
         if (keys[0] === "group") {
           itemData.type = "GROUP";
