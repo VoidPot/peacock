@@ -22,6 +22,7 @@ model User {
   transactionFrom Transaction[] @relation("from")
   transactionTo   Transaction[] @relation("to")
   summaries       Summary[]
+  passbook        Passbook[]
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
   deleted         Boolean       @default(false)
@@ -58,6 +59,7 @@ model Group {
   links        Link[]
   transactions Transaction[]
   summaries    Summary[]
+  passbook     Passbook[]
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   deleted      Boolean       @default(false)
@@ -155,4 +157,46 @@ enum SUMMARY_TYPE {
   ALL_GROUP
   ALL_MEMBER
   ALL_VENDOR
+}
+
+model Passbook {
+  id           Int               @id @default(autoincrement())
+  entryOf      PASSBOOK_ENTRY_OF @default(CLUB)
+  termDeposit  Float             @default(0)
+  deposit      Float             @default(0)
+  totalDeposit Float             @default(0)
+  withdraw     Float             @default(0)
+  termBalance  Float             @default(0)
+  balance      Float             @default(0)
+  totalBalance Float             @default(0)
+  holding      Float             @default(0)
+  termInvest   Float             @default(0)
+  invest       Float             @default(0)
+  totalInvest  Float             @default(0)
+  termReturns  Float             @default(0)
+  returns      Float             @default(0)
+  totalReturns Float             @default(0)
+  termExpense  Float             @default(0)
+  expense      Float             @default(0)
+  totalExpense Float             @default(0)
+  totalProfit  Float             @default(0)
+  months       Int               @default(0)
+  returnMonths Int               @default(0)
+  user         User?             @relation(fields: [userId], references: [id])
+  userId       Int?
+  group        Group?            @relation(fields: [groupId], references: [id])
+  groupId      Int?
+}
+
+enum PASSBOOK_ENTRY_OF {
+  ONE_MEMBER
+  ONE_GROUP
+  ONE_VENDOR
+  MEMBER_GROUP
+  VENDOR_GROUP
+  ALL_MEMBER
+  ALL_VENDOR
+  ALL_GROUP
+  NON_GROUP
+  CLUB
 }

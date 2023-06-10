@@ -1,4 +1,6 @@
-import { prisma } from "~/db.server";
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
 
 const getTransactionData = async () => {
   const transactions = await prisma.transaction.findMany({
@@ -10,14 +12,15 @@ const getTransactionData = async () => {
   });
 
   const groups = await prisma.group.findMany();
-  const member = await prisma.user.findMany({
-    where: {
-      type: "MEMBER",
-    },
-  });
-  const vendor = await prisma.user.findMany({
-    where: {
-      type: "VENDOR",
+
+  const users = await prisma.user.findMany({
+    where: {},
+    include: {
+      links: {
+        include: {
+          group: true,
+        },
+      },
     },
   });
 
@@ -37,19 +40,51 @@ const getTransactionData = async () => {
     group: { ...initial },
   };
 
-  const groupIds = groups.map((e) => [e.id, {}]);
-
-  const memberIds = member.map((e) => [e.id, {}]);
-
-  const extract = {
-    member: {
-      ...memberIds.re,
-    },
+  const start = {
+    periodicDeposit: 0,
+    deposit: 0,
+    withdraw: 0,
+    transfer: 0,
+    holding: 0,
+    investMonths: 0,
+    returnMonths: 0,
+    groupId: null,
+    userId: null,
   };
 
-  groups.forEach((group) => {
-    data[`group_${group.id}`] = { ...initial };
-  });
+  const groupIds = Object.fromEntries(groups.map((e) => [e.id, { ...start }]));
+  const memberIds = Object.fromEntries(
+    users
+      .filter((e) => e.type === "MEMBER")
+      .map((e) => [
+        e.id,
+        { none: { ...start }, all: { ...start }, ...groupIds },
+      ])
+  );
+  const vendorIds = Object.fromEntries(
+    users
+      .filter((e) => e.type === "VENDOR")
+      .map((e) => [
+        e.id,
+        { none: { ...start }, all: { ...start }, ...groupIds },
+      ])
+  );
+
+  const extract = {
+    all: { ...start },
+    group: {
+      all: { ...start },
+      ...groupIds,
+    },
+    member: {
+      all: { ...start },
+      ...memberIds,
+    },
+    vendor: {
+      all: { ...start },
+      ...vendorIds,
+    },
+  };
 
   transactions.forEach((each) => {
     const from = each.from;

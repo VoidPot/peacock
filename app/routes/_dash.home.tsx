@@ -21,7 +21,6 @@ export const loader = async ({ request }: LoaderArgs) => {
 export default function IndexPage() {
   const { groups, summaries, membersCount, summary } =
     useLoaderData<typeof loader>();
-  console.log({ groups, summaries, membersCount, summary });
   const clubDate = getClubTimes();
   return (
     <>

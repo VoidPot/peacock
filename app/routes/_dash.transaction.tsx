@@ -10,7 +10,6 @@ export const loader = async ({ request }: LoaderArgs) => {
   const summaries = await getSummaries();
   const summary = await getOneSummary({ type: "DEFAULT" });
   const membersCount = await getMembersCount();
-  console.log({ summaries });
   return json({ summaries, groups, summary, membersCount });
 };
 
@@ -25,7 +24,6 @@ function monthDiff(d1: any, d2: any) {
 export default function IndexPage() {
   const { groups, summaries, membersCount, summary } =
     useLoaderData<typeof loader>();
-  console.log({ groups, summaries, membersCount, summary });
   return (
     <div className="h-full w-full">
       <div className="mb-8 grid gap-6 md:grid-cols-2 xl:grid-cols-4">

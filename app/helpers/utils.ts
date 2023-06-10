@@ -29,3 +29,37 @@ export const getFirstLetterUpperCase = (str: string) => {
   const spaced = str.split("_").join(" ").toLowerCase();
   return spaced.charAt(0).toUpperCase() + spaced.substring(1);
 };
+
+export const getMonthYear = (input: any = new Date()) => {
+  const date = moment(input);
+  return date.format("MMM YYYY");
+};
+
+export const formatMoney = (input: any = 0) => {
+  return `${Number(input).toLocaleString("en-IN") || 0} ₹`;
+};
+
+export const getMemberSummaryAmount = (
+  member: any,
+  key: string = "deposit"
+) => {
+  return formatMoney(
+    member.summaries
+      .map((each: any) => each[key])
+      .reduce((a: any, e: any) => {
+        a = a + e;
+        return a;
+      }, 0)
+  );
+};
+
+export const getMemberBalance = (member: any, key: string = "deposit") => {
+  return formatMoney(
+    member.summaries
+      .map((each: any) => each[key])
+      .reduce((a: any, e: any) => {
+        a = a + e;
+        return a;
+      }, 0)
+  );
+};

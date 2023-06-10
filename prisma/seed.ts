@@ -1,9 +1,17 @@
 import type { Prisma, TRANSACTION_TYPE } from "@prisma/client";
 import { PrismaClient } from "@prisma/client";
 import seedData from "./seeds/seed-data";
-import generateSummary from "./seeds/summary-generator";
+import generateSummary from "../app/models/summary-generate.server";
+import { passbookMiddleware } from "~/models/passbook.server";
+import { addPassbookEntry } from "./seeds/passbook-entry";
 
 const prisma = new PrismaClient();
+
+prisma.$use(async (param, next) => {
+  const result = await next(param);
+  await passbookMiddleware(param, result);
+  return result;
+});
 
 const userSeedMap = () => {
   const users: Prisma.Enumerable<Prisma.UserCreateManyInput> =
@@ -81,6 +89,7 @@ const transactionSeedMap = (users: any[], group: any) => {
   return transactions;
 };
 async function seed() {
+  await prisma.passbook.deleteMany();
   await prisma.summary.deleteMany();
   await prisma.transaction.deleteMany();
   await prisma.link.deleteMany();
@@ -118,6 +127,13 @@ async function seed() {
     },
   });
 
+  const groups = await prisma.group.findMany();
+  const passbookEntries = addPassbookEntry(users, groups);
+  await prisma.passbook.createMany({
+    data: passbookEntries,
+    skipDuplicates: true,
+  });
+
   const transactions = transactionSeedMap(users, alphaGroup);
 
   await Promise.all(
@@ -128,7 +144,7 @@ async function seed() {
     })
   );
 
-  await generateSummary();
+  // await generateSummary();
   return;
 }
 

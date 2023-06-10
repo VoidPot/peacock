@@ -12,7 +12,7 @@ interface MenuItemProps {
 
 function MenuItem({ hed, pathName, iconName, onClick }: MenuItemProps) {
   const matches = useMatches();
-  console.log({ matches });
+  // console.log({ matches });
 
   const isActive = false;
 

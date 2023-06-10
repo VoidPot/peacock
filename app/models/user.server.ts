@@ -5,6 +5,26 @@ export async function getMembers() {
   return prisma.user.findMany({ where: { type: "MEMBER" } });
 }
 
+export async function getMembersWithSummary() {
+  const members = await prisma.user.findMany({
+    where: { type: "MEMBER", deleted: false },
+    include: {
+      summaries: {
+        include: {
+          group: true,
+        },
+      },
+      links: {
+        include: {
+          group: true,
+        },
+      },
+    },
+  });
+
+  return members;
+}
+
 export async function getVendors() {
   return prisma.user.findMany({ where: { type: "VENDOR" } });
 }

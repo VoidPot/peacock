@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import invariant from "tiny-invariant";
+import { passbookMiddleware } from "./models/passbook.server";
 
 let prisma: PrismaClient;
 
@@ -56,6 +57,38 @@ function getClient() {
       },
     },
   });
+
+  client.$use(async (param, next) => {
+    const result = await next(param);
+    await passbookMiddleware(param, result);
+    return result;
+  });
+
+  client.$use((params, next) => {
+    // Check incoming query type
+    if (params.action == "delete") {
+      // Delete queries
+      // Change action to an update
+      params.action = "update";
+      params.args["data"] = { deleted: true, deletedAt: new Date() };
+    }
+    if (params.action == "deleteMany") {
+      // Delete many queries
+      params.action = "updateMany";
+      if (params.args === undefined) {
+        params.args = {};
+      }
+      if (params.args?.data !== undefined) {
+        params.args.data["deleted"] = true;
+        params.args.data["deletedAt"] = new Date();
+      } else {
+        params.args["data"] = { deleted: true, deletedAt: new Date() };
+      }
+    }
+
+    return next(params);
+  });
+
   // connect eagerly
   client.$connect();
 

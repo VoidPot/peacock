@@ -22,7 +22,7 @@
                         this.bgRequestsListeners[response.requestId](response.response);
                     }
                     catch (e) {
-                        console.log(e);
+                        d(e);
                     }
                     delete this.bgRequestsListeners[response.requestId];
                 }

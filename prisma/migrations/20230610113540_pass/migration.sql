@@ -1,0 +1,20 @@
+/*
+  Warnings:
+
+  - You are about to drop the column `return` on the `Passbook` table. All the data in the column will be lost.
+
+*/
+-- AlterTable
+ALTER TABLE "Passbook" DROP COLUMN "return",
+ADD COLUMN     "invest" DOUBLE PRECISION NOT NULL DEFAULT 0,
+ADD COLUMN     "months" INTEGER NOT NULL DEFAULT 0,
+ADD COLUMN     "returnMonths" INTEGER NOT NULL DEFAULT 0,
+ADD COLUMN     "returns" DOUBLE PRECISION NOT NULL DEFAULT 0,
+ADD COLUMN     "termExpense" DOUBLE PRECISION NOT NULL DEFAULT 0,
+ADD COLUMN     "termInvest" DOUBLE PRECISION NOT NULL DEFAULT 0,
+ADD COLUMN     "termReturns" DOUBLE PRECISION NOT NULL DEFAULT 0,
+ADD COLUMN     "totalBalance" DOUBLE PRECISION NOT NULL DEFAULT 0,
+ADD COLUMN     "totalExpense" DOUBLE PRECISION NOT NULL DEFAULT 0,
+ADD COLUMN     "totalInvest" DOUBLE PRECISION NOT NULL DEFAULT 0,
+ADD COLUMN     "totalProfit" DOUBLE PRECISION NOT NULL DEFAULT 0,
+ADD COLUMN     "totalReturns" DOUBLE PRECISION NOT NULL DEFAULT 0;
