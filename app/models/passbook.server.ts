@@ -1,5 +1,4 @@
 import { Prisma, type Passbook, type Transaction } from "@prisma/client";
-import { KeyObject } from "tls";
 import { prisma } from "~/db.server";
 
 const getFromToUser = async (
@@ -74,17 +73,17 @@ const getUserPassbooks = async (
         where: {
           groupId: groupId,
           entryOf: {
-            in: ["NON_GROUP"],
+            in: ["ONE_GROUP"],
           },
         },
       })
     : undefined;
 
   return {
-    FROM_ONE_USER: passbookUser.find((e) => e.id === from),
-    TO_ONE_USER: passbookUser.find((e) => e.id === to),
-    TO_USER_GROUP: passbookUserGroup.find((e) => e.id === from),
-    FROM_USER_GROUP: passbookUserGroup.find((e) => e.id === to),
+    FROM_ONE_USER: passbookUser.find((e) => e.userId === from),
+    TO_ONE_USER: passbookUser.find((e) => e.userId === to),
+    TO_USER_GROUP: passbookUserGroup.find((e) => e.userId === from),
+    FROM_USER_GROUP: passbookUserGroup.find((e) => e.userId === to),
     ONE_GROUP: passbookGroup,
   };
 };
@@ -535,6 +534,7 @@ export const passbookMiddleware = async (params: any, result: Transaction) => {
         }
       );
     }
+    console.log(JSON.stringify(passbooksForUpdate));
 
     const mapper = passbooksForUpdate.map(({ where, data }) =>
       prisma.passbook.update({

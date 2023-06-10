@@ -1,7 +1,6 @@
 import type { Prisma, TRANSACTION_TYPE } from "@prisma/client";
 import { PrismaClient } from "@prisma/client";
 import seedData from "./seeds/seed-data";
-import generateSummary from "../app/models/summary-generate.server";
 import { passbookMiddleware } from "~/models/passbook.server";
 import { addPassbookEntry } from "./seeds/passbook-entry";
 
@@ -9,7 +8,8 @@ const prisma = new PrismaClient();
 
 prisma.$use(async (param, next) => {
   const result = await next(param);
-  await passbookMiddleware(param, result);
+  const data = await passbookMiddleware(param, result);
+  console.log({ data });
   return result;
 });
 
@@ -136,13 +136,18 @@ async function seed() {
 
   const transactions = transactionSeedMap(users, alphaGroup);
 
-  await Promise.all(
-    transactions.map(async (each: any) => {
-      return await prisma.transaction.create({
-        data: each,
-      });
-    })
-  );
+  for (const each of transactions) {
+    await prisma.transaction.create({
+      data: { ...each } as any,
+    });
+  }
+  // await Promise.all(
+  //   transactions.map(async (each: any) => {
+  //     return await prisma.transaction.create({
+  //       data: each,
+  //     });
+  //   })
+  // );
 
   // await generateSummary();
   return;
