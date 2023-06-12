@@ -1,7 +1,13 @@
+import { useMatches } from "@remix-run/react";
 import classNames from "classnames";
 import SideBySideBrand from "../atoms/svg/side-by-side-brand";
 
 function NavBar({ isOpen, setOpen }: any) {
+  const matches = useMatches();
+
+  const pageName =
+    matches.length > 2 ? matches[2].pathname.replace("/", "") : "Dashboard";
+
   return (
     <nav
       className="relative mx-2 flex grow flex-col flex-wrap items-center justify-between rounded-2xl px-0 py-2 shadow-none transition-all duration-250 ease-soft-in lg:mx-6 lg:flex-nowrap lg:justify-start"
@@ -14,13 +20,13 @@ function NavBar({ isOpen, setOpen }: any) {
               <span className="text-slate-700 opacity-50">Pages</span>
             </li>
             <li
-              className="pl-2 text-sm capitalize leading-normal text-slate-700 before:float-left before:pr-2 before:text-gray-600 before:content-['/']"
+              className="pl-2 text-sm capitalize leading-normal text-slate-700 opacity-70 before:float-left before:pr-2 before:text-gray-600 before:content-['/']"
               aria-current="page"
             >
-              Dashboard
+              {pageName}
             </li>
           </ol>
-          <h6 className="mb-0 font-bold capitalize">Dashboard</h6>
+          <h6 className="mb-0 font-bold capitalize">{pageName}</h6>
         </nav>
 
         <div className="mt-2 flex items-center sm:mr-6 sm:mt-0 md:mr-0 lg:flex lg:basis-auto">

@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import StackedBrand from "../atoms/svg/stacked-brand";
+// import StackedBrand from "../atoms/svg/stacked-brand";
 import { Link } from "@remix-run/react";
 import MenuItem from "../molecules/menu-item";
 
@@ -9,7 +9,7 @@ function SideBar({ isOpen, setOpen }: any) {
       <div
         onClick={() => setOpen(!isOpen)}
         className={classNames(
-          "fixed left-0 top-0 z-110 h-screen w-screen bg-black opacity-60",
+          "fixed left-0 top-0 z-110 h-screen w-screen bg-primary bg-gradient-to-t from-white to-primary opacity-60",
           {
             "translate-x-0 shadow-soft-xl": isOpen,
             "-translate-x-full shadow-none": !isOpen,
@@ -18,25 +18,27 @@ function SideBar({ isOpen, setOpen }: any) {
       ></div>
       <aside
         className={classNames(
-          "ease-nav-brand fixed inset-y-0 z-990 mx-4 my-4 block w-full max-w-62.5 flex-wrap items-center justify-between overflow-y-auto rounded-2xl border-0 bg-white p-0 antialiased transition-transform duration-200 xl:left-0 xl:translate-x-0 xl:bg-transparent",
+          "ease-nav-brand fixed inset-y-0 z-990 mx-4 my-4 block h-full w-full max-w-62.5 flex-wrap items-center justify-between rounded-2xl border-0 bg-white p-0 transition-transform duration-200 xl:left-0 xl:translate-x-0 ",
           {
             "translate-x-0 shadow-soft-xl": isOpen,
             "-translate-x-[275px] shadow-none": !isOpen,
           }
         )}
       >
-        <div className="h-fit">
+        <div className="my-10 h-fit pt-5 text-center">
           <Link
             to={"/"}
-            className="m-0 block whitespace-nowrap px-8 py-6 text-sm text-slate-700"
+            className="m-auto block select-none whitespace-nowrap text-sm text-slate-700"
           >
-            <StackedBrand />
+            <h1 className="m-0 p-0 font-brand text-2xl uppercase tracking-normal text-primary">
+              Peacock Club
+            </h1>
           </Link>
         </div>
 
-        <hr className="mt-0 h-px bg-transparent bg-gradient-to-r from-transparent via-black/40 to-transparent" />
+        <hr className="mt-0 h-px bg-transparent bg-gradient-to-r from-transparent via-black/90 to-transparent" />
 
-        <div className="block h-min max-h-screen w-auto grow basis-full items-center overflow-auto">
+        <div className="block h-full w-auto basis-full items-center">
           <ul className="mb-0 flex flex-col pl-0">
             <li className="mt-0.5 w-full">
               <MenuItem
@@ -64,7 +66,7 @@ function SideBar({ isOpen, setOpen }: any) {
             </li>
 
             <li className="mt-4 w-full">
-              <h6 className="ml-2 pl-6 text-xs font-bold uppercase leading-tight opacity-60">
+              <h6 className="ml-2 pl-6 text-xs font-bold uppercase leading-tight opacity-80">
                 Account pages
               </h6>
             </li>

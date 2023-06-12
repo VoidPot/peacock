@@ -19,7 +19,7 @@ export default function Index() {
           <h1 className="font-brand text-4xl uppercase tracking-normal sm:text-5xl">
             Peacock Club
           </h1>
-          <p className="font-core text-xs uppercase">
+          <p className="font-core text-xs uppercase text-slate-700">
             Creating the environment for business
           </p>
 
