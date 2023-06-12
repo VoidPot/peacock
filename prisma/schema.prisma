@@ -159,28 +159,70 @@ enum SUMMARY_TYPE {
   ALL_VENDOR
 }
 
+// model Passbook {
+//   id             Int               @id @default(autoincrement())
+//   entryOf        PASSBOOK_ENTRY_OF @default(CLUB)
+//   termDeposit    Float             @default(0)
+//   deposit        Float             @default(0)
+//   totalDeposit   Float             @default(0)
+//   termWithdraw   Float             @default(0)
+//   withdraw       Float             @default(0)
+//   profitWithdraw Float             @default(0)
+//   totalWithdraw  Float             @default(0)
+//   invest         Float             @default(0)
+//   returns        Float             @default(0)
+//   profit         Float             @default(0)
+//   eachProfit     Float             @default(0)
+//   accountBalance Float             @default(0)
+//   holding        Float             @default(0)
+//   monthsIn       Float             @default(0)
+//   monthsOut      Float             @default(0)
+//   user           User?             @relation(fields: [userId], references: [id])
+//   userId         Int?
+//   group          Group?            @relation(fields: [groupId], references: [id])
+//   groupId        Int?
+// }
+
+// enum PASSBOOK_ENTRY_OF {
+//   USER
+//   GROUP
+//   USER_GROUP
+//   CLUB
+// }
+
 model Passbook {
-  id             Int               @id @default(autoincrement())
-  entryOf        PASSBOOK_ENTRY_OF @default(CLUB)
-  termDeposit    Float             @default(0)
-  deposit        Float             @default(0)
-  totalDeposit   Float             @default(0)
-  termWithdraw   Float             @default(0)
-  withdraw       Float             @default(0)
-  profitWithdraw Float             @default(0)
-  totalWithdraw  Float             @default(0)
-  invest         Float             @default(0)
-  returns        Float             @default(0)
-  profit         Float             @default(0)
-  eachProfit     Float             @default(0)
-  accountBalance Float             @default(0)
-  holding        Float             @default(0)
-  monthsIn       Float             @default(0)
-  monthsOut      Float             @default(0)
-  user           User?             @relation(fields: [userId], references: [id])
-  userId         Int?
-  group          Group?            @relation(fields: [groupId], references: [id])
-  groupId        Int?
+  id      Int               @id @default(autoincrement())
+  entryOf PASSBOOK_ENTRY_OF @default(CLUB)
+
+  termDeposit  Float @default(0)
+  deposit      Float @default(0)
+  totalDeposit Float @default(0)
+
+  termWithdraw   Float @default(0)
+  withdraw       Float @default(0)
+  profitWithdraw Float @default(0)
+  totalWithdraw  Float @default(0)
+
+  termInvest  Float @default(0)
+  invest      Float @default(0)
+  totalInvest Float @default(0)
+
+  termReturns  Float @default(0)
+  returns      Float @default(0)
+  totalReturns Float @default(0)
+
+  accountBalance Float @default(0)
+  holdingAmount  Float @default(0)
+
+  depositMonths  Float @default(0)
+  withdrawMonths Float @default(0)
+  investMonths   Float @default(0)
+  returnsMonths  Float @default(0)
+
+  user    User?  @relation(fields: [userId], references: [id])
+  userId  Int?
+  group   Group? @relation(fields: [groupId], references: [id])
+  groupId Int?
 }
 
 enum PASSBOOK_ENTRY_OF {

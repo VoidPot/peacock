@@ -6,28 +6,40 @@ export const meta: V2_MetaFunction = () => [{ title: "Peacock Club" }];
 
 export default function Index() {
   return (
-    <div className="flex min-h-screen flex-col justify-center bg-base-100 px-8 align-middle">
-      <div className="m-auto flex max-w-lg flex-col gap-4">
-        <StackedBrand />
-        <h1 className="hidden">Peacock Club</h1>
-        <p className="hidden"> Creating the environment for business</p>
+    <div className="select-none bg-[#b8e1d6]">
+      <div className="m-auto grid min-h-screen max-w-6xl grid-cols-1 px-8 align-middle lg:grid-cols-2 lg:flex-row">
+        <div className="flex w-full items-end justify-center lg:items-center">
+          <img
+            className="h-auto w-auto max-w-full rounded-md"
+            src="/peacock.png"
+            alt="Peacock Bird"
+          />
+        </div>
+        <div className="m-auto mt-0 flex max-w-lg flex-col items-center justify-center lg:mt-auto">
+          <h1 className="font-brand text-4xl uppercase tracking-normal sm:text-5xl">
+            Peacock Club
+          </h1>
+          <p className="font-core text-xs uppercase">
+            Creating the environment for business
+          </p>
 
-        <Link to={"/home"} className="btn-primary btn-block btn mt-4">
-          View Dashboard
-          <svg
-            aria-hidden="true"
-            className="-mr-1 ml-2 h-5 w-5"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              fillRule="evenodd"
-              d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-              clip-rule="evenodd"
-            ></path>
-          </svg>
-        </Link>
+          <Link to={"/home"} className="btn-primary btn-block btn mt-4">
+            View Dashboard
+            <svg
+              aria-hidden="true"
+              className="-mr-1 ml-2 h-5 w-5"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fillRule="evenodd"
+                d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                clip-rule="evenodd"
+              ></path>
+            </svg>
+          </Link>
+        </div>
       </div>
     </div>
   );

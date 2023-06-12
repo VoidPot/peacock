@@ -5,30 +5,18 @@ export const addPassbookEntry = (users: User[], groups: Group[]) => {
     {
       entryOf: "CLUB",
     },
-    {
-      entryOf: "ALL_GROUP",
-    },
-    {
-      entryOf: "ALL_MEMBER",
-    },
-    {
-      entryOf: "ALL_VENDOR",
-    },
-    {
-      entryOf: "NON_GROUP",
-    },
   ];
 
   users.forEach((user) => {
     passbooks.push({
       userId: user.id,
-      entryOf: user.type === "MEMBER" ? "ONE_MEMBER" : "ONE_VENDOR",
+      entryOf: "USER",
     });
     groups.forEach((group) => {
       passbooks.push({
         userId: user.id,
         groupId: group.id,
-        entryOf: user.type === "MEMBER" ? "MEMBER_GROUP" : "VENDOR_GROUP",
+        entryOf: "USER_GROUP",
       });
     });
   });
@@ -36,7 +24,7 @@ export const addPassbookEntry = (users: User[], groups: Group[]) => {
   groups.forEach((group) => {
     passbooks.push({
       groupId: group.id,
-      entryOf: "ONE_GROUP",
+      entryOf: "GROUP",
     });
   });
 

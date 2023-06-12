@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import invariant from "tiny-invariant";
-import { passbookMiddleware } from "./models/passbook.server";
+import { passbookMiddleware } from "./models/passbook-entry.server";
 
 let prisma: PrismaClient;
 
@@ -88,7 +88,6 @@ function getClient() {
 
     return next(params);
   });
-
   // connect eagerly
   client.$connect();
 

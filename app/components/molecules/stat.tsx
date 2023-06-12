@@ -5,7 +5,7 @@ import Icon from "../atoms/svg/icon";
 
 interface StatProps {
   hed: string;
-  dek: string;
+  dek: string | number;
   highlight?: string;
   iconName: keyof typeof Icons;
 }

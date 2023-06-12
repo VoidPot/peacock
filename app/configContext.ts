@@ -2,19 +2,24 @@ import type { TRANSACTION_MODE } from "@prisma/client";
 
 export type Passbook_Settings_Keys =
   | "termDeposit"
-  | "termMonths"
   | "deposit"
   | "totalDeposit"
   | "termWithdraw"
   | "withdraw"
   | "profitWithdraw"
   | "totalWithdraw"
-  | "accountBalance"
-  | "holding"
-  | "monthsIn"
-  | "monthsOut"
+  | "termInvest"
   | "invest"
-  | "returns";
+  | "totalInvest"
+  | "termReturns"
+  | "returns"
+  | "totalReturns"
+  | "accountBalance"
+  | "holdingAmount"
+  | "depositMonths"
+  | "withdrawMonths"
+  | "investMonths"
+  | "returnsMonths";
 
 export type ConfigContext = {
   group: {
@@ -54,12 +59,12 @@ const configContext: ConfigContext = {
       INTER_CASH_TRANSFER: {
         FROM_USER: {
           SUB: {
-            holding: "amount",
+            holdingAmount: "amount",
           },
         },
         TO_USER: {
           ADD: {
-            holding: "amount",
+            holdingAmount: "amount",
           },
         },
       },
@@ -73,7 +78,8 @@ const configContext: ConfigContext = {
         },
         TO_USER: {
           ADD: {
-            holding: "amount",
+            holdingAmount: "amount",
+            accountBalance: "amount",
           },
         },
         GROUP: {
@@ -88,12 +94,13 @@ const configContext: ConfigContext = {
             termDeposit: "amount",
             totalDeposit: "amount",
             accountBalance: "amount",
-            monthsIn: "month",
+            depositMonths: "month",
           },
         },
         TO_USER_GROUP: {
           ADD: {
-            holding: "amount",
+            holdingAmount: "amount",
+            accountBalance: "amount",
           },
         },
         CLUB: {
@@ -101,7 +108,7 @@ const configContext: ConfigContext = {
             termDeposit: "amount",
             totalDeposit: "amount",
             accountBalance: "amount",
-            holding: "amount",
+            holdingAmount: "amount",
           },
         },
       },
@@ -115,7 +122,8 @@ const configContext: ConfigContext = {
         },
         TO_USER: {
           ADD: {
-            holding: "amount",
+            holdingAmount: "amount",
+            accountBalance: "amount",
           },
         },
         GROUP: {
@@ -134,7 +142,8 @@ const configContext: ConfigContext = {
         },
         TO_USER_GROUP: {
           ADD: {
-            holding: "amount",
+            holdingAmount: "amount",
+            accountBalance: "amount",
           },
         },
         CLUB: {
@@ -142,62 +151,68 @@ const configContext: ConfigContext = {
             deposit: "amount",
             totalDeposit: "amount",
             accountBalance: "amount",
-            holding: "amount",
+            holdingAmount: "amount",
           },
         },
       },
       MEMBERS_WITHDRAW: {
         FROM_USER: {
           SUB: {
-            holding: "amount",
+            holdingAmount: "amount",
+            accountBalance: "amount",
           },
         },
         TO_USER: {
           SUB: {
-            termDeposit: "amount",
-            totalDeposit: "amount",
+            withdraw: "amount",
+            totalWithdraw: "amount",
             accountBalance: "amount",
+            holdingAmount: "amount",
           },
         },
         GROUP: {
           SUB: {
-            termDeposit: "amount",
-            totalDeposit: "amount",
+            withdraw: "amount",
+            totalWithdraw: "amount",
             accountBalance: "amount",
+            holdingAmount: "amount",
           },
         },
         FROM_USER_GROUP: {
           ADD: {
-            holding: "amount",
+            holdingAmount: "amount",
+            accountBalance: "amount",
           },
         },
         TO_USER_GROUP: {
           ADD: {
-            termDeposit: "amount",
-            totalDeposit: "amount",
+            withdraw: "amount",
+            totalWithdraw: "amount",
             accountBalance: "amount",
-            monthsIn: "month",
+            holdingAmount: "amount",
           },
         },
         CLUB: {
           SUB: {
-            termDeposit: "amount",
-            totalDeposit: "amount",
+            withdraw: "amount",
+            totalWithdraw: "amount",
             accountBalance: "amount",
-            holding: "amount",
+            holdingAmount: "amount",
           },
         },
       },
       VENDOR_PERIODIC_INVEST: {
         FROM_USER: {
           SUB: {
-            holding: "amount",
+            holdingAmount: "amount",
+            accountBalance: "amount",
           },
         },
         TO_USER: {
           ADD: {
-            termDeposit: "amount",
-            totalDeposit: "amount",
+            termInvest: "amount",
+            totalInvest: "amount",
+            investMonths: "month",
           },
           SUB: {
             accountBalance: "amount",
@@ -205,116 +220,194 @@ const configContext: ConfigContext = {
         },
         GROUP: {
           ADD: {
-            termWithdraw: "amount",
-            totalWithdraw: "amount",
+            termInvest: "amount",
+            totalInvest: "amount",
+            investMonths: "month",
           },
           SUB: {
+            holdingAmount: "amount",
             accountBalance: "amount",
           },
         },
         FROM_USER_GROUP: {
           SUB: {
-            holding: "amount",
-          },
-        },
-        TO_USER_GROUP: {
-          ADD: {
-            invest: "amount",
-          },
-          SUB: {
+            holdingAmount: "amount",
             accountBalance: "amount",
           },
         },
         CLUB: {
           ADD: {
-            invest: "amount",
+            termInvest: "amount",
+            totalInvest: "amount",
+            investMonths: "month",
           },
           SUB: {
-            holding: "amount",
+            holdingAmount: "amount",
+            accountBalance: "amount",
           },
         },
       },
       VENDOR_INVEST: {
         FROM_USER: {
           SUB: {
-            holding: "amount",
+            holdingAmount: "amount",
+            accountBalance: "amount",
           },
         },
         TO_USER: {
           ADD: {
-            deposit: "amount",
-            totalDeposit: "amount",
+            invest: "amount",
+            totalInvest: "amount",
+          },
+          SUB: {
             accountBalance: "amount",
           },
         },
         GROUP: {
           ADD: {
-            withdraw: "amount",
-            totalWithdraw: "amount",
+            invest: "amount",
+            totalInvest: "amount",
           },
           SUB: {
+            holdingAmount: "amount",
             accountBalance: "amount",
           },
         },
         FROM_USER_GROUP: {
           SUB: {
-            holding: "amount",
-          },
-        },
-        TO_USER_GROUP: {
-          ADD: {
-            invest: "amount",
-          },
-          SUB: {
+            holdingAmount: "amount",
             accountBalance: "amount",
           },
         },
         CLUB: {
           ADD: {
             invest: "amount",
+            totalInvest: "amount",
+            investMonths: "month",
           },
           SUB: {
-            holding: "amount",
+            holdingAmount: "amount",
+            accountBalance: "amount",
+          },
+        },
+      },
+      VENDOR_PERIODIC_RETURN: {
+        FROM_USER: {
+          ADD: {
+            termReturns: "amount",
+            totalReturns: "amount",
+            accountBalance: "amount",
+          },
+        },
+        TO_USER: {
+          ADD: {
+            holdingAmount: "amount",
+            accountBalance: "amount",
+          },
+        },
+        GROUP: {
+          ADD: {
+            termReturns: "amount",
+            totalReturns: "amount",
+            holdingAmount: "amount",
+            accountBalance: "amount",
+          },
+        },
+        TO_USER_GROUP: {
+          ADD: {
+            holdingAmount: "amount",
+            accountBalance: "amount",
+          },
+        },
+        CLUB: {
+          ADD: {
+            termReturns: "amount",
+            totalReturns: "amount",
+            holdingAmount: "amount",
+            accountBalance: "amount",
           },
         },
       },
       VENDOR_RETURN: {
         FROM_USER: {
           ADD: {
-            termWithdraw: "amount",
-            totalWithdraw: "amount",
+            returns: "amount",
+            totalReturns: "amount",
             accountBalance: "amount",
           },
         },
         TO_USER: {
           ADD: {
-            holding: "amount",
+            holdingAmount: "amount",
+            accountBalance: "amount",
           },
         },
         GROUP: {
           ADD: {
             returns: "amount",
-            accountBalance: "amount",
-          },
-        },
-        FROM_USER_GROUP: {
-          ADD: {
-            returns: "amount",
+            totalReturns: "amount",
+            holdingAmount: "amount",
             accountBalance: "amount",
           },
         },
         TO_USER_GROUP: {
           ADD: {
-            holding: "amount",
+            holdingAmount: "amount",
+            accountBalance: "amount",
           },
         },
         CLUB: {
           ADD: {
             returns: "amount",
+            totalReturns: "amount",
+            holdingAmount: "amount",
+            accountBalance: "amount",
           },
+        },
+      },
+      OTHER_EXPENDITURE: {
+        FROM_USER: {
           SUB: {
-            accountBalance: "balance",
-            holding: "amount",
+            holdingAmount: "amount",
+            accountBalance: "amount",
+          },
+        },
+        TO_USER: {
+          SUB: {
+            withdraw: "amount",
+            totalWithdraw: "amount",
+            accountBalance: "amount",
+            holdingAmount: "amount",
+          },
+        },
+        GROUP: {
+          SUB: {
+            withdraw: "amount",
+            totalWithdraw: "amount",
+            accountBalance: "amount",
+            holdingAmount: "amount",
+          },
+        },
+        FROM_USER_GROUP: {
+          ADD: {
+            holdingAmount: "amount",
+            accountBalance: "amount",
+          },
+        },
+        TO_USER_GROUP: {
+          ADD: {
+            withdraw: "amount",
+            totalWithdraw: "amount",
+            accountBalance: "amount",
+            holdingAmount: "amount",
+          },
+        },
+        CLUB: {
+          SUB: {
+            withdraw: "amount",
+            totalWithdraw: "amount",
+            accountBalance: "amount",
+            holdingAmount: "amount",
           },
         },
       },

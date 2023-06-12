@@ -1,7 +1,7 @@
 import type { Prisma, TRANSACTION_TYPE } from "@prisma/client";
 import { PrismaClient } from "@prisma/client";
 import seedData from "./seeds/seed-data";
-import { passbookMiddleware } from "~/models/passbook.server";
+import { passbookMiddleware } from "~/models/passbook-entry.server";
 import { addPassbookEntry } from "./seeds/passbook-entry";
 
 const prisma = new PrismaClient();

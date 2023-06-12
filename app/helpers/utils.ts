@@ -1,3 +1,4 @@
+import type { Group } from "@prisma/client";
 import moment from "moment";
 
 export const getClubTimes = () => {
@@ -37,6 +38,25 @@ export const getMonthYear = (input: any = new Date()) => {
 
 export const formatMoney = (input: any = 0) => {
   return `${Number(input).toLocaleString("en-IN") || 0} ₹`;
+};
+
+export const computeGroupTiming = ({ startAt, endAt, amount }: Group) => {
+  const start = moment(startAt);
+  const end = moment(endAt || new Date());
+  const current = moment(new Date());
+  const hasEndTime = Boolean(endAt);
+  const startEndMonths = end.diff(start, "months", true);
+  const startCurrentMonths = current.diff(start, "months", true);
+  const currentMonthDiff = startCurrentMonths >= 0 ? startCurrentMonths : 0;
+  return {
+    startMonth: start.format("MMM YYYY"),
+    hasEndTime,
+    endMonth: end.format("MMM YYYY"),
+    currentMonth: current.format("MMM YYYY"),
+    endMonthsDif: Math.ceil(startEndMonths),
+    currentMonthsDiff: Math.ceil(currentMonthDiff),
+    personTermAmount: Math.ceil(currentMonthDiff) * amount,
+  };
 };
 
 export const getMemberSummaryAmount = (
