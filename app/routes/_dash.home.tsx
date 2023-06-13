@@ -25,26 +25,37 @@ export default function IndexPage() {
   const { passbookData } = useLoaderData<typeof loader>();
   const { club, groups } = passbookData;
 
+  const statsData = [
+    {
+      hed: "No Of Members",
+      dek: club?.noOfMembers || 0,
+      iconName: "member",
+    },
+    {
+      hed: "Net Value",
+      dek: `${(club.accountBalance || 0).toLocaleString("en-IN")} ₹`,
+      iconName: "transaction",
+    },
+    {
+      hed: "Net Liquidity",
+      dek: `${(club.holdingAmount || 0).toLocaleString("en-IN")} ₹`,
+      iconName: "trans",
+    },
+    {
+      hed: "Net Liquidity",
+      dek: `${(club.holdingAmount || 0).toLocaleString("en-IN")} ₹`,
+      iconName: "trans",
+    },
+  ];
+
   return (
     <>
       {club && (
         <div className="rounded-2xl ">
           <div className="grid grid-flow-row-dense grid-cols-1 items-center justify-center gap-4 align-middle sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4">
-            <Stat
-              hed="No Of Members"
-              dek={club?.noOfMembers || 0}
-              iconName="member"
-            />
-            <Stat
-              hed="Net Value"
-              dek={`${(club.accountBalance || 0).toLocaleString("en-IN")} ₹`}
-              iconName="archive"
-            />
-            <Stat
-              hed="Net Liquidity"
-              dek={`${(club.holdingAmount || 0).toLocaleString("en-IN")} ₹`}
-              iconName="trans"
-            />
+            {statsData.map((each, index) => (
+              <Stat key={index} index={index}  {...each}  />
+            ))}
             <Stat
               hed="Members Deposit"
               dek={`${(club.termDeposit || 0).toLocaleString("en-IN")} ₹`}

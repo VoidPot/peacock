@@ -9,7 +9,7 @@ function SideBar({ isOpen, setOpen }: any) {
       <div
         onClick={() => setOpen(!isOpen)}
         className={classNames(
-          "fixed left-0 top-0 z-110 h-screen w-screen bg-primary bg-gradient-to-t from-white to-primary opacity-60",
+          "fixed left-0 top-0 z-110 h-screen w-screen bg-secondary bg-gradient-to-t from-accent to-secondary opacity-60",
           {
             "translate-x-0 shadow-soft-xl": isOpen,
             "-translate-x-full shadow-none": !isOpen,
@@ -25,7 +25,7 @@ function SideBar({ isOpen, setOpen }: any) {
           }
         )}
       >
-        <div className="h-full rounded-2xl bg-white">
+        <div className="h-full rounded-2xl bg-base-100">
           <div className="h-fit py-10 text-center">
             <Link
               to={"/"}

@@ -18,15 +18,15 @@ export const links: LinksFunction = () => [
 
 export default function App() {
   return (
-    <html lang="en" className="h-full w-full" data-theme="cupcake">
+    <html lang="en" className="h-full w-full" data-theme="lemonade">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <Meta />
         <Links />
       </head>
-      <body className="h-full w-full bg-transparent font-body font-normal leading-default text-base text-neutral-500 antialiased">
-        <div className="min-w-screen fixed left-0 right-0 top-0 -z-100 min-h-screen bg-slate-100 from-white to-[#b8e1d6]"></div>
+      <body className="h-full w-full bg-transparent font-body text-base font-normal leading-default text-neutral-500 antialiased">
+        <div className="min-w-screen fixed left-0 right-0 top-0 -z-100 min-h-screen bg-base-100 from-white to-[#b8e1d6]"></div>
         <Outlet />
         <ScrollRestoration />
         <Scripts />

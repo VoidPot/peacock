@@ -42,7 +42,7 @@ function GroupCard(props: any) {
   ];
   return (
     <div className="mb-0 mt-0 w-full max-w-full text-center lg:mb-0 lg:flex-none">
-      <div className="relative z-20 flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid border-black/12.5 bg-white bg-clip-border p-8 shadow-soft-xl">
+      <div className="relative z-20 flex min-w-0 flex-col break-words rounded-2xl border-2 border-solid border-primary/40 bg-base-100 bg-clip-border p-8 shadow-soft-xl">
         <div className="flex-auto">
           <h4 className="m-0 uppercase text-primary">{props.name}</h4>
           <p className="ml-2 border-b-2 pb-3 text-sm leading-normal">{dek}</p>

@@ -47,14 +47,18 @@ export type ConfigContext = {
 
 const configContext: ConfigContext = {
   statColors: [
-    "red",
+    "primary,",
+    "secondary",
     // "pink",
-    "purple",
+    "accent",
     // "indigo",
-    "blue",
-    "cyan",
+    "neutral",
+    "base",
     // "teal",
-    "green",
+    "info",
+    "success",
+    "warning",
+    "error",
     // "lime",
     // "yellow",
     // "amber",

@@ -17,6 +17,7 @@ export default {
     prefix: "",
     themes: [
       "emerald",
+      "lemonade",
       {
         myTheme: {
           primary: "#349b7b",
