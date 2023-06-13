@@ -18,7 +18,7 @@ export const links: LinksFunction = () => [
 
 export default function App() {
   return (
-    <html lang="en" className="h-full w-full">
+    <html lang="en" className="h-full w-full" data-theme="cupcake">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -26,7 +26,7 @@ export default function App() {
         <Links />
       </head>
       <body className="h-full w-full bg-transparent font-body font-normal leading-default text-base text-neutral-500 antialiased">
-        <div className="min-w-screen fixed left-0 right-0 top-0 -z-100 min-h-screen bg-primary bg-gradient-to-t from-white to-[#b8e1d6]"></div>
+        <div className="min-w-screen fixed left-0 right-0 top-0 -z-100 min-h-screen bg-slate-100 from-white to-[#b8e1d6]"></div>
         <Outlet />
         <ScrollRestoration />
         <Scripts />

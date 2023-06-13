@@ -107,14 +107,18 @@ export const passbookMiddleware = async (params: any, result: Transaction) => {
       }
     });
 
+    console.log(JSON.stringify(passbooksForUpdate));
+
     const mapper = passbooksForUpdate.map(({ where, data }) =>
-      prisma.passbook.update({
-        where,
-        data,
-      })
+      prisma.passbook
+        .update({
+          where,
+          data,
+        })
+        .catch(console.error)
     );
 
-    await Promise.all(mapper);
+    await Promise.all(mapper).catch((e) => console.error(e));
   }
   return;
 };

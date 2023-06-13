@@ -22,6 +22,7 @@ export type Passbook_Settings_Keys =
   | "returnsMonths";
 
 export type ConfigContext = {
+  statColors: string[];
   group: {
     [key in "alpha" | "bravo"]: { stateDate: Date; endDate?: Date };
   };
@@ -45,6 +46,38 @@ export type ConfigContext = {
 };
 
 const configContext: ConfigContext = {
+  statColors: [
+    "red",
+    // "pink",
+    "purple",
+    // "indigo",
+    "blue",
+    "cyan",
+    // "teal",
+    "green",
+    // "lime",
+    // "yellow",
+    // "amber",
+    // "orange",
+    // "brown",
+    // "grey",
+  ],
+  // statColors: [
+  //   "red",
+  //   // "pink",
+  //   "purple",
+  //   // "indigo",
+  //   "blue",
+  //   "cyan",
+  //   // "teal",
+  //   "green",
+  //   // "lime",
+  //   // "yellow",
+  //   // "amber",
+  //   // "orange",
+  //   // "brown",
+  //   // "grey",
+  // ],
   group: {
     alpha: {
       stateDate: new Date("09/01/2020"),

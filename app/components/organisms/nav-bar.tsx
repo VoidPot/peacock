@@ -10,10 +10,10 @@ function NavBar({ isOpen, setOpen }: any) {
 
   return (
     <nav
-      className="relative mx-2 flex grow flex-col flex-wrap items-center justify-between rounded-2xl px-0 py-2 shadow-none transition-all duration-250 ease-soft-in lg:mx-6 lg:flex-nowrap lg:justify-start"
+      className="relative m-0 flex grow flex-col flex-wrap items-center justify-between rounded-2xl bg-transparent px-6 py-2 shadow-none transition-all duration-250 ease-soft-in lg:flex-nowrap lg:justify-start"
       navbar-scroll="true"
     >
-      <div className="mx-auto flex w-full items-center justify-between px-4 py-1 flex-wrap-inherit lg:px-0">
+      <div className="mx-auto flex w-full items-center justify-between px-0 py-1 flex-wrap-inherit lg:px-0">
         <nav>
           <ol className="mr-12 flex flex-wrap rounded-lg bg-transparent pt-1 sm:mr-16">
             <li className="text-sm leading-normal">
