@@ -11,8 +11,8 @@ function SideBar({ isOpen, setOpen }: any) {
         className={classNames(
           "fixed left-0 top-0 z-110 h-screen w-screen bg-secondary bg-gradient-to-t from-accent to-secondary opacity-60",
           {
-            "translate-x-0 shadow-soft-xl": isOpen,
-            "-translate-x-full shadow-none": !isOpen,
+            "translate-x-0": isOpen,
+            "-translate-x-full": !isOpen,
           }
         )}
       ></div>
@@ -20,12 +20,12 @@ function SideBar({ isOpen, setOpen }: any) {
         className={classNames(
           "ease-nav-brand fixed z-990 m-0 block h-full max-h-screen w-[300px] flex-wrap items-center justify-between border-0 p-4 transition-transform duration-200 xl:left-0 xl:translate-x-0 ",
           {
-            "translate-x-0 shadow-soft-xl": isOpen,
-            "-translate-x-[300px] shadow-none": !isOpen,
+            "translate-x-0": isOpen,
+            "-translate-x-[300px]": !isOpen,
           }
         )}
       >
-        <div className="h-full rounded-2xl bg-base-100">
+        <div className="h-full rounded-2xl bg-base-100 shadow-soft-xl">
           <div className="h-fit py-10 text-center">
             <Link
               to={"/"}

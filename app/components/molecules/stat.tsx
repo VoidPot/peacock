@@ -12,8 +12,8 @@ interface StatProps {
 
 const Stat = ({ hed, dek, highlight, iconName }: StatProps) => {
   return (
-    <div className="w-full max-w-full shadow-lg">
-      <div className="relative flex min-w-0 flex-col break-words rounded-md bg-base-200 bg-clip-border">
+    <div className="w-full max-w-full">
+      <div className="relative flex min-w-0 flex-col break-words rounded-md bg-base-100 shadow-soft-md">
         <div className="flex-auto px-8 py-3">
           <div className="-mx-3 flex flex-row justify-between">
             <div className="w-auto flex-none">
@@ -21,7 +21,7 @@ const Stat = ({ hed, dek, highlight, iconName }: StatProps) => {
                 <p className="mb-0 text-xs font-semibold leading-normal text-slate-500">
                   {hed}
                 </p>
-                <h5 className="text-1xl mb-0 font-bold text-accent-content">
+                <h5 className="text-1xl mb-0 font-bold text-primary">
                   {dek}
                   {highlight && (
                     <span className="font-weight-bolder ml-2 text-sm leading-normal text-lime-500">
@@ -32,7 +32,7 @@ const Stat = ({ hed, dek, highlight, iconName }: StatProps) => {
               </div>
             </div>
             <div
-              className={`inline-flex h-12 w-12 justify-center rounded-lg bg-base-100 text-center align-middle`}
+              className={`inline-flex h-12 w-12 justify-center rounded-lg bg-base-200 text-center align-middle `}
             >
               <div className="m-auto h-8 w-8">
                 <Icon name={iconName} color="slate" className="h-6 w-6" />

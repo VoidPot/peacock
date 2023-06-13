@@ -26,7 +26,7 @@ export default function App() {
         <Links />
       </head>
       <body className="h-full w-full bg-transparent font-body text-base font-normal leading-default text-neutral-500 antialiased">
-        <div className="min-w-screen fixed left-0 right-0 top-0 -z-100 min-h-screen bg-base-100 from-white to-[#b8e1d6]"></div>
+        <div className="fixed left-0 right-0 top-0 -z-100 h-full w-full bg-[#f1f5f9] from-white to-[#b8e1d6]"></div>
         <Outlet />
         <ScrollRestoration />
         <Scripts />
