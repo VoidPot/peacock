@@ -37,7 +37,7 @@ interface IconProps {
 const colorObject = {
   white: "stroke-white fill-white",
   black: "stroke-black fill-black",
-  slate: "stroke-slate-600 fill-slate-600",
+  slate: "stroke-slate-500 fill-slate-500",
   primary: "stroke-primary-400 fill-primary-400",
 };
 

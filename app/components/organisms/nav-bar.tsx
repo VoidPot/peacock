@@ -1,6 +1,5 @@
 import { useMatches } from "@remix-run/react";
 import classNames from "classnames";
-import SideBySideBrand from "../atoms/svg/side-by-side-brand";
 
 function NavBar({ isOpen, setOpen }: any) {
   const matches = useMatches();
@@ -33,7 +32,7 @@ function NavBar({ isOpen, setOpen }: any) {
           <ul className="mb-0 flex list-none flex-row justify-end pl-0 md-max:w-full">
             <li className="flex items-center pl-4 xl:hidden">
               <button
-                className="ease-nav-brand block p-0 text-sm text-slate-500 transition-all"
+                className="ease-nav-brand block p-4 text-sm text-slate-500 transition-all"
                 onClick={() => setOpen(!isOpen)}
               >
                 <div className="w-4.5 overflow-hidden">

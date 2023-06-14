@@ -7,17 +7,12 @@ import { getOneSummary, getSummaries } from "~/models/summary.server";
 import { getMembersCount, getMembersWithSummary } from "~/models/user.server";
 
 export const loader = async ({ request }: LoaderArgs) => {
-  const groups = await getGroups();
-  const summaries = await getSummaries();
-  const summary = await getOneSummary({ type: "DEFAULT" });
-  const membersCount = await getMembersCount();
   const members = await getMembersWithSummary();
-  return json({ summaries, groups, summary, membersCount, members });
+  return json({ members });
 };
 
 export default function IndexPage() {
-  const { groups, summaries, membersCount, summary, members } =
-    useLoaderData<typeof loader>();
+  const { members } = useLoaderData<typeof loader>();
   console.log({ members });
   return (
     <div className="h-full w-full">
@@ -30,21 +25,29 @@ export default function IndexPage() {
             <div className="flex-auto px-0 pb-2 pt-0">
               <div className="overflow-x-auto p-0">
                 <table className="mb-0 w-full items-center border-gray-200 align-top text-slate-500">
-                  <thead className="align-bottom">
+                  <thead className="px-4 align-bottom">
                     <tr>
-                      <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-left align-middle text-xxs font-bold uppercase tracking-none text-slate-400 opacity-70 shadow-none">
-                        Author
+                      <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-left align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
+                        Name
                       </th>
-                      <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 pl-2 text-left align-middle text-xxs font-bold uppercase tracking-none text-slate-400 opacity-70 shadow-none">
-                        Function
+                      <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
+                        Joined At
                       </th>
-                      <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-400 opacity-70 shadow-none">
-                        Status
+                      <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
+                        Term Deposit
                       </th>
-                      <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-400 opacity-70 shadow-none">
-                        Employed
+                      <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
+                        Deposit
                       </th>
-                      <th className="whitespace-nowrap border-b border-solid border-gray-200 bg-transparent px-6 py-3 align-middle font-semibold capitalize tracking-none text-slate-400 opacity-70 shadow-none"></th>
+                      <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
+                        Balance
+                      </th>
+                      <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
+                        Profit
+                      </th>
+                      <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
+                        Net Value
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -63,29 +66,46 @@ export default function IndexPage() {
                               <h6 className="mb-0 text-sm leading-normal">
                                 {member.firstName} {member.lastName}
                               </h6>
-                              <p className="mb-0 text-xs leading-tight text-slate-400">
-                                {member.links
-                                  .map((each) => each.group.name)
-                                  .sort()
-                                  .join(", ")}
-                              </p>
+
+                              {member.userPassbook.holdingAmount ? (
+                                <p className="mb-0 text-xs leading-tight text-slate-500">
+                                  {member.userPassbook?.holdingAmountInRupee}
+                                </p>
+                              ) : (
+                                <></>
+                              )}
                             </div>
                           </div>
                         </td>
                         <td className="whitespace-nowrap border-b bg-transparent p-2 text-center align-middle text-sm leading-normal shadow-transparent">
-                          <span className="text-xs font-semibold leading-tight text-slate-400">
-                            {getMemberSummaryAmount(member, "deposit")}
+                          <span className="text-xs font-semibold leading-tight text-slate-500">
+                            {member.formattedJoinedAt}
+                          </span>
+                        </td>
+                        <td className="whitespace-nowrap border-b bg-transparent p-2 text-center align-middle text-sm leading-normal shadow-transparent">
+                          <span className="text-xs font-semibold leading-tight text-slate-500">
+                            {member.userPassbook.termDepositInRupee}
                           </span>
                         </td>
 
                         <td className="whitespace-nowrap border-b bg-transparent p-2 text-center align-middle text-sm leading-normal shadow-transparent">
-                          <span className="text-xs font-semibold leading-tight text-slate-400">
-                            {getMemberSummaryAmount(member, "deposit")}
+                          <span className="text-xs font-semibold leading-tight text-slate-500">
+                            {member.userPassbook.depositInRupee}
+                          </span>
+                        </td>
+                        <td className="whitespace-nowrap border-b bg-transparent p-2 text-center align-middle text-sm leading-normal shadow-transparent">
+                          <span className="text-xs font-semibold leading-tight text-slate-500">
+                            {member.userPassbook.balanceInRupee}
+                          </span>
+                        </td>
+                        <td className="whitespace-nowrap border-b bg-transparent p-2 text-center align-middle text-sm leading-normal shadow-transparent">
+                          <span className="text-xs font-semibold leading-tight text-slate-500">
+                            {member.userPassbook.eachPersonProfitInRupee}
                           </span>
                         </td>
                         <td className="whitespace-nowrap border-b bg-transparent p-2 text-center align-middle shadow-transparent">
-                          <span className="text-xs font-semibold leading-tight text-slate-400">
-                            {getMonthYear(member.joinedAt)}
+                          <span className="text-xs font-semibold leading-tight text-slate-500">
+                            {member.userPassbook.netAmountInRupee}
                           </span>
                         </td>
                       </tr>

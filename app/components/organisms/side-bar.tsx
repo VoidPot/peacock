@@ -9,7 +9,7 @@ function SideBar({ isOpen, setOpen }: any) {
       <div
         onClick={() => setOpen(!isOpen)}
         className={classNames(
-          "fixed left-0 top-0 z-110 h-screen w-screen bg-secondary bg-gradient-to-t from-accent to-secondary opacity-60",
+          "fixed left-0 top-0 z-110 h-screen w-screen bg-secondary bg-gradient-to-t from-slate-600 to-base-300 opacity-60",
           {
             "translate-x-0": isOpen,
             "-translate-x-full": !isOpen,
