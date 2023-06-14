@@ -12,6 +12,15 @@ export interface StatProps {
   theme?: "default" | "ghost";
   iconPlacement?: "end" | "start" | "none";
   align?: "start" | "center" | "end" | "between";
+  hedColor?:
+    | "secondary"
+    | "primary"
+    | "accent"
+    | "neutral"
+    | "base"
+    | "success"
+    | "info"
+    | "error";
 }
 
 const Stat = ({
@@ -22,6 +31,7 @@ const Stat = ({
   theme = "default",
   iconPlacement = "end",
   align = "between",
+  hedColor = "secondary",
 }: StatProps) => {
   return (
     <div className="w-full max-w-full">
@@ -64,7 +74,7 @@ const Stat = ({
               <p className="mb-0 text-xs font-semibold leading-normal text-slate-500">
                 {hed}
               </p>
-              <h5 className="text-1xl mb-0 font-bold text-primary">
+              <h5 className={`text-1xl text-${hedColor} mb-0 font-bold`}>
                 {dek}
                 {highlight && (
                   <span className="font-weight-bolder ml-2 text-sm leading-normal text-lime-500">

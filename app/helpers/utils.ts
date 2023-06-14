@@ -40,6 +40,15 @@ export const formatMoney = (input: any = 0) => {
   return `${Number(input).toLocaleString("en-IN") || 0} ₹`;
 };
 
+export const getClubAge = () => {
+  const diff = moment.duration(moment(new Date()).diff(new Date("09/01/2020")));
+  let output = `${diff.years()} yrs`;
+  if (diff.months()) {
+    output = `${output} ${diff.months()} mth`;
+  }
+  return output;
+};
+
 export const computeGroupTiming = ({ startAt, endAt, amount }: Group) => {
   const start = moment(startAt);
   const end = moment(endAt || new Date());

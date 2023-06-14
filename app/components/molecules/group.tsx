@@ -1,7 +1,5 @@
-import type { Icons } from "../atoms/svg/icon";
-import Icon from "../atoms/svg/icon";
-import classNames from "classnames";
-import Stat, { StatProps } from "./stat";
+import type { StatProps } from "./stat";
+import Stat from "./stat";
 
 function GroupCard(props: any) {
   const startMonth = props.startMonth;
@@ -24,6 +22,7 @@ function GroupCard(props: any) {
       dek: `${props.passbook.balance.toLocaleString("en-IN")} ₹`,
       iconName: "trans",
       align: "end",
+      hedColor: "accent",
     },
   ];
 

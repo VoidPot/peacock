@@ -1,8 +1,8 @@
 import type { Config } from "tailwindcss";
 import plugin from "tailwindcss/plugin";
-const colors = require("tailwindcss/colors");
 
 export default {
+  darkMode: "class",
   content: [
     "./app/**/*.{js,jsx,ts,tsx}",
     "./node_modules/flowbite/**/*.js",
@@ -15,9 +15,15 @@ export default {
     logs: true,
     rtl: false,
     prefix: "",
+    darkMode: "class",
+
     themes: [
+      "cupcake",
       "emerald",
       "lemonade",
+      "dark",
+      "light",
+      "business",
       {
         myTheme: {
           primary: "#349b7b",
