@@ -1,6 +1,7 @@
 import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
+import type { Icons } from "~/components/atoms/svg/icon";
 import Icon from "~/components/atoms/svg/icon";
 import GroupCard from "~/components/molecules/group";
 import Stat from "~/components/molecules/stat";
@@ -12,7 +13,7 @@ import { getOneSummary, getSummaries } from "~/models/summary.server";
 import { getMembersCount } from "~/models/user.server";
 import { Popover } from "@headlessui/react";
 import { Carousel } from "flowbite-react";
-import { Key } from "react";
+import type { Key } from "react";
 
 export const loader = async ({ request }: LoaderArgs) => {
   const summaries = await getSummaries();
@@ -26,7 +27,11 @@ export default function IndexPage() {
   const { passbookData } = useLoaderData<typeof loader>();
   const { club, groups } = passbookData;
 
-  const statsData: any = [
+  const statsData: {
+    hed: string;
+    dek: string | number;
+    iconName: keyof typeof Icons;
+  }[] = [
     {
       hed: "No Of Members",
       dek: club?.noOfMembers || 0,
