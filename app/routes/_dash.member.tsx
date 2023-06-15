@@ -9,7 +9,7 @@ export const loader = async ({ request }: LoaderArgs) => {
   return json({ items });
 };
 
-export default function IndexPage() {
+export default function MemberPage() {
   const { items } = useLoaderData<typeof loader>();
   return (
     <div className="h-full w-full">

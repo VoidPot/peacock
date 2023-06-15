@@ -9,9 +9,8 @@ export const loader = async ({ request }: LoaderArgs) => {
   return json({ items });
 };
 
-export default function IndexPage() {
+export default function VendorPage() {
   const { items } = useLoaderData<typeof loader>();
-  console.log({ items });
   return (
     <div className="h-full w-full">
       <div className="flex flex-wrap">

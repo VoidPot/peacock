@@ -3,7 +3,7 @@ import { useState } from "react";
 import NavBar from "~/components/organisms/nav-bar";
 import SideBar from "~/components/organisms/side-bar";
 
-export default function NotesPage() {
+export default function DashTemplate() {
   const [isOpen, setOpen] = useState(false);
   return (
     <>

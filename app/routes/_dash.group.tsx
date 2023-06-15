@@ -21,9 +21,8 @@ function monthDiff(d1: any, d2: any) {
   return months <= 0 ? 0 : months;
 }
 
-export default function IndexPage() {
-  const { groups, summaries, membersCount, summary } =
-    useLoaderData<typeof loader>();
+export default function GroupPage() {
+  const { membersCount, summary } = useLoaderData<typeof loader>();
   return (
     <div className="h-full w-full">
       <div className="mb-8 grid gap-6 md:grid-cols-2 xl:grid-cols-4">

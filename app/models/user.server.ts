@@ -23,37 +23,39 @@ export async function getMembersWithSummary() {
     },
   });
 
-  const members = response.map((each) => {
-    const { passbook, ...member } = each;
-    const userPassbook = passbook.find((pass) => pass.entryOf === "USER");
+  const members = response
+    .map((each) => {
+      const { passbook, ...member } = each;
+      const userPassbook = passbook.find((pass) => pass.entryOf === "USER");
 
-    return {
-      ...member,
-      formattedJoinedAt: getMonthYear(member.joinedAt),
-      userPassbook: {
-        ...userPassbook,
-        ...(userPassbook && {
-          holdingAmountInRupee: `${userPassbook.holdingAmount.toLocaleString(
-            "en-IN"
-          )} ₹`,
-          termDepositInRupee: `${userPassbook.termDeposit.toLocaleString(
-            "en-IN"
-          )} ₹`,
-          depositInRupee: `${userPassbook.deposit.toLocaleString("en-IN")} ₹`,
-          eachPersonProfitInRupee: `0 ₹`,
-          balanceInRupee: `0 ₹`,
-          netAmountInRupee: `${userPassbook.totalDeposit.toLocaleString(
-            "en-IN"
-          )} ₹`,
-        }),
-      },
-      groupPassbook: passbook
-        .filter((pass) => pass.entryOf === "USER_GROUP")
-        .sort((a, b) =>
-          (a.group?.slug || "") > (b.group?.slug || "") ? 1 : -1
-        ),
-    };
-  });
+      return {
+        ...member,
+        formattedJoinedAt: getMonthYear(member.joinedAt),
+        userPassbook: {
+          ...userPassbook,
+          ...(userPassbook && {
+            holdingAmountInRupee: `${userPassbook.holdingAmount.toLocaleString(
+              "en-IN"
+            )} ₹`,
+            termDepositInRupee: `${userPassbook.termDeposit.toLocaleString(
+              "en-IN"
+            )} ₹`,
+            depositInRupee: `${userPassbook.deposit.toLocaleString("en-IN")} ₹`,
+            eachPersonProfitInRupee: `0 ₹`,
+            balanceInRupee: `0 ₹`,
+            netAmountInRupee: `${userPassbook.totalDeposit.toLocaleString(
+              "en-IN"
+            )} ₹`,
+          }),
+        },
+        groupPassbook: passbook
+          .filter((pass) => pass.entryOf === "USER_GROUP")
+          .sort((a, b) =>
+            (a.group?.slug || "") > (b.group?.slug || "") ? 1 : -1
+          ),
+      };
+    })
+    .sort((a, b) => (a.nickName > b.nickName ? 1 : -1));
 
   return members;
 }
@@ -75,37 +77,39 @@ export async function getVendorsWithSummary() {
     },
   });
 
-  const members = response.map((each) => {
-    const { passbook, ...member } = each;
-    const userPassbook = passbook.find((pass) => pass.entryOf === "USER");
+  const members = response
+    .map((each) => {
+      const { passbook, ...member } = each;
+      const userPassbook = passbook.find((pass) => pass.entryOf === "USER");
 
-    return {
-      ...member,
-      formattedJoinedAt: getMonthYear(member.joinedAt),
-      userPassbook: {
-        ...userPassbook,
-        ...(userPassbook && {
-          holdingAmountInRupee: `${userPassbook.holdingAmount.toLocaleString(
-            "en-IN"
-          )} ₹`,
-          termDepositInRupee: `${userPassbook.termDeposit.toLocaleString(
-            "en-IN"
-          )} ₹`,
-          depositInRupee: `${userPassbook.deposit.toLocaleString("en-IN")} ₹`,
-          eachPersonProfitInRupee: `0 ₹`,
-          balanceInRupee: `0 ₹`,
-          netAmountInRupee: `${userPassbook.totalDeposit.toLocaleString(
-            "en-IN"
-          )} ₹`,
-        }),
-      },
-      groupPassbook: passbook
-        .filter((pass) => pass.entryOf === "USER_GROUP")
-        .sort((a, b) =>
-          (a.group?.slug || "") > (b.group?.slug || "") ? 1 : -1
-        ),
-    };
-  });
+      return {
+        ...member,
+        formattedJoinedAt: getMonthYear(member.joinedAt),
+        userPassbook: {
+          ...userPassbook,
+          ...(userPassbook && {
+            holdingAmountInRupee: `${userPassbook.holdingAmount.toLocaleString(
+              "en-IN"
+            )} ₹`,
+            termDepositInRupee: `${userPassbook.termDeposit.toLocaleString(
+              "en-IN"
+            )} ₹`,
+            depositInRupee: `${userPassbook.deposit.toLocaleString("en-IN")} ₹`,
+            eachPersonProfitInRupee: `0 ₹`,
+            balanceInRupee: `0 ₹`,
+            netAmountInRupee: `${userPassbook.totalDeposit.toLocaleString(
+              "en-IN"
+            )} ₹`,
+          }),
+        },
+        groupPassbook: passbook
+          .filter((pass) => pass.entryOf === "USER_GROUP")
+          .sort((a, b) =>
+            (a.group?.slug || "") > (b.group?.slug || "") ? 1 : -1
+          ),
+      };
+    })
+    .sort((a, b) => (a.nickName > b.nickName ? 1 : -1));
 
   return members;
 }
