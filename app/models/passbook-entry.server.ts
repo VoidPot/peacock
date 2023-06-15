@@ -107,8 +107,6 @@ export const passbookMiddleware = async (params: any, result: Transaction) => {
       }
     });
 
-    console.log(JSON.stringify(passbooksForUpdate));
-
     const mapper = passbooksForUpdate.map(({ where, data }) =>
       prisma.passbook
         .update({

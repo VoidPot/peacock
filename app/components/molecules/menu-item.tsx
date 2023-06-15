@@ -12,7 +12,6 @@ interface MenuItemProps {
 
 function MenuItem({ hed, pathName, iconName, onClick }: MenuItemProps) {
   const matches = useMatches();
-  console.log({ matches, pathName });
 
   const isActive = matches.length > 2 && matches[2].pathname === pathName;
 

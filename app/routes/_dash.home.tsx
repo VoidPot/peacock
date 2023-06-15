@@ -92,7 +92,7 @@ export default function IndexPage() {
   return (
     <>
       {club && (
-        <div className="rounded-2xl ">
+        <div className="rounded-md ">
           <div className="grid grid-flow-row-dense grid-cols-1 items-center justify-center gap-4 align-middle sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4">
             {statsData.map((each: any, index: Key | null | undefined) => (
               <Stat key={index} hedColor="neutral" {...each} />
@@ -100,13 +100,15 @@ export default function IndexPage() {
           </div>
         </div>
       )}
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-        <div className="col-span-2 flex flex-col gap-6">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-7">
+        <div className="col-span-1 flex flex-col gap-6 lg:col-span-4">
           {groups?.map((each, key) => (
             <GroupCard key={key} {...each} noOfMembers={club.noOfMembers} />
           ))}
         </div>
-        <UpdateCard />
+        <div className="col-span-1 flex flex-col gap-6 lg:col-span-3">
+          <UpdateCard />
+        </div>
       </div>
     </>
   );

@@ -26,80 +26,175 @@ export default function IndexPage() {
     useLoaderData<typeof loader>();
   return (
     <div className="h-full w-full">
-      <div className="mb-8 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-        <div className="shadow-xs rounded-lg border bg-white dark:bg-gray-800">
-          <div className="flex items-center justify-start p-3">
-            <div className="mr-4 rounded-full bg-green-100 p-3 text-[#349b7b]">
-              <svg fill="currentColor" viewBox="0 0 20 20" className="h-5 w-5">
-                <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"></path>
-              </svg>
-            </div>
-            <div>
-              <p className="font-sans text-sm font-medium uppercase text-gray-600 dark:text-gray-400">
-                Members
-              </p>
-              <p className="font-sans text-2xl font-semibold text-gray-700 dark:text-gray-200">
-                {membersCount}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="shadow-xs rounded-lg border bg-white dark:bg-gray-800">
-          <div className="flex items-center justify-start p-3">
-            <div className="mr-4 rounded-full bg-green-100 p-3 text-[#349b7b]">
-              <svg fill="currentColor" viewBox="0 0 20 20" className="h-5 w-5">
-                <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"></path>
-              </svg>
-            </div>
-            <div>
-              <p className="font-sans text-sm font-medium uppercase text-gray-600 dark:text-gray-400">
-                Started
-              </p>
-              <p className="font-sans text-2xl font-semibold text-gray-700 dark:text-gray-200">
-                {new Date("09/01/2020").toLocaleDateString("en-US", {
-                  month: "long",
-                  day: "numeric",
-                  year: "numeric",
-                })}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="shadow-xs rounded-lg border bg-white dark:bg-gray-800">
-          <div className="flex items-center justify-start p-3">
-            <div className="mr-4 rounded-full bg-green-100 p-3 text-[#349b7b]">
-              <svg fill="currentColor" viewBox="0 0 20 20" className="h-5 w-5">
-                <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"></path>
-              </svg>
-            </div>
-            <div>
-              <p className="font-sans text-sm font-medium uppercase text-gray-600 dark:text-gray-400">
-                Months till
-              </p>
-              <p className="font-sans text-2xl font-semibold text-gray-700 dark:text-gray-200">
-                {monthDiff(new Date("09/01/2020"), new Date())}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="shadow-xs rounded-lg border bg-white dark:bg-gray-800">
-          <div className="flex items-center justify-start p-3">
-            <div className="mr-4 rounded-full bg-green-100 p-3 text-[#349b7b]">
-              <svg fill="currentColor" viewBox="0 0 20 20" className="h-5 w-5">
-                <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"></path>
-              </svg>
-            </div>
-            <div>
-              <p className="font-sans text-sm font-medium uppercase text-gray-600 dark:text-gray-400">
-                Amount
-              </p>
-              <p className="font-sans text-2xl font-semibold text-gray-700 dark:text-gray-200">
-                {summary?.holding.toLocaleString("en-IN") || 0} ₹
-              </p>
-            </div>
-          </div>
-        </div>
+      <div className="overflow-x-auto bg-base-200">
+        <table className="table">
+          {/* head */}
+          <thead>
+            <tr>
+              <th>
+                <label>
+                  <input type="checkbox" className="checkbox" />
+                </label>
+              </th>
+              <th>Name</th>
+              <th>Job</th>
+              <th>Favorite Color</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {/* row 1 */}
+            <tr>
+              <th>
+                <label>
+                  <input type="checkbox" className="checkbox" />
+                </label>
+              </th>
+              <td>
+                <div className="flex items-center space-x-3">
+                  <div className="avatar">
+                    <div className="mask mask-squircle h-12 w-12">
+                      <img
+                        src="/tailwind-css-component-profile-2@56w.png"
+                        alt="Avatar Tailwind CSS Component"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <div className="font-bold">Hart Hagerty</div>
+                    <div className="text-sm opacity-50">United States</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                Zemlak, Daniel and Leannon
+                <br />
+                <span className="badge badge-ghost badge-sm">
+                  Desktop Support Technician
+                </span>
+              </td>
+              <td>Purple</td>
+              <th>
+                <button className="btn-ghost btn-xs btn">details</button>
+              </th>
+            </tr>
+            {/* row 2 */}
+            <tr>
+              <th>
+                <label>
+                  <input type="checkbox" className="checkbox" />
+                </label>
+              </th>
+              <td>
+                <div className="flex items-center space-x-3">
+                  <div className="avatar">
+                    <div className="mask mask-squircle h-12 w-12">
+                      <img
+                        src="/tailwind-css-component-profile-3@56w.png"
+                        alt="Avatar Tailwind CSS Component"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <div className="font-bold">Brice Swyre</div>
+                    <div className="text-sm opacity-50">China</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                Carroll Group
+                <br />
+                <span className="badge badge-ghost badge-sm">
+                  Tax Accountant
+                </span>
+              </td>
+              <td>Red</td>
+              <th>
+                <button className="btn-ghost btn-xs btn">details</button>
+              </th>
+            </tr>
+            {/* row 3 */}
+            <tr>
+              <th>
+                <label>
+                  <input type="checkbox" className="checkbox" />
+                </label>
+              </th>
+              <td>
+                <div className="flex items-center space-x-3">
+                  <div className="avatar">
+                    <div className="mask mask-squircle h-12 w-12">
+                      <img
+                        src="/tailwind-css-component-profile-4@56w.png"
+                        alt="Avatar Tailwind CSS Component"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <div className="font-bold">Marjy Ferencz</div>
+                    <div className="text-sm opacity-50">Russia</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                Rowe-Schoen
+                <br />
+                <span className="badge badge-ghost badge-sm">
+                  Office Assistant I
+                </span>
+              </td>
+              <td>Crimson</td>
+              <th>
+                <button className="btn-ghost btn-xs btn">details</button>
+              </th>
+            </tr>
+            {/* row 4 */}
+            <tr>
+              <th>
+                <label>
+                  <input type="checkbox" className="checkbox" />
+                </label>
+              </th>
+              <td>
+                <div className="flex items-center space-x-3">
+                  <div className="avatar">
+                    <div className="mask mask-squircle h-12 w-12">
+                      <img
+                        src="/tailwind-css-component-profile-5@56w.png"
+                        alt="Avatar Tailwind CSS Component"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <div className="font-bold">Yancy Tear</div>
+                    <div className="text-sm opacity-50">Brazil</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                Wyman-Ledner
+                <br />
+                <span className="badge badge-ghost badge-sm">
+                  Community Outreach Specialist
+                </span>
+              </td>
+              <td>Indigo</td>
+              <th>
+                <button className="btn-ghost btn-xs btn">details</button>
+              </th>
+            </tr>
+          </tbody>
+          {/* foot */}
+          <tfoot>
+            <tr>
+              <th></th>
+              <th>Name</th>
+              <th>Job</th>
+              <th>Favorite Color</th>
+              <th></th>
+            </tr>
+          </tfoot>
+        </table>
       </div>
     </div>
   );

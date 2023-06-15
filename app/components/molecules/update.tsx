@@ -2,7 +2,7 @@ import Icon from "../atoms/svg/icon";
 
 function UpdateCard() {
   return (
-    <div className="relative flex h-full w-full flex-col break-words rounded-2xl border-0 border-solid border-black/12.5 bg-white bg-clip-border shadow-soft-xl">
+    <div className="relative flex h-full w-full flex-col break-words rounded-md border-0 border-solid border-black/12.5 bg-white bg-clip-border shadow-soft-xl">
       <div className="mb-0 rounded-t-2xl border-b-0 border-solid border-black/12.5 bg-white p-6 pb-0">
         <h6 className="text-neutral">Recent Transactions</h6>
       </div>

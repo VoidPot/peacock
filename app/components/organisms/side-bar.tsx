@@ -9,7 +9,7 @@ function SideBar({ isOpen, setOpen }: any) {
       <div
         onClick={() => setOpen(!isOpen)}
         className={classNames(
-          "fixed left-0 top-0 z-110 h-screen w-screen bg-secondary bg-gradient-to-t from-slate-600 to-base-300 opacity-60",
+          "fixed left-0 top-0 z-110 h-screen w-screen bg-secondary bg-gradient-to-r from-slate-600 to-base-300 opacity-60",
           {
             "translate-x-0": isOpen,
             "-translate-x-full": !isOpen,
@@ -18,14 +18,14 @@ function SideBar({ isOpen, setOpen }: any) {
       ></div>
       <aside
         className={classNames(
-          "ease-nav-brand fixed z-990 m-0 block h-full max-h-screen w-[300px] flex-wrap items-center justify-between border-0 p-4 transition-transform duration-200 xl:left-0 xl:translate-x-0 ",
+          "ease-nav-brand fixed z-990 m-0 block h-full max-h-screen w-[300px] flex-wrap items-center justify-between border-0 p-6 pr-0 transition-transform duration-200 md:pl-8 xl:left-0 xl:translate-x-0",
           {
             "translate-x-0": isOpen,
             "-translate-x-[300px]": !isOpen,
           }
         )}
       >
-        <div className="h-full rounded-2xl bg-base-100 shadow-soft-xl">
+        <div className="flex h-full flex-col rounded-md bg-base-100 shadow-soft-xl">
           <div className="h-fit py-10 text-center">
             <Link
               to={"/"}
@@ -38,10 +38,9 @@ function SideBar({ isOpen, setOpen }: any) {
           </div>
 
           <hr className="mt-0 h-px bg-transparent bg-gradient-to-r from-transparent via-black/90 to-transparent" />
-
-          <div className="block h-full w-auto basis-full items-center">
-            <ul className="mb-0 flex flex-col pl-0">
-              <li className="mt-0.5 w-full">
+          <div className="block h-auto w-full basis-full overflow-y-auto">
+            <ul className="mb-0 flex h-min w-full flex-col pl-0">
+              <li className="w-full">
                 <MenuItem
                   onClick={() => setOpen(false)}
                   pathName="/home"
@@ -49,7 +48,7 @@ function SideBar({ isOpen, setOpen }: any) {
                   iconName="home"
                 />
               </li>
-              <li className="mt-0.5 w-full">
+              <li className="w-full">
                 <MenuItem
                   onClick={() => setOpen(false)}
                   pathName="/transaction"
@@ -57,7 +56,7 @@ function SideBar({ isOpen, setOpen }: any) {
                   iconName="trans"
                 />
               </li>
-              <li className="mt-0.5 w-full">
+              <li className="w-full">
                 <MenuItem
                   onClick={() => setOpen(false)}
                   pathName="/admin-panel"
@@ -72,7 +71,7 @@ function SideBar({ isOpen, setOpen }: any) {
                 </h6>
               </li>
 
-              <li className="mt-0.5 w-full">
+              <li className="w-full">
                 <MenuItem
                   onClick={() => setOpen(false)}
                   pathName="/member"
@@ -81,7 +80,7 @@ function SideBar({ isOpen, setOpen }: any) {
                 />
               </li>
 
-              <li className="mt-0.5 w-full">
+              <li className="w-full">
                 <MenuItem
                   onClick={() => setOpen(false)}
                   pathName="/vendor"
@@ -91,6 +90,10 @@ function SideBar({ isOpen, setOpen }: any) {
               </li>
             </ul>
           </div>
+
+          {/* <div className="block h-auto w-auto items-center overflow-y-auto">
+           
+          </div> */}
         </div>
       </aside>
     </>

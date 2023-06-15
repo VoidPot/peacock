@@ -1,102 +1,160 @@
 import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import { getGroups } from "~/models/group.server";
-import { getOneSummary, getSummaries } from "~/models/summary.server";
-import { getMembersCount } from "~/models/user.server";
+import classNames from "classnames";
+import { getVendorsWithSummary } from "~/models/user.server";
 
 export const loader = async ({ request }: LoaderArgs) => {
-  const groups = await getGroups();
-  const summaries = await getSummaries();
-  const summary = await getOneSummary({ type: "DEFAULT" });
-  const membersCount = await getMembersCount();
-  return json({ summaries, groups, summary, membersCount });
+  const items = await getVendorsWithSummary();
+  return json({ items });
 };
 
-function monthDiff(d1: any, d2: any) {
-  var months;
-  months = (d2.getFullYear() - d1.getFullYear()) * 12;
-  months -= d1.getMonth();
-  months += d2.getMonth();
-  return months <= 0 ? 0 : months;
-}
-
 export default function IndexPage() {
-  const { groups, summaries, membersCount, summary } =
-    useLoaderData<typeof loader>();
+  const { items } = useLoaderData<typeof loader>();
+  console.log({ items });
   return (
     <div className="h-full w-full">
-      <div className="mb-8 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-        <div className="shadow-xs rounded-lg border bg-white dark:bg-gray-800">
-          <div className="flex items-center justify-start p-3">
-            <div className="mr-4 rounded-full bg-green-100 p-3 text-[#349b7b]">
-              <svg fill="currentColor" viewBox="0 0 20 20" className="h-5 w-5">
-                <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"></path>
-              </svg>
+      <div className="flex flex-wrap">
+        <div className="w-full max-w-full flex-none">
+          <div className="relative mb-6 flex min-w-0 flex-col break-words rounded-md border-0 border-solid border-transparent bg-white bg-clip-border shadow-soft-xl">
+            <div className="border-b-solid mb-0 rounded-t-2xl border-b-0 border-b-transparent bg-white p-6 pb-0">
+              <h6 className="text-neutral">Vendors Table</h6>
             </div>
-            <div>
-              <p className="font-sans text-sm font-medium uppercase text-gray-600 dark:text-gray-400">
-                Members
-              </p>
-              <p className="font-sans text-2xl font-semibold text-gray-700 dark:text-gray-200">
-                {membersCount}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="shadow-xs rounded-lg border bg-white dark:bg-gray-800">
-          <div className="flex items-center justify-start p-3">
-            <div className="mr-4 rounded-full bg-green-100 p-3 text-[#349b7b]">
-              <svg fill="currentColor" viewBox="0 0 20 20" className="h-5 w-5">
-                <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"></path>
-              </svg>
-            </div>
-            <div>
-              <p className="font-sans text-sm font-medium uppercase text-gray-600 dark:text-gray-400">
-                Started
-              </p>
-              <p className="font-sans text-2xl font-semibold text-gray-700 dark:text-gray-200">
-                {new Date("09/01/2020").toLocaleDateString("en-US", {
-                  month: "long",
-                  day: "numeric",
-                  year: "numeric",
-                })}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="shadow-xs rounded-lg border bg-white dark:bg-gray-800">
-          <div className="flex items-center justify-start p-3">
-            <div className="mr-4 rounded-full bg-green-100 p-3 text-[#349b7b]">
-              <svg fill="currentColor" viewBox="0 0 20 20" className="h-5 w-5">
-                <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"></path>
-              </svg>
-            </div>
-            <div>
-              <p className="font-sans text-sm font-medium uppercase text-gray-600 dark:text-gray-400">
-                Months till
-              </p>
-              <p className="font-sans text-2xl font-semibold text-gray-700 dark:text-gray-200">
-                {monthDiff(new Date("09/01/2020"), new Date())}
-              </p>
-            </div>
-          </div>
-        </div>
+            <div className="flex-auto px-0 pb-2 pt-0">
+              <div className="overflow-x-auto p-0">
+                <table className="mb-0 table w-full items-center border-gray-200 align-top text-slate-500">
+                  <thead className="px-4 align-bottom">
+                    <tr>
+                      <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-5 py-3 text-left align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
+                        Name
+                      </th>
+                      <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
+                        Started At
+                      </th>
+                      <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
+                        Term / Other Invest
+                      </th>
+                      {/* <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
+                        Deposit
+                      </th> */}
+                      <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
+                        Returns
+                      </th>
+                      <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
+                        Profit
+                      </th>
+                      <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
+                        Net Amount
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {items.map((member, index) => (
+                      <tr key={index}>
+                        <td
+                          className={classNames(
+                            "whitespace-nowrap bg-transparent p-2 align-middle shadow-transparent",
+                            {
+                              "border-b": index !== items.length - 1,
+                            }
+                          )}
+                        >
+                          <div className="flex px-2 py-1">
+                            <div>
+                              <img
+                                src={`https://file.iam-hussain.site/peacock/image/${member.avatar}`}
+                                className="mr-4 inline-flex h-9 w-9 items-center justify-center rounded-xl text-sm text-white transition-all duration-200 ease-soft-in-out"
+                                alt="user1"
+                              />
+                            </div>
+                            <div className="flex flex-col justify-center">
+                              <h6 className="mb-0 text-sm leading-normal">
+                                {member.firstName} {member.lastName}
+                              </h6>
 
-        <div className="shadow-xs rounded-lg border bg-white dark:bg-gray-800">
-          <div className="flex items-center justify-start p-3">
-            <div className="mr-4 rounded-full bg-green-100 p-3 text-[#349b7b]">
-              <svg fill="currentColor" viewBox="0 0 20 20" className="h-5 w-5">
-                <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"></path>
-              </svg>
-            </div>
-            <div>
-              <p className="font-sans text-sm font-medium uppercase text-gray-600 dark:text-gray-400">
-                Amount
-              </p>
-              <p className="font-sans text-2xl font-semibold text-gray-700 dark:text-gray-200">
-                {summary?.holding.toLocaleString("en-IN") || 0} ₹
-              </p>
+                              {member.userPassbook.holdingAmount ? (
+                                <p className="mb-0 text-xs leading-tight text-slate-500">
+                                  {member.userPassbook?.holdingAmountInRupee}
+                                </p>
+                              ) : (
+                                <></>
+                              )}
+                            </div>
+                          </div>
+                        </td>
+                        <td
+                          className={classNames(
+                            "whitespace-nowrap bg-transparent p-2 text-center align-middle text-sm leading-normal shadow-transparent",
+                            {
+                              "border-b": index !== items.length - 1,
+                            }
+                          )}
+                        >
+                          <span className="text-xs font-semibold leading-tight text-slate-500">
+                            {member.formattedJoinedAt}
+                          </span>
+                        </td>
+                        <td
+                          className={classNames(
+                            "whitespace-nowrap bg-transparent p-2 text-center align-middle text-sm leading-normal shadow-transparent",
+                            {
+                              "border-b": index !== items.length - 1,
+                            }
+                          )}
+                        >
+                          <span className="text-xs font-semibold leading-tight text-slate-500">
+                            {member.userPassbook.invest}
+
+                            {member.userPassbook.deposit ? (
+                              <p className="mb-0 text-xs leading-tight text-slate-500">
+                                {member.userPassbook?.depositInRupee}
+                              </p>
+                            ) : (
+                              ""
+                            )}
+                          </span>
+                        </td>
+                        <td
+                          className={classNames(
+                            "whitespace-nowrap bg-transparent p-2 text-center align-middle text-sm leading-normal shadow-transparent",
+                            {
+                              "border-b": index !== items.length - 1,
+                            }
+                          )}
+                        >
+                          <span className="text-xs font-semibold leading-tight text-slate-500">
+                            {member.userPassbook.balanceInRupee}
+                          </span>
+                        </td>
+                        <td
+                          className={classNames(
+                            "whitespace-nowrap bg-transparent p-2 text-center align-middle text-sm leading-normal shadow-transparent",
+                            {
+                              "border-b": index !== items.length - 1,
+                            }
+                          )}
+                        >
+                          <span className="text-xs font-semibold leading-tight text-slate-500">
+                            {member.userPassbook.eachPersonProfitInRupee}
+                          </span>
+                        </td>
+                        <td
+                          className={classNames(
+                            "whitespace-nowrap bg-transparent p-2 text-center align-middle text-sm leading-normal shadow-transparent",
+                            {
+                              "border-b": index !== items.length - 1,
+                            }
+                          )}
+                        >
+                          <span className="text-xs font-semibold leading-tight text-slate-500">
+                            {member.userPassbook.netAmountInRupee}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>

@@ -9,7 +9,6 @@ const prisma = new PrismaClient();
 prisma.$use(async (param, next) => {
   const result = await next(param);
   const data = await passbookMiddleware(param, result);
-  console.log({ data });
   return result;
 });
 

@@ -28,7 +28,7 @@ function GroupCard(props: any) {
 
   return (
     <div className="mb-0 mt-0 w-full max-w-full text-center lg:mb-0 lg:flex-none">
-      <div className="relative z-20 flex min-w-0 flex-col break-words rounded-2xl bg-base-100 bg-clip-border p-4 shadow-soft-xl">
+      <div className="relative z-20 flex min-w-0 flex-col break-words rounded-md bg-base-100 bg-clip-border p-4 shadow-soft-xl">
         <div className="flex flex-col">
           <div className="flex justify-between p-2 pb-4">
             <h3 className="m-0 uppercase text-neutral">{props.name}</h3>
@@ -55,7 +55,7 @@ function GroupCard(props: any) {
               ></progress>
               <div className="flex justify-between pt-1">
                 <p className="m-0 p-0 text-sm font-semibold leading-normal text-slate-500">
-                  {0}
+                  0 ₹
                 </p>
                 <p className="m-0 p-0 text-sm font-semibold leading-normal text-slate-500">
                   {netAmount}

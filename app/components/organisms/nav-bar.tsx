@@ -9,12 +9,15 @@ function NavBar({ isOpen, setOpen }: any) {
 
   return (
     <nav
-      className="relative m-0 flex grow flex-col flex-wrap items-center justify-between rounded-2xl bg-transparent px-6 py-2 shadow-none transition-all duration-250 ease-soft-in lg:flex-nowrap lg:justify-start"
+      className="relative m-0 flex grow flex-col flex-wrap items-center justify-between rounded-md bg-transparent px-6 py-2 shadow-none transition-all duration-250 ease-soft-in lg:flex-nowrap lg:justify-start"
       navbar-scroll="true"
     >
-      <div className="mx-auto flex w-full items-center justify-between px-0 py-1 flex-wrap-inherit lg:px-0">
+      <div className="mx-auto flex w-full items-center justify-between px-0 py-3 align-middle flex-wrap-inherit lg:px-0">
         <nav>
-          <ol className="mr-12 flex flex-wrap rounded-lg bg-transparent pt-1 sm:mr-16">
+          <h6 className="m-0 p-0 font-brand uppercase tracking-normal text-neutral">
+            Peacock Club
+          </h6>
+          <ol className="mr-12 flex flex-wrap rounded-lg bg-transparent sm:mr-16">
             <li className="text-sm leading-normal">
               <span className="text-slate-700 opacity-50">Pages</span>
             </li>
@@ -25,10 +28,9 @@ function NavBar({ isOpen, setOpen }: any) {
               {pageName}
             </li>
           </ol>
-          <h6 className="mb-0 font-bold capitalize">{pageName}</h6>
         </nav>
 
-        <div className="mt-2 flex items-center sm:mr-6 sm:mt-0 md:mr-0 lg:flex lg:basis-auto">
+        <div className="flex items-center sm:mr-6 sm:mt-0 md:mr-0 lg:flex lg:basis-auto">
           <ul className="mb-0 flex list-none flex-row justify-end pl-0 md-max:w-full">
             <li className="flex items-center pl-4 xl:hidden">
               <button
