@@ -4,45 +4,39 @@ import configContext from "~/configContext";
 import { prisma } from "~/db.server";
 
 const getUserPassbooks = async (from: number, to: number, groupId: number) => {
-  const passbookUser = await prisma.passbook.findMany({
-    where: {
-      userId: {
-        in: [from, to],
+  return await Promise.all([
+    await prisma.passbook.findFirst({
+      where: {
+        user: {
+          id: from,
+        },
       },
-      entryOf: "USER",
-    },
-  });
-  const passbookUserGroup = await prisma.passbook.findMany({
-    where: {
-      userId: {
-        in: [from, to],
+    }),
+    await prisma.passbook.findFirst({
+      where: {
+        user: {
+          id: to,
+        },
       },
-      groupId: groupId,
-      entryOf: "USER_GROUP",
-    },
-  });
-
-  const passbookGroup = await prisma.passbook.findFirst({
-    where: {
-      groupId: groupId,
-      entryOf: "GROUP",
-    },
-  });
-
-  const club = await prisma.passbook.findFirst({
-    where: {
-      entryOf: "CLUB",
-    },
-  });
-
-  return {
-    FROM_USER: passbookUser.find((e) => e.userId === from),
-    TO_USER: passbookUser.find((e) => e.userId === to),
-    TO_USER_GROUP: passbookUserGroup.find((e) => e.userId === from),
-    FROM_USER_GROUP: passbookUserGroup.find((e) => e.userId === to),
-    GROUP: passbookGroup,
-    CLUB: club,
-  };
+    }),
+    await prisma.passbook.findFirst({
+      where: {
+        group: {
+          id: groupId,
+        },
+      },
+    }),
+    await prisma.passbook.findFirst({
+      where: {
+        entryOf: "CLUB",
+      },
+    }),
+  ]).then(([FROM, TO, GROUP, CLUB]) => ({
+    FROM,
+    TO,
+    GROUP,
+    CLUB,
+  }));
 };
 
 export const passbookMiddleware = async (params: any, result: Transaction) => {

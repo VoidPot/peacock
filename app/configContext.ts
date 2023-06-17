@@ -90,13 +90,7 @@ const computeGroupData = ({
 export type PassbookConfig = {
   settings: {
     [key in TRANSACTION_MODE]?: {
-      [key in
-        | "FROM_USER"
-        | "TO_USER"
-        | "GROUP"
-        | "FROM_USER_GROUP"
-        | "TO_USER_GROUP"
-        | "CLUB"]?: {
+      [key in "FROM" | "TO" | "GROUP" | "CLUB"]?: {
         [key in "ADD" | "SUB"]?: {
           [key in Passbook_Settings_Keys]?: "amount" | "month" | "balance";
         };
@@ -108,29 +102,28 @@ export type PassbookConfig = {
 const passbook: PassbookConfig = {
   settings: {
     INTER_CASH_TRANSFER: {
-      FROM_USER: {
+      FROM: {
         SUB: {
           holdingAmount: "amount",
         },
       },
-      TO_USER: {
+      TO: {
         ADD: {
           holdingAmount: "amount",
         },
       },
     },
     MEMBERS_PERIODIC_DEPOSIT: {
-      FROM_USER: {
+      FROM: {
         ADD: {
           termDeposit: "amount",
           totalDeposit: "amount",
           accountBalance: "amount",
         },
       },
-      TO_USER: {
+      TO: {
         ADD: {
           holdingAmount: "amount",
-          accountBalance: "amount",
         },
       },
       GROUP: {
@@ -138,20 +131,7 @@ const passbook: PassbookConfig = {
           termDeposit: "amount",
           totalDeposit: "amount",
           accountBalance: "amount",
-        },
-      },
-      FROM_USER_GROUP: {
-        ADD: {
-          termDeposit: "amount",
-          totalDeposit: "amount",
-          accountBalance: "amount",
-          depositMonths: "month",
-        },
-      },
-      TO_USER_GROUP: {
-        ADD: {
           holdingAmount: "amount",
-          accountBalance: "amount",
         },
       },
       CLUB: {
@@ -164,17 +144,16 @@ const passbook: PassbookConfig = {
       },
     },
     NEW_MEMBER_PAST_TALLY: {
-      FROM_USER: {
+      FROM: {
         ADD: {
           deposit: "amount",
           totalDeposit: "amount",
           accountBalance: "amount",
         },
       },
-      TO_USER: {
+      TO: {
         ADD: {
           holdingAmount: "amount",
-          accountBalance: "amount",
         },
       },
       GROUP: {
@@ -182,19 +161,7 @@ const passbook: PassbookConfig = {
           deposit: "amount",
           totalDeposit: "amount",
           accountBalance: "amount",
-        },
-      },
-      FROM_USER_GROUP: {
-        ADD: {
-          deposit: "amount",
-          totalDeposit: "amount",
-          accountBalance: "amount",
-        },
-      },
-      TO_USER_GROUP: {
-        ADD: {
           holdingAmount: "amount",
-          accountBalance: "amount",
         },
       },
       CLUB: {
@@ -207,13 +174,13 @@ const passbook: PassbookConfig = {
       },
     },
     MEMBERS_WITHDRAW: {
-      FROM_USER: {
+      FROM: {
         SUB: {
           holdingAmount: "amount",
           accountBalance: "amount",
         },
       },
-      TO_USER: {
+      TO: {
         SUB: {
           withdraw: "amount",
           totalWithdraw: "amount",
@@ -223,20 +190,6 @@ const passbook: PassbookConfig = {
       },
       GROUP: {
         SUB: {
-          withdraw: "amount",
-          totalWithdraw: "amount",
-          accountBalance: "amount",
-          holdingAmount: "amount",
-        },
-      },
-      FROM_USER_GROUP: {
-        ADD: {
-          holdingAmount: "amount",
-          accountBalance: "amount",
-        },
-      },
-      TO_USER_GROUP: {
-        ADD: {
           withdraw: "amount",
           totalWithdraw: "amount",
           accountBalance: "amount",
@@ -253,13 +206,13 @@ const passbook: PassbookConfig = {
       },
     },
     VENDOR_PERIODIC_INVEST: {
-      FROM_USER: {
+      FROM: {
         SUB: {
           holdingAmount: "amount",
           accountBalance: "amount",
         },
       },
-      TO_USER: {
+      TO: {
         ADD: {
           termInvest: "amount",
           totalInvest: "amount",
@@ -299,13 +252,13 @@ const passbook: PassbookConfig = {
       },
     },
     VENDOR_INVEST: {
-      FROM_USER: {
+      FROM: {
         SUB: {
           holdingAmount: "amount",
           accountBalance: "amount",
         },
       },
-      TO_USER: {
+      TO: {
         ADD: {
           invest: "amount",
           totalInvest: "amount",
@@ -343,14 +296,14 @@ const passbook: PassbookConfig = {
       },
     },
     VENDOR_PERIODIC_RETURN: {
-      FROM_USER: {
+      FROM: {
         ADD: {
           termReturns: "amount",
           totalReturns: "amount",
           accountBalance: "amount",
         },
       },
-      TO_USER: {
+      TO: {
         ADD: {
           holdingAmount: "amount",
           accountBalance: "amount",
@@ -380,14 +333,14 @@ const passbook: PassbookConfig = {
       },
     },
     VENDOR_RETURN: {
-      FROM_USER: {
+      FROM: {
         ADD: {
           returns: "amount",
           totalReturns: "amount",
           accountBalance: "amount",
         },
       },
-      TO_USER: {
+      TO: {
         ADD: {
           holdingAmount: "amount",
           accountBalance: "amount",
@@ -417,13 +370,13 @@ const passbook: PassbookConfig = {
       },
     },
     OTHER_EXPENDITURE: {
-      FROM_USER: {
+      FROM: {
         SUB: {
           holdingAmount: "amount",
           accountBalance: "amount",
         },
       },
-      TO_USER: {
+      TO: {
         SUB: {
           withdraw: "amount",
           totalWithdraw: "amount",
