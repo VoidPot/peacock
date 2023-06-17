@@ -2,15 +2,22 @@ import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import classNames from "classnames";
-import { getVendorsWithSummary } from "~/models/user.server";
+import {
+  getMemberSelectData,
+  getVendorsWithSummary,
+} from "~/models/user.server";
 
 export const loader = async ({ request }: LoaderArgs) => {
+  const users = await getMemberSelectData();
   const items = await getVendorsWithSummary();
-  return json({ items });
+  return json({
+    items,
+    users: users.sort((a, b) => (a.nickName > b.nickName ? 1 : -1)),
+  });
 };
 
 export default function TransactionPage() {
-  const { items } = useLoaderData<typeof loader>();
+  const { items, users } = useLoaderData<typeof loader>();
   console.log({ items });
   return (
     <div className="h-full w-full">
@@ -20,28 +27,57 @@ export default function TransactionPage() {
             <div className="border-b-solid mb-0 rounded-t-2xl border-b-0 border-b-transparent bg-white p-6 pb-0">
               <h6 className="text-neutral">Transaction Table</h6>
               <div className="join">
-                <div>
-                  <div>
-                    <input
-                      className="input-bordered input join-item"
-                      placeholder="Search..."
-                    />
-                  </div>
-                </div>
-                <select className="select-bordered select join-item">
+                <select className="select-bordered select  input-xs join-item">
                   <option disabled selected>
-                    Category
+                    From
+                  </option>
+                  {users.map((e, i) => (
+                    <option key={i} value={e.id}>
+                      {e.firstName} {e.lastName}
+                    </option>
+                  ))}
+                </select>
+                <select className="select-bordered select  input-xs join-item">
+                  <option disabled selected>
+                    To
+                  </option>
+                  {users.map((e, i) => (
+                    <option key={i} value={e.id}>
+                      {e.firstName} {e.lastName}
+                    </option>
+                  ))}
+                </select>
+                <select className="select-bordered select  input-xs join-item">
+                  <option disabled selected>
+                    Method
                   </option>
                   <option>Sci-fi</option>
                   <option>Drama</option>
                   <option>Action</option>
                 </select>
-                <div className="indicator">
-                  <span className="badge badge-secondary indicator-item">
-                    new
-                  </span>
-                  <button className="join-item btn">Search</button>
-                </div>
+                <select className="select-bordered select  input-xs join-item">
+                  <option disabled selected>
+                    Transaction Type
+                  </option>
+                  <option>Transfer</option>
+                  <option>DEPOSIT</option>
+                  <option>WITHDRAWAL</option>
+                </select>
+                <select className="select-bordered select  input-xs join-item">
+                  <option disabled selected>
+                    Sort By
+                  </option>
+                  <option value={"recently-added"}>Added Date</option>
+                  <option value={"recent"}>Transaction Date</option>
+                </select>
+                <select className="select-bordered select  input-xs join-item">
+                  <option disabled selected>
+                    Order By
+                  </option>
+                  <option value={"ace"}>⬆ Ascending</option>
+                  <option value={"dce"}>⬇ Descending</option>
+                </select>
+                <button className="join-item btn">Search</button>
               </div>
             </div>
             <div className="flex-auto px-0 pb-2 pt-0">

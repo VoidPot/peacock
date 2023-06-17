@@ -6,6 +6,18 @@ export async function getMembers() {
   return prisma.user.findMany({ where: { type: "MEMBER" } });
 }
 
+export async function getMemberSelectData() {
+  return prisma.user.findMany({
+    where: { deleted: false },
+    select: {
+      id: true,
+      firstName: true,
+      lastName: true,
+      nickName: true,
+    },
+  });
+}
+
 export async function getMembersWithSummary() {
   const response = await prisma.user.findMany({
     where: { type: "MEMBER", deleted: false },
