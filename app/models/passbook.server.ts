@@ -2,6 +2,7 @@ import configContext from "~/configContext";
 import { prisma } from "~/db.server";
 import { commuteGroup } from "./group.server";
 import { formatMoney } from "~/helpers/utils";
+import type { Passbook } from "@prisma/client";
 
 export const getClubGroupPassbook = async () => {
   return await Promise.all([
@@ -21,11 +22,7 @@ export const getClubGroupPassbook = async () => {
         },
       },
       include: {
-        passbook: {
-          where: {
-            entryOf: "GROUP",
-          },
-        },
+        passbook: true,
         links: {
           select: {
             id: true,
@@ -56,7 +53,7 @@ export const getClubGroupPassbook = async () => {
       return {
         club,
         groups: groups.map((group, index) => {
-          const passbook = (group?.passbook || [])[0];
+          const passbook = group.passbook as Passbook;
           const termDeposit = passbook?.termDeposit || 0;
           const remainingTermAmount =
             groups.slice(0, index).reduce((a, b) => {

@@ -8,23 +8,23 @@ const prisma = new PrismaClient();
 
 prisma.$use(async (param, next) => {
   const result = await next(param);
-  const data = await passbookMiddleware(param, result);
+  await passbookMiddleware(param, result);
   return result;
 });
 
-const userSeedMap = () => {
-  const users: Prisma.Enumerable<Prisma.UserCreateManyInput> =
-    seedData.users.map((each) => ({
-      firstName: each.name.split(" ")[0],
-      lastName: each.name.split(" ")[1] || "",
-      nickName: each.value,
-      mobileNumber: each.phone || each.value,
-      type: each.role === "member" ? "MEMBER" : "VENDOR",
-      joinedAt: new Date(each.joined || new Date()),
-      avatar: each.image,
-    }));
-  return users;
-};
+const userSeedMap = () =>
+  seedData.users.map(
+    (each) =>
+      ({
+        firstName: each.name.split(" ")[0],
+        lastName: each.name.split(" ")[1] || "",
+        nickName: each.value,
+        mobileNumber: each.phone || each.value,
+        type: each.role === "member" ? "MEMBER" : "VENDOR",
+        joinedAt: new Date(each.joined || new Date()),
+        avatar: each.image,
+      } as any)
+  );
 
 const getUser = (users: any[], oldId: string) => {
   const formOld = seedData.users.find((each) => each._id === oldId);
@@ -89,16 +89,31 @@ const transactionSeedMap = (users: any[], group: any) => {
 };
 async function seed() {
   await prisma.passbook.deleteMany();
-  await prisma.summary.deleteMany();
   await prisma.transaction.deleteMany();
   await prisma.link.deleteMany();
   await prisma.group.deleteMany();
   await prisma.user.deleteMany();
 
-  await prisma.user.createMany({
-    data: userSeedMap(),
-    skipDuplicates: true,
+  await prisma.passbook.create({
+    data: {
+      entryOf: "CLUB",
+    },
   });
+  const userSeed = userSeedMap();
+  await Promise.all(
+    userSeed.map(async (user) => {
+      await prisma.user.create({
+        data: {
+          ...user,
+          passbook: {
+            create: {
+              entryOf: "USER",
+            },
+          },
+        },
+      });
+    })
+  );
 
   const users = await prisma.user.findMany();
 
@@ -109,6 +124,11 @@ async function seed() {
       await prisma.group.create({
         data: {
           ...each,
+          passbook: {
+            create: {
+              entryOf: "GROUP",
+            },
+          },
           links: {
             createMany: {
               data: userLinkIds,

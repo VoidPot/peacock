@@ -9,7 +9,7 @@ export const commuteGroup = (
         links?: {
           id: number;
         }[];
-        passbook?: Passbook[];
+        passbook?: Passbook;
       }
 ) => {
   if (!group) {
