@@ -1,19 +1,7 @@
-import { Group, type Passbook, type Transaction } from "@prisma/client";
-import type { Passbook_Settings_Keys } from "~/configContext";
 import configContext from "~/configContext";
 import { prisma } from "~/db.server";
 import { commuteGroup } from "./group.server";
-
-const commutePassbook = (
-  passbook: Passbook | null,
-  totalTeamAmount: number
-) => {
-  return {
-    ...passbook,
-    totalTeamAmount,
-    balance: totalTeamAmount - (passbook?.termDeposit || 0),
-  };
-};
+import { formatMoney } from "~/helpers/utils";
 
 export const getClubGroupPassbook = async () => {
   return await Promise.all([
@@ -24,7 +12,13 @@ export const getClubGroupPassbook = async () => {
     }),
     prisma.group.findMany({
       where: {
-        deleted: false,
+        links: {
+          every: {
+            user: {
+              deleted: false,
+            },
+          },
+        },
       },
       include: {
         passbook: {
@@ -32,36 +26,55 @@ export const getClubGroupPassbook = async () => {
             entryOf: "GROUP",
           },
         },
+        links: {
+          select: {
+            id: true,
+          },
+        },
       },
     }),
     prisma.user.count({ where: { deleted: false, type: "MEMBER" } }),
   ])
-    .then(([club, groups, noOfMembers]) => {
-      return {
-        club,
-        noOfMembers,
-        groups: groups.map((each) => {
-          const computer = commuteGroup(each);
-          const totalTeamAmount =
-            each.amount * noOfMembers * (computer?.currentMonthsDiff || 0);
-          const passbook = commutePassbook(each.passbook[0], totalTeamAmount);
-
-          return { ...each, ...computer, passbook };
-        }),
-      };
-    })
-    .then(({ club, groups, noOfMembers }) => {
-      let totalTeamAmount = 0;
-      groups.forEach((each) => {
-        totalTeamAmount = totalTeamAmount + each.passbook.totalTeamAmount;
-      });
+    .then(([club, groups, membersCount]) => {
+      const termDeposit = club?.termDeposit || 0;
+      const clubGroupConfig = configContext.group(membersCount).club;
+      const totalTermBalance = clubGroupConfig.totalTermAmount - termDeposit;
       return {
         club: {
-          ...club,
-          ...commutePassbook(club, totalTeamAmount),
-          noOfMembers,
+          ...(club || {}),
+          membersCount,
+          ...clubGroupConfig,
+          totalTermBalance,
+          totalTermBalanceCurrency: formatMoney(totalTermBalance),
         },
-        groups: groups.sort((a, b) => (a.slug > b.slug ? 1 : -1)),
+        groups: groups
+          .map(commuteGroup)
+          .sort((a, b) => (a.slug > b.slug ? 1 : -1)),
+      };
+    })
+    .then(({ club, groups }) => {
+      return {
+        club,
+        groups: groups.map((group, index) => {
+          const passbook = (group?.passbook || [])[0];
+          const termDeposit = passbook?.termDeposit || 0;
+          const remainingTermAmount =
+            groups.slice(0, index).reduce((a, b) => {
+              a = a + b.totalTermAmount;
+              return a;
+            }, 0) + termDeposit;
+
+          const balance = group.totalTermAmount - remainingTermAmount;
+          const totalTermBalance = Number(balance) >= 0 ? balance : 0;
+
+          return {
+            ...group,
+            totalTermBalance,
+            totalTermBalanceCurrency: formatMoney(totalTermBalance),
+            termDeposit,
+            termDepositCurrency: formatMoney(termDeposit),
+          };
+        }),
       };
     });
 };

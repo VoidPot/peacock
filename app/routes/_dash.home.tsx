@@ -21,24 +21,24 @@ export default function IndexPage() {
   const statsData: StatProps[] = [
     {
       hed: "No Of Members",
-      dek: getValidNumber(club.noOfMembers),
+      dek: getValidNumber(club.membersCount),
       iconName: "member",
     },
     {
       hed: "Members Deposit",
-      dek: formatMoney(club.termDeposit),
+      dek: formatMoney(club?.termDeposit),
       iconName: "archive",
       hedColor: "secondary",
     },
     {
       hed: "Members Balance",
-      dek: formatMoney(club.balance),
+      dek: formatMoney(club.totalTermBalance),
       iconName: "transaction",
       hedColor: "accent",
     },
     {
       hed: "Net Members Amount",
-      dek: formatMoney(club.totalTeamAmount),
+      dek: club.totalTermAmountCurrency,
       iconName: "trans",
       hedColor: "primary",
     },
@@ -81,7 +81,7 @@ export default function IndexPage() {
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-7">
         <div className="col-span-1 flex flex-col gap-6 lg:col-span-4">
           {groups?.map((each, key) => (
-            <GroupCard key={key} {...each} noOfMembers={club.noOfMembers} />
+            <GroupCard key={key} {...each} />
           ))}
         </div>
         <div className="col-span-1 flex flex-col gap-6 lg:col-span-3">

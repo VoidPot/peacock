@@ -2,6 +2,8 @@ import type { TRANSACTION_MODE } from "@prisma/client";
 import moment from "moment";
 import { formatMoney } from "./helpers/utils";
 
+export type GroupSlugs = "alpha" | "bravo";
+
 export type Passbook_Settings_Keys =
   | "termDeposit"
   | "deposit"
@@ -48,14 +50,16 @@ export type Passbook_Settings_Keys =
 //   passbook:
 // };
 
-const computeGroupDate = ({
+const computeGroupData = ({
   stateDate,
   endDate,
   amount,
+  membersCount = 0,
 }: {
   stateDate: Date;
   endDate?: Date;
   amount: number;
+  membersCount: number;
 }) => {
   const hasEndDate = Boolean(endDate);
   const start = moment(stateDate);
@@ -64,6 +68,8 @@ const computeGroupDate = ({
   const startEndMonths = end.diff(start, "months", true);
   const startCurrentMonths = current.diff(start, "months", true);
   const currentMonthDiff = startCurrentMonths >= 0 ? startCurrentMonths : 0;
+  const termAmountPerPerson = Math.ceil(currentMonthDiff) * amount;
+  const totalTermAmount = termAmountPerPerson * membersCount;
   return {
     stateDate,
     endDate,
@@ -74,10 +80,10 @@ const computeGroupDate = ({
     currentMonth: current.format("MMM YYYY"),
     endMonthsDif: Math.ceil(startEndMonths),
     currentMonthsDiff: Math.ceil(currentMonthDiff),
-    termAmountPerPerson: Math.ceil(currentMonthDiff) * amount,
-    termAmountPerPersonCurrency: formatMoney(
-      Math.ceil(currentMonthDiff) * amount
-    ),
+    termAmountPerPerson,
+    termAmountPerPersonCurrency: formatMoney(termAmountPerPerson),
+    totalTermAmount,
+    totalTermAmountCurrency: formatMoney(totalTermAmount),
   };
 };
 
@@ -499,24 +505,31 @@ const configContext = {
       DCE: "⬇ Descending",
     },
   },
-  group: function () {
+  group: function (membersCount: number = 0) {
     const data = {
-      alpha: computeGroupDate({
+      alpha: computeGroupData({
         amount: 1000,
         stateDate: new Date("09/01/2020"),
         endDate: new Date("07/31/2023"),
+        membersCount,
       }),
-      bravo: computeGroupDate({
+      bravo: computeGroupData({
         amount: 2000,
         stateDate: new Date("08/01/2023"),
+        membersCount,
       }),
     };
-    const totalTerm =
+    const totalTermAmountPerPerson =
       data.alpha.termAmountPerPerson + data.bravo.termAmountPerPerson;
+    const totalTermAmount = totalTermAmountPerPerson * membersCount;
     return {
       ...data,
-      totalTermAmountPerPerson: totalTerm,
-      totalTermAmountPerPersonCurrency: formatMoney(totalTerm),
+      club: {
+        totalTermAmountPerPerson,
+        totalTermAmountPerPersonCurrency: formatMoney(totalTermAmountPerPerson),
+        totalTermAmount,
+        totalTermAmountCurrency: formatMoney(totalTermAmount),
+      },
     };
   },
   club: {

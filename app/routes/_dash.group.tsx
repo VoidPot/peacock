@@ -6,11 +6,10 @@ import { getOneSummary, getSummaries } from "~/models/summary.server";
 import { getMembersCount } from "~/models/user.server";
 
 export const loader = async ({ request }: LoaderArgs) => {
-  const groups = await getGroups();
   const summaries = await getSummaries();
   const summary = await getOneSummary({ type: "DEFAULT" });
   const membersCount = await getMembersCount();
-  return json({ summaries, groups, summary, membersCount });
+  return json({ summaries, summary, membersCount });
 };
 
 function monthDiff(d1: any, d2: any) {

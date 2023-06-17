@@ -1,24 +1,42 @@
-import type { Group } from "@prisma/client";
+import type { Group, Passbook } from "@prisma/client";
+import type { GroupSlugs } from "~/configContext";
+import configContext from "~/configContext";
 import { prisma } from "~/db.server";
-import { computeGroupTiming } from "~/helpers/utils";
 
-export const commuteGroup = (group: Group | null) => {
+export const commuteGroup = (
+  group:
+    | Group & {
+        links?: {
+          id: number;
+        }[];
+        passbook?: Passbook[];
+      }
+) => {
   if (!group) {
     return group;
   }
   return {
     ...group,
-    ...computeGroupTiming(group),
+    ...configContext.group(group?.links?.length || 0)[group.slug as GroupSlugs],
   };
 };
 
 export async function getGroups() {
   return await prisma.group
     .findMany({
+      where: {
+        links: {
+          every: {
+            user: {
+              deleted: false,
+            },
+          },
+        },
+      },
       include: {
         links: {
-          include: {
-            user: true,
+          select: {
+            id: true,
           },
         },
       },
@@ -27,5 +45,6 @@ export async function getGroups() {
 }
 
 export async function getGroupById(id: Group["id"]) {
-  return commuteGroup(await prisma.group.findUnique({ where: { id } }));
+  const group = await prisma.group.findUnique({ where: { id } });
+  return group ? commuteGroup(group) : group;
 }

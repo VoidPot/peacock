@@ -13,13 +13,13 @@ function GroupCard(props: any) {
   const statsData: StatProps[] = [
     {
       hed: "Members Deposit",
-      dek: `${props.passbook.termDeposit.toLocaleString("en-IN")} ₹`,
+      dek: props.termDepositCurrency, // `${props.passbook.termDeposit.toLocaleString("en-IN")} ₹`,
       iconName: "trans",
       align: "start",
     },
     {
       hed: "Members Balance",
-      dek: `${props.passbook.balance.toLocaleString("en-IN")} ₹`,
+      dek: props.totalTermBalanceCurrency, //`${props.passbook.balance.toLocaleString("en-IN")} ₹`,
       iconName: "trans",
       align: "end",
       hedColor: "accent",
@@ -50,15 +50,15 @@ function GroupCard(props: any) {
               </div>
               <progress
                 className="progress progress-secondary h-3 w-full"
-                value={props.passbook.termDeposit}
-                max={props.personTermAmount * props.noOfMembers}
+                value={props.termDeposit}
+                max={props.totalTermAmount}
               ></progress>
               <div className="flex justify-between pt-1">
                 <p className="m-0 p-0 text-sm font-semibold leading-normal text-slate-500">
                   0 ₹
                 </p>
                 <p className="m-0 p-0 text-sm font-semibold leading-normal text-slate-500">
-                  {netAmount}
+                  {props.totalTermAmount}
                 </p>
               </div>
               <div className="flex flex-row gap-4 pt-6">
