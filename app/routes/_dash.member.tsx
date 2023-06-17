@@ -2,10 +2,10 @@ import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import classNames from "classnames";
-import { getMembersWithSummary } from "~/models/user.server";
+import { getMembersPassbook } from "~/models/user.server";
 
 export const loader = async ({ request }: LoaderArgs) => {
-  const items = await getMembersWithSummary();
+  const items = await getMembersPassbook();
   return json({ items });
 };
 
@@ -71,9 +71,9 @@ export default function MemberPage() {
                                 {member.firstName} {member.lastName}
                               </h6>
 
-                              {member.userPassbook.holdingAmount ? (
+                              {member.holdingAmount ? (
                                 <p className="mb-0 text-xs leading-tight text-slate-500">
-                                  {member.userPassbook?.holdingAmountInRupee}
+                                  {member.holdingAmountCurrency}
                                 </p>
                               ) : (
                                 <></>
@@ -90,7 +90,7 @@ export default function MemberPage() {
                           )}
                         >
                           <span className="text-xs font-semibold leading-tight text-slate-500">
-                            {member.formattedJoinedAt}
+                            {member.joinedAtFormat}
                           </span>
                         </td>
                         <td
@@ -102,11 +102,11 @@ export default function MemberPage() {
                           )}
                         >
                           <span className="text-xs font-semibold leading-tight text-slate-500">
-                            {member.userPassbook.termDepositInRupee}
+                            {member.termDepositCurrency}
 
-                            {member.userPassbook.deposit ? (
+                            {member.deposit ? (
                               <p className="mb-0 text-xs leading-tight text-slate-500">
-                                {member.userPassbook?.depositInRupee}
+                                {member.depositCurrency}
                               </p>
                             ) : (
                               ""
@@ -128,7 +128,15 @@ export default function MemberPage() {
                           )}
                         >
                           <span className="text-xs font-semibold leading-tight text-slate-500">
-                            {member.userPassbook.balanceInRupee}
+                            {member.termBalanceCurrency}
+
+                            {member.balance ? (
+                              <p className="mb-0 text-xs leading-tight text-slate-500">
+                                {member.balanceCurrency}
+                              </p>
+                            ) : (
+                              ""
+                            )}
                           </span>
                         </td>
                         <td
@@ -140,7 +148,7 @@ export default function MemberPage() {
                           )}
                         >
                           <span className="text-xs font-semibold leading-tight text-slate-500">
-                            {member.userPassbook.eachPersonProfitInRupee}
+                            {member.profitCurrency}
                           </span>
                         </td>
                         <td
@@ -152,7 +160,7 @@ export default function MemberPage() {
                           )}
                         >
                           <span className="text-xs font-semibold leading-tight text-slate-500">
-                            {member.userPassbook.netAmountInRupee}
+                            {member.netAmountCurrency}
                           </span>
                         </td>
                       </tr>

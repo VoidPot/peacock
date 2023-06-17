@@ -2,30 +2,22 @@ import type { StatProps } from "./stat";
 import Stat from "./stat";
 
 function GroupCard(props: any) {
-  const startMonth = props.startMonth;
-  const endMonth = props.hasEndTime ? props.endMonth : "Now";
-
-  const amount = `${props.amount.toLocaleString("en-IN")} ₹ / Month`;
-  const netAmount = `${(
-    props.personTermAmount * props.noOfMembers
-  ).toLocaleString("en-IN")} ₹`;
-
   const statsData: StatProps[] = [
     {
       hed: "Members Deposit",
-      dek: props.termDepositCurrency, // `${props.passbook.termDeposit.toLocaleString("en-IN")} ₹`,
+      dek: props.termDepositCurrency,
       iconName: "trans",
       align: "start",
     },
     {
       hed: "Members Balance",
-      dek: props.totalTermBalanceCurrency, //`${props.passbook.balance.toLocaleString("en-IN")} ₹`,
+      dek: props.termBalanceCurrency,
       iconName: "trans",
       align: "end",
       hedColor: "accent",
     },
   ];
-
+  console.log({ props });
   return (
     <div className="mb-0 mt-0 w-full max-w-full text-center lg:mb-0 lg:flex-none">
       <div className="relative z-20 flex min-w-0 flex-col break-words rounded-md bg-base-100 bg-clip-border p-4 shadow-soft-xl">
@@ -34,7 +26,7 @@ function GroupCard(props: any) {
             <h3 className="m-0 uppercase text-neutral">{props.name}</h3>
             <div className="text-right">
               <p className="m-0 p-0 text-sm font-semibold leading-normal text-slate-500">
-                {amount}
+                {props.amountCurrency}
               </p>
             </div>
           </div>
@@ -42,10 +34,10 @@ function GroupCard(props: any) {
             <div className="flex flex-col px-2">
               <div className="flex justify-between pb-1">
                 <p className="m-0 p-0 text-xs font-semibold leading-normal text-slate-500">
-                  {startMonth}
+                  {props.startMonth}
                 </p>
                 <p className="m-0 p-0 text-xs font-semibold leading-normal text-slate-500">
-                  {endMonth}
+                  {props.hasEndTime ? props.endMonth : "Now"}
                 </p>
               </div>
               <progress
@@ -58,7 +50,7 @@ function GroupCard(props: any) {
                   0 ₹
                 </p>
                 <p className="m-0 p-0 text-sm font-semibold leading-normal text-slate-500">
-                  {props.totalTermAmount}
+                  {props.totalTermAmountCurrency}
                 </p>
               </div>
               <div className="flex flex-row gap-4 pt-6">

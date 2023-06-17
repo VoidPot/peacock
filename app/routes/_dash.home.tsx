@@ -32,7 +32,7 @@ export default function IndexPage() {
     },
     {
       hed: "Members Balance",
-      dek: formatMoney(club.totalTermBalance),
+      dek: formatMoney(club.termBalanceCurrency),
       iconName: "transaction",
       hedColor: "accent",
     },

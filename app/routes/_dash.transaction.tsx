@@ -132,9 +132,9 @@ export default function TransactionPage() {
                                 {member.firstName} {member.lastName}
                               </h6>
 
-                              {member.userPassbook.holdingAmount ? (
+                              {member.holdingAmount ? (
                                 <p className="mb-0 text-xs leading-tight text-slate-500">
-                                  {member.userPassbook?.holdingAmountInRupee}
+                                  {member.holdingAmountCurrency}
                                 </p>
                               ) : (
                                 <></>
@@ -151,7 +151,7 @@ export default function TransactionPage() {
                           )}
                         >
                           <span className="text-xs font-semibold leading-tight text-slate-500">
-                            {member.formattedJoinedAt}
+                            {member.joinedAtFormat}
                           </span>
                         </td>
                         <td
@@ -163,11 +163,37 @@ export default function TransactionPage() {
                           )}
                         >
                           <span className="text-xs font-semibold leading-tight text-slate-500">
-                            {member.userPassbook.invest}
+                            {member.termDepositCurrency}
 
-                            {member.userPassbook.deposit ? (
+                            {member.deposit ? (
                               <p className="mb-0 text-xs leading-tight text-slate-500">
-                                {member.userPassbook?.depositInRupee}
+                                {member.depositCurrency}
+                              </p>
+                            ) : (
+                              ""
+                            )}
+                          </span>
+                        </td>
+
+                        {/* <td className="whitespace-nowrap border-b bg-transparent p-2 text-center align-middle text-sm leading-normal shadow-transparent">
+                          <span className="text-xs font-semibold leading-tight text-slate-500">
+                            {member.userPassbook.depositInRupee}
+                          </span>
+                        </td> */}
+                        <td
+                          className={classNames(
+                            "whitespace-nowrap bg-transparent p-2 text-center align-middle text-sm leading-normal shadow-transparent",
+                            {
+                              "border-b": index !== items.length - 1,
+                            }
+                          )}
+                        >
+                          <span className="text-xs font-semibold leading-tight text-slate-500">
+                            {member.termBalanceCurrency}
+
+                            {member.balance ? (
+                              <p className="mb-0 text-xs leading-tight text-slate-500">
+                                {member.balanceCurrency}
                               </p>
                             ) : (
                               ""
@@ -183,7 +209,7 @@ export default function TransactionPage() {
                           )}
                         >
                           <span className="text-xs font-semibold leading-tight text-slate-500">
-                            {member.userPassbook.balanceInRupee}
+                            {member.profitCurrency}
                           </span>
                         </td>
                         <td
@@ -195,19 +221,7 @@ export default function TransactionPage() {
                           )}
                         >
                           <span className="text-xs font-semibold leading-tight text-slate-500">
-                            {member.userPassbook.eachPersonProfitInRupee}
-                          </span>
-                        </td>
-                        <td
-                          className={classNames(
-                            "whitespace-nowrap bg-transparent p-2 text-center align-middle text-sm leading-normal shadow-transparent",
-                            {
-                              "border-b": index !== items.length - 1,
-                            }
-                          )}
-                        >
-                          <span className="text-xs font-semibold leading-tight text-slate-500">
-                            {member.userPassbook.netAmountInRupee}
+                            {member.netAmountCurrency}
                           </span>
                         </td>
                       </tr>

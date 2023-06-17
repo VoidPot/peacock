@@ -31,13 +31,13 @@ export default function VendorPage() {
                         Started At
                       </th>
                       <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
-                        Term / Other Invest
+                        Total Invest
                       </th>
                       {/* <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
                         Deposit
                       </th> */}
                       <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
-                        Returns
+                        Total Returns
                       </th>
                       <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
                         Profit
@@ -48,7 +48,7 @@ export default function VendorPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {items.map((member, index) => (
+                    {items.map((vendor, index) => (
                       <tr key={index}>
                         <td
                           className={classNames(
@@ -61,19 +61,19 @@ export default function VendorPage() {
                           <div className="flex px-2 py-1">
                             <div>
                               <img
-                                src={`https://file.iam-hussain.site/peacock/image/${member.avatar}`}
+                                src={`https://file.iam-hussain.site/peacock/image/${vendor.avatar}`}
                                 className="mr-4 inline-flex h-9 w-9 items-center justify-center rounded-xl text-sm text-white transition-all duration-200 ease-soft-in-out"
                                 alt="user1"
                               />
                             </div>
                             <div className="flex flex-col justify-center">
                               <h6 className="mb-0 text-sm leading-normal">
-                                {member.firstName} {member.lastName}
+                                {vendor.firstName} {vendor.lastName}
                               </h6>
 
-                              {member.userPassbook.holdingAmount ? (
+                              {vendor.holdingAmount ? (
                                 <p className="mb-0 text-xs leading-tight text-slate-500">
-                                  {member.userPassbook?.holdingAmountInRupee}
+                                  {vendor.holdingAmountCurrency}
                                 </p>
                               ) : (
                                 <></>
@@ -90,7 +90,7 @@ export default function VendorPage() {
                           )}
                         >
                           <span className="text-xs font-semibold leading-tight text-slate-500">
-                            {member.formattedJoinedAt}
+                            {vendor.joinedAtFormat}
                           </span>
                         </td>
                         <td
@@ -102,15 +102,7 @@ export default function VendorPage() {
                           )}
                         >
                           <span className="text-xs font-semibold leading-tight text-slate-500">
-                            {member.userPassbook.invest}
-
-                            {member.userPassbook.deposit ? (
-                              <p className="mb-0 text-xs leading-tight text-slate-500">
-                                {member.userPassbook?.depositInRupee}
-                              </p>
-                            ) : (
-                              ""
-                            )}
+                            {vendor.totalDepositCurrency}
                           </span>
                         </td>
                         <td
@@ -122,7 +114,7 @@ export default function VendorPage() {
                           )}
                         >
                           <span className="text-xs font-semibold leading-tight text-slate-500">
-                            {member.userPassbook.balanceInRupee}
+                            {vendor.balanceCurrency}
                           </span>
                         </td>
                         <td
@@ -134,7 +126,7 @@ export default function VendorPage() {
                           )}
                         >
                           <span className="text-xs font-semibold leading-tight text-slate-500">
-                            {member.userPassbook.eachPersonProfitInRupee}
+                            {vendor.profit}
                           </span>
                         </td>
                         <td
@@ -146,7 +138,7 @@ export default function VendorPage() {
                           )}
                         >
                           <span className="text-xs font-semibold leading-tight text-slate-500">
-                            {member.userPassbook.netAmountInRupee}
+                            {vendor.netAmountCurrency}
                           </span>
                         </td>
                       </tr>
