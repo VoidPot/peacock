@@ -4,14 +4,28 @@ import plugin from "tailwindcss/plugin";
 export default {
   content: ["./app/**/*.{js,jsx,ts,tsx}"],
   daisyui: {
-    themes: true, // true: all themes | false: only light + dark | array: specific themes like this ["light", "dark", "cupcake"]
-    darkTheme: "dark", // name of one of the included themes for dark mode
-    base: true, // applies background color and foreground color for root element by default
-    styled: true, // include daisyUI colors and design decisions for all components
-    utils: true, // adds responsive and modifier utility classes
-    rtl: false, // rotate style direction from left-to-right to right-to-left. You also need to add dir="rtl" to your html tag and install `tailwindcss-flip` plugin for Tailwind CSS.
-    prefix: "", // prefix for daisyUI classnames (components, modifiers and responsive class names. Not colors)
-    logs: true, // Shows info about daisyUI version and used config in the console when building your CSS
+    styled: true,
+    base: true,
+    utils: true,
+    logs: true,
+    rtl: false,
+    prefix: "",
+    themes: [
+      "emerald",
+      {
+        myTheme: {
+          primary: "#349b7b",
+          secondary: "#8fcceb",
+          accent: "#5fd7e2",
+          neutral: "#151e1c",
+          base: "#f8f5f0",
+          info: "#6586EC",
+          success: "#34d399",
+          warning: "#facc15",
+          error: "#fb7185",
+        },
+      },
+    ],
   },
   plugins: [
     require("@tailwindcss/typography"),

@@ -17,7 +17,6 @@ function GroupCard(props: any) {
       hedColor: "accent",
     },
   ];
-  console.log({ props });
   return (
     <div className="mb-0 mt-0 w-full max-w-full text-center lg:mb-0 lg:flex-none">
       <div className="relative z-20 flex min-w-0 flex-col break-words rounded-md bg-base-100 bg-clip-border p-4 shadow-soft-xl">

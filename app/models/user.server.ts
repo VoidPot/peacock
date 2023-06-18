@@ -12,7 +12,6 @@ export async function getMembersPassbook() {
   });
 
   return members.map((member) => {
-    console.log(member);
     const club = configContext.group().club;
     const holdingAmount = member.passbook.holdingAmount;
     const termDeposit = member.passbook.termDeposit;
@@ -57,7 +56,6 @@ export async function getVendorsWithSummary() {
   });
 
   return vendors.map((vendor) => {
-    console.log(vendor);
     const club = configContext.group().club;
     const holdingAmount = vendor.passbook.holdingAmount;
     const termDeposit = vendor.passbook.termDeposit;

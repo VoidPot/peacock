@@ -18,7 +18,7 @@ export const loader = async ({ request }: LoaderArgs) => {
 
 export default function TransactionPage() {
   const { items, users } = useLoaderData<typeof loader>();
-  console.log({ items });
+  // console.log({ items });
   return (
     <div className="h-full w-full">
       <div className="flex flex-wrap">
