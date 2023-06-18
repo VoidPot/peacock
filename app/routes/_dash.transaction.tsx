@@ -2,23 +2,22 @@ import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import classNames from "classnames";
-import {
-  getMemberSelectData,
-  getVendorsWithSummary,
-} from "~/models/user.server";
+import { getFirstLetterUpperCase } from "~/helpers/utils";
+import { findTransaction } from "~/models/transaction.server";
+import { getUserSelect } from "~/models/user.server";
 
 export const loader = async ({ request }: LoaderArgs) => {
-  const users = await getMemberSelectData();
-  const items = await getVendorsWithSummary();
+  const users = await getUserSelect();
+  const items = await findTransaction();
   return json({
     items,
-    users: users.sort((a, b) => (a.nickName > b.nickName ? 1 : -1)),
+    users,
   });
 };
 
 export default function TransactionPage() {
   const { items, users } = useLoaderData<typeof loader>();
-  // console.log({ items });
+  console.log({ items });
   return (
     <div className="h-full w-full">
       <div className="flex flex-wrap">
@@ -86,30 +85,27 @@ export default function TransactionPage() {
                   <thead className="px-4 align-bottom">
                     <tr>
                       <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-5 py-3 text-left align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
-                        Name
+                        From
                       </th>
                       <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
-                        Started At
+                        Amount
                       </th>
                       <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
-                        Term / Other Invest
-                      </th>
-                      {/* <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
-                        Deposit
-                      </th> */}
-                      <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
-                        Returns
+                        Type
                       </th>
                       <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
-                        Profit
+                        To
                       </th>
                       <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
-                        Net Amount
+                        Transaction At
+                      </th>
+                      <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
+                        Added At
                       </th>
                     </tr>
                   </thead>
                   <tbody>
-                    {items.map((member, index) => (
+                    {items.map(({ from, to, ...transaction }, index) => (
                       <tr key={index}>
                         <td
                           className={classNames(
@@ -122,23 +118,15 @@ export default function TransactionPage() {
                           <div className="flex px-2 py-1">
                             <div>
                               <img
-                                src={`https://file.iam-hussain.site/peacock/image/${member.avatar}`}
+                                src={`https://file.iam-hussain.site/peacock/image/${from.avatar}`}
                                 className="mr-4 inline-flex h-9 w-9 items-center justify-center rounded-xl text-sm text-white transition-all duration-200 ease-soft-in-out"
                                 alt="user1"
                               />
                             </div>
                             <div className="flex flex-col justify-center">
                               <h6 className="mb-0 text-sm leading-normal">
-                                {member.firstName} {member.lastName}
+                                {from.firstName} {from.lastName}
                               </h6>
-
-                              {member.holdingAmount ? (
-                                <p className="mb-0 text-xs leading-tight text-slate-500">
-                                  {member.holdingAmount$}
-                                </p>
-                              ) : (
-                                <></>
-                              )}
                             </div>
                           </div>
                         </td>
@@ -151,7 +139,7 @@ export default function TransactionPage() {
                           )}
                         >
                           <span className="text-xs font-semibold leading-tight text-slate-500">
-                            {member.joinedAt$}
+                            {transaction.amount$}
                           </span>
                         </td>
                         <td
@@ -162,42 +150,45 @@ export default function TransactionPage() {
                             }
                           )}
                         >
-                          <span className="text-xs font-semibold leading-tight text-slate-500">
-                            {member.termDeposit$}
-
-                            {member.deposit ? (
-                              <p className="mb-0 text-xs leading-tight text-slate-500">
-                                {member.deposit$}
-                              </p>
-                            ) : (
-                              ""
-                            )}
+                          <span className="text-xs font-semibold capitalize leading-tight text-slate-500">
+                            {getFirstLetterUpperCase(transaction.type)}
                           </span>
                         </td>
 
-                        {/* <td className="whitespace-nowrap border-b bg-transparent p-2 text-center align-middle text-sm leading-normal shadow-transparent">
-                          <span className="text-xs font-semibold leading-tight text-slate-500">
-                            {member.userPassbook.depositInRupee}
-                          </span>
-                        </td> */}
                         <td
                           className={classNames(
-                            "whitespace-nowrap bg-transparent p-2 text-center align-middle text-sm leading-normal shadow-transparent",
+                            "whitespace-nowrap bg-transparent p-2 text-center align-middle shadow-transparent",
                             {
                               "border-b": index !== items.length - 1,
                             }
                           )}
                         >
-                          <span className="text-xs font-semibold leading-tight text-slate-500">
-                            {member.termBalance$}
+                          <div className="flex items-center justify-center px-2 py-1">
+                            {/* <div>
+                              <img
+                                src={`https://file.iam-hussain.site/peacock/image/${from.avatar}`}
+                                className="mr-4 inline-flex h-9 w-9 items-center justify-center rounded-xl text-sm text-white transition-all duration-200 ease-soft-in-out"
+                                alt="user1"
+                              />
+                            </div> */}
+                            <div className="flex flex-col justify-center">
+                              <h6 className="mb-0 text-sm leading-normal">
+                                {from.firstName} {from.lastName}
+                              </h6>
+                            </div>
+                          </div>
+                        </td>
 
-                            {member.balance ? (
-                              <p className="mb-0 text-xs leading-tight text-slate-500">
-                                {member.balance$}
-                              </p>
-                            ) : (
-                              ""
-                            )}
+                        <td
+                          className={classNames(
+                            "whitespace-nowrap bg-transparent p-2 text-center align-middle text-sm leading-normal shadow-transparent",
+                            {
+                              "border-b": index !== items.length - 1,
+                            }
+                          )}
+                        >
+                          <span className="text-xs font-semibold leading-tight text-slate-500">
+                            {transaction.dot$}
                           </span>
                         </td>
                         <td
@@ -209,25 +200,20 @@ export default function TransactionPage() {
                           )}
                         >
                           <span className="text-xs font-semibold leading-tight text-slate-500">
-                            {member.profit$}
-                          </span>
-                        </td>
-                        <td
-                          className={classNames(
-                            "whitespace-nowrap bg-transparent p-2 text-center align-middle text-sm leading-normal shadow-transparent",
-                            {
-                              "border-b": index !== items.length - 1,
-                            }
-                          )}
-                        >
-                          <span className="text-xs font-semibold leading-tight text-slate-500">
-                            {member.netAmount$}
+                            {transaction.createdAt$}
                           </span>
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
+              </div>
+            </div>
+            <div className="flex w-full max-w-full items-center justify-center pb-4">
+              <div className="join">
+                <button className="join-item btn">«</button>
+                <button className="join-item btn">Page 22</button>
+                <button className="join-item btn">»</button>
               </div>
             </div>
           </div>

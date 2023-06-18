@@ -11,6 +11,11 @@ export const formatMoney = (input: any | undefined = 0) => {
   return `${Number(Number(input).toFixed(2)).toLocaleString("en-IN") || 0} ₹`;
 };
 
+export const formatDate = (input: any = new Date()) => {
+  const date = moment(getValidDate(input));
+  return date.format("DD MMM YYYY");
+};
+
 export const getValidNumber = (input: any | undefined = 0) => {
   return isNaN(Number(input)) ? 0 : Number(input);
 };

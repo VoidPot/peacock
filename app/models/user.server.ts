@@ -65,7 +65,7 @@ export async function getMembers() {
   return prisma.user.findMany({ where: { type: "MEMBER" } });
 }
 
-export async function getMemberSelectData() {
+export async function getUserSelect() {
   return prisma.user.findMany({
     where: { deleted: false },
     select: {
