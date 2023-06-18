@@ -10,14 +10,12 @@ export const commuteGroup = (
           id: number;
         }[];
         passbook?: Passbook;
-      }
+      },
+  membersCount: number = 0
 ) => {
-  if (!group) {
-    return group;
-  }
   return {
     ...group,
-    ...configContext.group(group?.links?.length || 0)[group.slug as GroupSlugs],
+    ...configContext.group(membersCount)[group.slug as GroupSlugs],
   };
 };
 

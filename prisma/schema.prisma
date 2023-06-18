@@ -139,12 +139,14 @@ model Passbook {
 
   termDeposit  Float @default(0)
   deposit      Float @default(0)
+  tallyDeposit Float @default(0)
   totalDeposit Float @default(0)
 
-  termWithdraw   Float @default(0)
   withdraw       Float @default(0)
   profitWithdraw Float @default(0)
   totalWithdraw  Float @default(0)
+
+  accountBalance Float @default(0)
 
   termInvest  Float @default(0)
   invest      Float @default(0)
@@ -154,8 +156,9 @@ model Passbook {
   returns      Float @default(0)
   totalReturns Float @default(0)
 
-  accountBalance Float @default(0)
-  holdingAmount  Float @default(0)
+  profit Float @default(0)
+
+  holdingAmount Float @default(0)
 
   depositMonths  Float @default(0)
   withdrawMonths Float @default(0)

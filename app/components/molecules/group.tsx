@@ -26,6 +26,7 @@ function GroupCard(props: any) {
             <div className="text-right">
               <p className="m-0 p-0 text-sm font-semibold leading-normal text-slate-500">
                 {props.amountCurrency}
+                {" / Month"}
               </p>
             </div>
           </div>
@@ -36,7 +37,7 @@ function GroupCard(props: any) {
                   {props.startMonth}
                 </p>
                 <p className="m-0 p-0 text-xs font-semibold leading-normal text-slate-500">
-                  {props.hasEndTime ? props.endMonth : "Now"}
+                  {props.hasEndDate ? props.endMonth : "Now"}
                 </p>
               </div>
               <progress

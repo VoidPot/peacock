@@ -87,11 +87,11 @@ const transactionSeedMap = (users: any[], group: any) => {
   return transactions;
 };
 async function seed() {
-  await prisma.passbook.deleteMany();
   await prisma.transaction.deleteMany();
   await prisma.link.deleteMany();
   await prisma.group.deleteMany();
   await prisma.user.deleteMany();
+  await prisma.passbook.deleteMany();
 
   await prisma.passbook.create({
     data: {

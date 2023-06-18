@@ -4,6 +4,13 @@ import { commuteGroup } from "./group.server";
 import { formatMoney } from "~/helpers/utils";
 import type { Passbook } from "@prisma/client";
 
+export const formatPassbook = (passbook: Passbook) => {
+  return {
+    ...passbook,
+    termDeposit$: formatMoney(passbook.termDeposit),
+  };
+};
+
 export const getClubGroupPassbook = async () => {
   return await Promise.all([
     prisma.passbook.findFirst({
@@ -12,22 +19,8 @@ export const getClubGroupPassbook = async () => {
       },
     }),
     prisma.group.findMany({
-      where: {
-        links: {
-          every: {
-            user: {
-              deleted: false,
-            },
-          },
-        },
-      },
       include: {
         passbook: true,
-        links: {
-          select: {
-            id: true,
-          },
-        },
       },
     }),
     prisma.user.count({ where: { deleted: false, type: "MEMBER" } }),
@@ -36,6 +29,7 @@ export const getClubGroupPassbook = async () => {
       const termDeposit = club?.termDeposit || 0;
       const clubGroupConfig = configContext.group(membersCount).club;
       const termBalance = clubGroupConfig.totalTermAmount - termDeposit;
+
       return {
         club: {
           ...(club || {}),
@@ -43,9 +37,11 @@ export const getClubGroupPassbook = async () => {
           ...clubGroupConfig,
           termBalance,
           termBalanceCurrency: formatMoney(termBalance),
+          termDeposit,
+          termDepositCurrency: formatMoney(termDeposit),
         },
         groups: groups
-          .map(commuteGroup)
+          .map((e) => commuteGroup(e, membersCount))
           .sort((a, b) => (a.slug > b.slug ? 1 : -1)),
       };
     })

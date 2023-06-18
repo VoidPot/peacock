@@ -26,13 +26,13 @@ export default function IndexPage() {
     },
     {
       hed: "Members Deposit",
-      dek: formatMoney(club?.termDeposit),
+      dek: club.termDepositCurrency,
       iconName: "archive",
       hedColor: "secondary",
     },
     {
       hed: "Members Balance",
-      dek: formatMoney(club.termBalanceCurrency),
+      dek: club.termBalanceCurrency,
       iconName: "transaction",
       hedColor: "accent",
     },

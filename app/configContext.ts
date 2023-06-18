@@ -7,8 +7,8 @@ export type GroupSlugs = "alpha" | "bravo";
 export type Passbook_Settings_Keys =
   | "termDeposit"
   | "deposit"
+  | "tallyDeposit"
   | "totalDeposit"
-  | "termWithdraw"
   | "withdraw"
   | "profitWithdraw"
   | "totalWithdraw"
@@ -20,6 +20,7 @@ export type Passbook_Settings_Keys =
   | "totalReturns"
   | "accountBalance"
   | "holdingAmount"
+  | "profit"
   | "depositMonths"
   | "withdrawMonths"
   | "investMonths"
@@ -92,7 +93,11 @@ export type PassbookConfig = {
     [key in TRANSACTION_MODE]?: {
       [key in "FROM" | "TO" | "GROUP" | "CLUB"]?: {
         [key in "ADD" | "SUB"]?: {
-          [key in Passbook_Settings_Keys]?: "amount" | "month" | "balance";
+          [key in Passbook_Settings_Keys]?:
+            | "amount"
+            | "month"
+            | "balance"
+            | "profit";
         };
       };
     };
@@ -146,7 +151,7 @@ const passbook: PassbookConfig = {
     NEW_MEMBER_PAST_TALLY: {
       FROM: {
         ADD: {
-          deposit: "amount",
+          tallyDeposit: "amount",
           totalDeposit: "amount",
           accountBalance: "amount",
         },
@@ -158,7 +163,7 @@ const passbook: PassbookConfig = {
       },
       GROUP: {
         ADD: {
-          deposit: "amount",
+          tallyDeposit: "amount",
           totalDeposit: "amount",
           accountBalance: "amount",
           holdingAmount: "amount",
@@ -166,7 +171,7 @@ const passbook: PassbookConfig = {
       },
       CLUB: {
         ADD: {
-          deposit: "amount",
+          tallyDeposit: "amount",
           totalDeposit: "amount",
           accountBalance: "amount",
           holdingAmount: "amount",
@@ -209,7 +214,6 @@ const passbook: PassbookConfig = {
       FROM: {
         SUB: {
           holdingAmount: "amount",
-          accountBalance: "amount",
         },
       },
       TO: {
@@ -219,7 +223,8 @@ const passbook: PassbookConfig = {
           investMonths: "month",
         },
         SUB: {
-          accountBalance: "amount",
+          holdingAmount: "amount",
+          profit: "profit",
         },
       },
       GROUP: {
@@ -230,13 +235,7 @@ const passbook: PassbookConfig = {
         },
         SUB: {
           holdingAmount: "amount",
-          accountBalance: "amount",
-        },
-      },
-      FROM_USER_GROUP: {
-        SUB: {
-          holdingAmount: "amount",
-          accountBalance: "amount",
+          profit: "profit",
         },
       },
       CLUB: {
@@ -247,7 +246,7 @@ const passbook: PassbookConfig = {
         },
         SUB: {
           holdingAmount: "amount",
-          accountBalance: "amount",
+          profit: "profit",
         },
       },
     },
@@ -255,32 +254,28 @@ const passbook: PassbookConfig = {
       FROM: {
         SUB: {
           holdingAmount: "amount",
-          accountBalance: "amount",
         },
       },
       TO: {
         ADD: {
           invest: "amount",
           totalInvest: "amount",
+          investMonths: "month",
         },
         SUB: {
-          accountBalance: "amount",
+          holdingAmount: "amount",
+          profit: "profit",
         },
       },
       GROUP: {
         ADD: {
           invest: "amount",
           totalInvest: "amount",
+          investMonths: "month",
         },
         SUB: {
           holdingAmount: "amount",
-          accountBalance: "amount",
-        },
-      },
-      FROM_USER_GROUP: {
-        SUB: {
-          holdingAmount: "amount",
-          accountBalance: "amount",
+          profit: "profit",
         },
       },
       CLUB: {
@@ -291,7 +286,7 @@ const passbook: PassbookConfig = {
         },
         SUB: {
           holdingAmount: "amount",
-          accountBalance: "amount",
+          profit: "profit",
         },
       },
     },
@@ -300,13 +295,15 @@ const passbook: PassbookConfig = {
         ADD: {
           termReturns: "amount",
           totalReturns: "amount",
-          accountBalance: "amount",
+          holdingAmount: "amount",
+          accountBalance: "profit",
+          profit: "profit",
         },
       },
       TO: {
         ADD: {
           holdingAmount: "amount",
-          accountBalance: "amount",
+          accountBalance: "profit",
         },
       },
       GROUP: {
@@ -314,13 +311,8 @@ const passbook: PassbookConfig = {
           termReturns: "amount",
           totalReturns: "amount",
           holdingAmount: "amount",
-          accountBalance: "amount",
-        },
-      },
-      TO_USER_GROUP: {
-        ADD: {
-          holdingAmount: "amount",
-          accountBalance: "amount",
+          accountBalance: "profit",
+          profit: "profit",
         },
       },
       CLUB: {
@@ -328,7 +320,8 @@ const passbook: PassbookConfig = {
           termReturns: "amount",
           totalReturns: "amount",
           holdingAmount: "amount",
-          accountBalance: "amount",
+          accountBalance: "profit",
+          profit: "profit",
         },
       },
     },
@@ -337,13 +330,15 @@ const passbook: PassbookConfig = {
         ADD: {
           returns: "amount",
           totalReturns: "amount",
-          accountBalance: "amount",
+          holdingAmount: "amount",
+          accountBalance: "profit",
+          profit: "profit",
         },
       },
       TO: {
         ADD: {
           holdingAmount: "amount",
-          accountBalance: "amount",
+          accountBalance: "profit",
         },
       },
       GROUP: {
@@ -351,13 +346,8 @@ const passbook: PassbookConfig = {
           returns: "amount",
           totalReturns: "amount",
           holdingAmount: "amount",
-          accountBalance: "amount",
-        },
-      },
-      TO_USER_GROUP: {
-        ADD: {
-          holdingAmount: "amount",
-          accountBalance: "amount",
+          accountBalance: "profit",
+          profit: "profit",
         },
       },
       CLUB: {
@@ -365,7 +355,8 @@ const passbook: PassbookConfig = {
           returns: "amount",
           totalReturns: "amount",
           holdingAmount: "amount",
-          accountBalance: "amount",
+          accountBalance: "profit",
+          profit: "profit",
         },
       },
     },
@@ -380,6 +371,36 @@ const passbook: PassbookConfig = {
         SUB: {
           withdraw: "amount",
           totalWithdraw: "amount",
+        },
+      },
+      GROUP: {
+        SUB: {
+          withdraw: "amount",
+          totalWithdraw: "amount",
+          accountBalance: "amount",
+          holdingAmount: "amount",
+        },
+      },
+      CLUB: {
+        SUB: {
+          withdraw: "amount",
+          totalWithdraw: "amount",
+          accountBalance: "amount",
+          holdingAmount: "amount",
+        },
+      },
+    },
+    MEMBER_EXIT_WITHDRAW: {
+      FROM: {
+        SUB: {
+          holdingAmount: "amount",
+          accountBalance: "amount",
+        },
+      },
+      TO: {
+        SUB: {
+          withdraw: "amount",
+          totalWithdraw: "amount",
           accountBalance: "amount",
           holdingAmount: "amount",
         },
@@ -392,14 +413,32 @@ const passbook: PassbookConfig = {
           holdingAmount: "amount",
         },
       },
-      FROM_USER_GROUP: {
-        ADD: {
+      CLUB: {
+        SUB: {
+          withdraw: "amount",
+          totalWithdraw: "amount",
+          accountBalance: "amount",
+          holdingAmount: "amount",
+        },
+      },
+    },
+    MEMBER_EXIT_PROFIT_WITHDRAW: {
+      FROM: {
+        SUB: {
           holdingAmount: "amount",
           accountBalance: "amount",
         },
       },
-      TO_USER_GROUP: {
-        ADD: {
+      TO: {
+        SUB: {
+          withdraw: "amount",
+          totalWithdraw: "amount",
+          accountBalance: "amount",
+          holdingAmount: "amount",
+        },
+      },
+      GROUP: {
+        SUB: {
           withdraw: "amount",
           totalWithdraw: "amount",
           accountBalance: "amount",
@@ -472,9 +511,10 @@ const configContext = {
         membersCount,
       }),
     };
-    const totalTermAmountPerPerson =
-      data.alpha.termAmountPerPerson + data.bravo.termAmountPerPerson;
-    const totalTermAmount = totalTermAmountPerPerson * membersCount;
+    const totalTermAmount =
+      data.alpha.totalTermAmount + data.bravo.totalTermAmount;
+    const totalTermAmountPerPerson = totalTermAmount / membersCount;
+
     return {
       ...data,
       club: {
