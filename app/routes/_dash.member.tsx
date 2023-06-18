@@ -90,7 +90,7 @@ export default function MemberPage() {
                           )}
                         >
                           <span className="text-xs font-semibold leading-tight text-slate-500">
-                            {member.joinedAtFormat}
+                            {member.joinedAt$}
                           </span>
                         </td>
                         <td
@@ -128,7 +128,7 @@ export default function MemberPage() {
                           )}
                         >
                           <span className="text-xs font-semibold leading-tight text-slate-500">
-                            {member.termBalance$}
+                            {member.totalBalance$}
 
                             {member.balance ? (
                               <p className="mb-0 text-xs leading-tight text-slate-500">

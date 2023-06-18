@@ -97,7 +97,8 @@ export type PassbookConfig = {
             | "amount"
             | "month"
             | "balance"
-            | "profit";
+            | "profit"
+            | "one";
         };
       };
     };
@@ -220,7 +221,7 @@ const passbook: PassbookConfig = {
         ADD: {
           termInvest: "amount",
           totalInvest: "amount",
-          investMonths: "month",
+          investMonths: "one",
         },
         SUB: {
           holdingAmount: "amount",
@@ -231,7 +232,7 @@ const passbook: PassbookConfig = {
         ADD: {
           termInvest: "amount",
           totalInvest: "amount",
-          investMonths: "month",
+          investMonths: "one",
         },
         SUB: {
           holdingAmount: "amount",
@@ -242,7 +243,7 @@ const passbook: PassbookConfig = {
         ADD: {
           termInvest: "amount",
           totalInvest: "amount",
-          investMonths: "month",
+          investMonths: "one",
         },
         SUB: {
           holdingAmount: "amount",
@@ -260,7 +261,6 @@ const passbook: PassbookConfig = {
         ADD: {
           invest: "amount",
           totalInvest: "amount",
-          investMonths: "month",
         },
         SUB: {
           holdingAmount: "amount",
@@ -271,7 +271,6 @@ const passbook: PassbookConfig = {
         ADD: {
           invest: "amount",
           totalInvest: "amount",
-          investMonths: "month",
         },
         SUB: {
           holdingAmount: "amount",
@@ -282,7 +281,6 @@ const passbook: PassbookConfig = {
         ADD: {
           invest: "amount",
           totalInvest: "amount",
-          investMonths: "month",
         },
         SUB: {
           holdingAmount: "amount",
@@ -298,6 +296,7 @@ const passbook: PassbookConfig = {
           holdingAmount: "amount",
           accountBalance: "profit",
           profit: "profit",
+          returnsMonths: "one",
         },
       },
       TO: {
@@ -313,6 +312,7 @@ const passbook: PassbookConfig = {
           holdingAmount: "amount",
           accountBalance: "profit",
           profit: "profit",
+          returnsMonths: "one",
         },
       },
       CLUB: {
@@ -322,6 +322,7 @@ const passbook: PassbookConfig = {
           holdingAmount: "amount",
           accountBalance: "profit",
           profit: "profit",
+          returnsMonths: "one",
         },
       },
     },

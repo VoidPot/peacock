@@ -151,7 +151,7 @@ export default function TransactionPage() {
                           )}
                         >
                           <span className="text-xs font-semibold leading-tight text-slate-500">
-                            {member.joinedAtFormat}
+                            {member.joinedAt$}
                           </span>
                         </td>
                         <td

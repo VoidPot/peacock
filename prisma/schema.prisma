@@ -146,6 +146,8 @@ model Passbook {
   profitWithdraw Float @default(0)
   totalWithdraw  Float @default(0)
 
+  tallyBalance Float @default(0)
+
   accountBalance Float @default(0)
 
   termInvest  Float @default(0)

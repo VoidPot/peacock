@@ -54,7 +54,7 @@ const transactionSeedMap = (users: any[], group: any) => {
         each.method === "return_on_invest" &&
         from.nickName === "chit_20"
       ) {
-        mode = "VENDOR_PERIODIC_RETURN";
+        mode = "VENDOR_RETURN";
       } else if (each.method === "invest") {
         mode = "VENDOR_INVEST";
       } else if (each.method === "return_on_invest") {

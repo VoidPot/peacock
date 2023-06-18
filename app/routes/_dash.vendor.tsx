@@ -11,6 +11,7 @@ export const loader = async ({ request }: LoaderArgs) => {
 
 export default function VendorPage() {
   const { items } = useLoaderData<typeof loader>();
+  console.log({ items });
   return (
     <div className="h-full w-full">
       <div className="flex flex-wrap">
@@ -31,6 +32,9 @@ export default function VendorPage() {
                         Started At
                       </th>
                       <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
+                        Term Months
+                      </th>
+                      <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
                         Total Invest
                       </th>
                       {/* <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
@@ -41,9 +45,6 @@ export default function VendorPage() {
                       </th>
                       <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
                         Profit
-                      </th>
-                      <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
-                        Net Amount
                       </th>
                     </tr>
                   </thead>
@@ -90,7 +91,7 @@ export default function VendorPage() {
                           )}
                         >
                           <span className="text-xs font-semibold leading-tight text-slate-500">
-                            {vendor.joinedAtFormat}
+                            {vendor.joinedAt$}
                           </span>
                         </td>
                         <td
@@ -102,7 +103,7 @@ export default function VendorPage() {
                           )}
                         >
                           <span className="text-xs font-semibold leading-tight text-slate-500">
-                            {vendor.totalDeposit$}
+                            {vendor.investMonths}
                           </span>
                         </td>
                         <td
@@ -114,7 +115,7 @@ export default function VendorPage() {
                           )}
                         >
                           <span className="text-xs font-semibold leading-tight text-slate-500">
-                            {vendor.balance$}
+                            {vendor.totalInvest$}
                           </span>
                         </td>
                         <td
@@ -126,7 +127,7 @@ export default function VendorPage() {
                           )}
                         >
                           <span className="text-xs font-semibold leading-tight text-slate-500">
-                            {vendor.profit}
+                            {vendor.termReturns$}
                           </span>
                         </td>
                         <td
@@ -138,7 +139,7 @@ export default function VendorPage() {
                           )}
                         >
                           <span className="text-xs font-semibold leading-tight text-slate-500">
-                            {vendor.netAmount$}
+                            {vendor.holdingAmount$}
                           </span>
                         </td>
                       </tr>

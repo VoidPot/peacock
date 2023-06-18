@@ -56,6 +56,7 @@ export const passbookMiddleware = async (params: any, result: Transaction) => {
       amount: result.amount,
       month: group ? Math.round(result.amount / group.amount) : 0,
       profit: 0,
+      one: 1,
     };
 
     const passbooksForUpdate: {
