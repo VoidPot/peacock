@@ -73,7 +73,7 @@ export default function VendorPage() {
 
                               {vendor.holdingAmount ? (
                                 <p className="mb-0 text-xs leading-tight text-slate-500">
-                                  {vendor.holdingAmountCurrency}
+                                  {vendor.holdingAmount$}
                                 </p>
                               ) : (
                                 <></>
@@ -102,7 +102,7 @@ export default function VendorPage() {
                           )}
                         >
                           <span className="text-xs font-semibold leading-tight text-slate-500">
-                            {vendor.totalDepositCurrency}
+                            {vendor.totalDeposit$}
                           </span>
                         </td>
                         <td
@@ -114,7 +114,7 @@ export default function VendorPage() {
                           )}
                         >
                           <span className="text-xs font-semibold leading-tight text-slate-500">
-                            {vendor.balanceCurrency}
+                            {vendor.balance$}
                           </span>
                         </td>
                         <td
@@ -138,7 +138,7 @@ export default function VendorPage() {
                           )}
                         >
                           <span className="text-xs font-semibold leading-tight text-slate-500">
-                            {vendor.netAmountCurrency}
+                            {vendor.netAmount$}
                           </span>
                         </td>
                       </tr>

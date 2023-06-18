@@ -82,9 +82,9 @@ const computeGroupData = ({
     endMonthsDif: Math.ceil(startEndMonths),
     currentMonthsDiff: Math.ceil(currentMonthDiff),
     termAmountPerPerson,
-    termAmountPerPersonCurrency: formatMoney(termAmountPerPerson),
+    termAmountPerPerson$: formatMoney(termAmountPerPerson),
     totalTermAmount,
-    totalTermAmountCurrency: formatMoney(totalTermAmount),
+    totalTermAmount$: formatMoney(totalTermAmount),
   };
 };
 
@@ -519,9 +519,9 @@ const configContext = {
       ...data,
       club: {
         totalTermAmountPerPerson,
-        totalTermAmountPerPersonCurrency: formatMoney(totalTermAmountPerPerson),
+        totalTermAmountPerPerson$: formatMoney(totalTermAmountPerPerson),
         totalTermAmount,
-        totalTermAmountCurrency: formatMoney(totalTermAmount),
+        totalTermAmount$: formatMoney(totalTermAmount),
       },
     };
   },

@@ -26,19 +26,19 @@ export default function IndexPage() {
     },
     {
       hed: "Members Deposit",
-      dek: club.termDepositCurrency,
+      dek: club.termDeposit$,
       iconName: "archive",
       hedColor: "secondary",
     },
     {
       hed: "Members Balance",
-      dek: club.termBalanceCurrency,
+      dek: club.termBalance$,
       iconName: "transaction",
       hedColor: "accent",
     },
     {
       hed: "Net Members Amount",
-      dek: club.totalTermAmountCurrency,
+      dek: club.totalTermAmount$,
       iconName: "trans",
       hedColor: "primary",
     },

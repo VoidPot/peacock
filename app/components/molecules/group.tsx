@@ -5,13 +5,13 @@ function GroupCard(props: any) {
   const statsData: StatProps[] = [
     {
       hed: "Members Deposit",
-      dek: props.termDepositCurrency,
+      dek: props.termDeposit$,
       iconName: "trans",
       align: "start",
     },
     {
       hed: "Members Balance",
-      dek: props.termBalanceCurrency,
+      dek: props.termBalance$,
       iconName: "trans",
       align: "end",
       hedColor: "accent",
@@ -25,7 +25,7 @@ function GroupCard(props: any) {
             <h3 className="m-0 uppercase text-neutral">{props.name}</h3>
             <div className="text-right">
               <p className="m-0 p-0 text-sm font-semibold leading-normal text-slate-500">
-                {props.amountCurrency}
+                {props.amount$}
                 {" / Month"}
               </p>
             </div>
@@ -50,7 +50,7 @@ function GroupCard(props: any) {
                   0 ₹
                 </p>
                 <p className="m-0 p-0 text-sm font-semibold leading-normal text-slate-500">
-                  {props.totalTermAmountCurrency}
+                  {props.totalTermAmount$}
                 </p>
               </div>
               <div className="flex flex-row gap-4 pt-6">

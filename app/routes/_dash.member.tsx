@@ -73,7 +73,7 @@ export default function MemberPage() {
 
                               {member.holdingAmount ? (
                                 <p className="mb-0 text-xs leading-tight text-slate-500">
-                                  {member.holdingAmountCurrency}
+                                  {member.holdingAmount$}
                                 </p>
                               ) : (
                                 <></>
@@ -102,11 +102,11 @@ export default function MemberPage() {
                           )}
                         >
                           <span className="text-xs font-semibold leading-tight text-slate-500">
-                            {member.termDepositCurrency}
+                            {member.termDeposit$}
 
                             {member.deposit ? (
                               <p className="mb-0 text-xs leading-tight text-slate-500">
-                                {member.depositCurrency}
+                                {member.deposit$}
                               </p>
                             ) : (
                               ""
@@ -128,11 +128,11 @@ export default function MemberPage() {
                           )}
                         >
                           <span className="text-xs font-semibold leading-tight text-slate-500">
-                            {member.termBalanceCurrency}
+                            {member.termBalance$}
 
                             {member.balance ? (
                               <p className="mb-0 text-xs leading-tight text-slate-500">
-                                {member.balanceCurrency}
+                                {member.balance$}
                               </p>
                             ) : (
                               ""
@@ -148,7 +148,7 @@ export default function MemberPage() {
                           )}
                         >
                           <span className="text-xs font-semibold leading-tight text-slate-500">
-                            {member.profitCurrency}
+                            {member.profit$}
                           </span>
                         </td>
                         <td
@@ -160,7 +160,7 @@ export default function MemberPage() {
                           )}
                         >
                           <span className="text-xs font-semibold leading-tight text-slate-500">
-                            {member.netAmountCurrency}
+                            {member.netAmount$}
                           </span>
                         </td>
                       </tr>

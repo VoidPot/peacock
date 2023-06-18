@@ -2,12 +2,69 @@ import configContext from "~/configContext";
 import { prisma } from "~/db.server";
 import { commuteGroup } from "./group.server";
 import { formatMoney } from "~/helpers/utils";
-import type { Passbook } from "@prisma/client";
+import type { Group, Passbook } from "@prisma/client";
 
 export const formatPassbook = (passbook: Passbook) => {
+  const {
+    termDeposit,
+    deposit,
+    tallyDeposit,
+    totalDeposit,
+    withdraw,
+    profitWithdraw,
+    totalWithdraw,
+    accountBalance,
+    termInvest,
+    invest,
+    totalInvest,
+    termReturns,
+    returns,
+    totalReturns,
+    profit,
+    holdingAmount,
+    depositMonths,
+    withdrawMonths,
+    investMonths,
+    returnsMonths,
+  } = passbook;
   return {
     ...passbook,
-    termDeposit$: formatMoney(passbook.termDeposit),
+    termDeposit$: formatMoney(termDeposit),
+    deposit$: formatMoney(deposit),
+    tallyDeposit$: formatMoney(tallyDeposit),
+    totalDeposit$: formatMoney(totalDeposit),
+    withdraw$: formatMoney(withdraw),
+    profitWithdraw$: formatMoney(profitWithdraw),
+    totalWithdraw$: formatMoney(totalWithdraw),
+    accountBalance$: formatMoney(accountBalance),
+    termInvest$: formatMoney(termInvest),
+    invest$: formatMoney(invest),
+    totalInvest$: formatMoney(totalInvest),
+    termReturns$: formatMoney(termReturns),
+    returns$: formatMoney(returns),
+    totalReturns$: formatMoney(totalReturns),
+    profit$: formatMoney(profit),
+    holdingAmount$: formatMoney(holdingAmount),
+    termDeposit,
+    deposit,
+    tallyDeposit,
+    totalDeposit,
+    withdraw,
+    profitWithdraw,
+    totalWithdraw,
+    accountBalance,
+    termInvest,
+    invest,
+    totalInvest,
+    termReturns,
+    returns,
+    totalReturns,
+    profit,
+    holdingAmount,
+    depositMonths,
+    withdrawMonths,
+    investMonths,
+    returnsMonths,
   };
 };
 
@@ -25,20 +82,21 @@ export const getClubGroupPassbook = async () => {
     }),
     prisma.user.count({ where: { deleted: false, type: "MEMBER" } }),
   ])
+    .then(
+      ([club, groups, membersCount]) =>
+        [club, groups, membersCount] as unknown as [Passbook, Group[], number]
+    )
     .then(([club, groups, membersCount]) => {
-      const termDeposit = club?.termDeposit || 0;
       const clubGroupConfig = configContext.group(membersCount).club;
-      const termBalance = clubGroupConfig.totalTermAmount - termDeposit;
+      const termBalance = clubGroupConfig.totalTermAmount - club.termDeposit;
 
       return {
         club: {
-          ...(club || {}),
+          ...formatPassbook(club),
           membersCount,
           ...clubGroupConfig,
           termBalance,
-          termBalanceCurrency: formatMoney(termBalance),
-          termDeposit,
-          termDepositCurrency: formatMoney(termDeposit),
+          termBalance$: formatMoney(termBalance),
         },
         groups: groups
           .map((e) => commuteGroup(e, membersCount))
@@ -49,24 +107,22 @@ export const getClubGroupPassbook = async () => {
       return {
         club,
         groups: groups.map((group, index) => {
-          const passbook = group.passbook as Passbook;
-          const termDeposit = passbook?.termDeposit || 0;
+          const passbook = formatPassbook(group.passbook as Passbook);
           const remainingTermAmount =
             groups.slice(0, index).reduce((a, b) => {
               a = a + b.totalTermAmount;
               return a;
-            }, 0) + termDeposit;
+            }, 0) + passbook.termDeposit;
 
           const balance = group.totalTermAmount - remainingTermAmount;
           const termBalance = Number(balance) >= 0 ? balance : 0;
 
           return {
             ...group,
-            amountCurrency: formatMoney(group.amount),
+            ...passbook,
+            amount$: formatMoney(group.amount),
             termBalance,
-            termBalanceCurrency: formatMoney(termBalance),
-            termDeposit,
-            termDepositCurrency: formatMoney(termDeposit),
+            termBalance$: formatMoney(termBalance),
           };
         }),
       };
