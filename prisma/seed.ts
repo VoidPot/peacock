@@ -2,6 +2,7 @@ import type { Prisma, TRANSACTION_TYPE } from "@prisma/client";
 import { PrismaClient } from "@prisma/client";
 import seedData from "./seeds/seed-data";
 import { passbookMiddleware } from "~/models/passbook-entry.server";
+import { profitCalculator } from "./seeds/seed-profit";
 
 const prisma = new PrismaClient();
 
@@ -15,8 +16,8 @@ const userSeedMap = () =>
   seedData.users.map(
     (each) =>
       ({
-        firstName: each.name.split(" ")[0],
-        lastName: each.name.split(" ")[1] || "",
+        firstName: each.role === "member" ? each.name.split(" ")[0] : each.name,
+        lastName: each.role === "member" ? each.name.split(" ")[1] || "" : "",
         nickName: each.value,
         mobileNumber: each.phone || each.value,
         type: each.role === "member" ? "MEMBER" : "VENDOR",
@@ -48,11 +49,11 @@ const transactionSeedMap = (users: any[], group: any) => {
         type = "TRANSFER";
       } else if (each.method === "expenditure") {
         mode = "OTHER_EXPENDITURE";
-      } else if (each.method === "invest" && to.nickName === "chit_20") {
+      } else if (each.method === "invest" && to.nickName === "chit_20l_2021") {
         mode = "VENDOR_PERIODIC_INVEST";
       } else if (
         each.method === "return_on_invest" &&
-        from.nickName === "chit_20"
+        from.nickName === "chit_20l_2021"
       ) {
         mode = "VENDOR_RETURN";
       } else if (each.method === "invest") {
@@ -152,6 +153,8 @@ async function seed() {
       data: { ...each } as any,
     });
   }
+
+  await profitCalculator();
   return;
 }
 

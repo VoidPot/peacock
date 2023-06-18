@@ -6,7 +6,9 @@ import { getMembersPassbook } from "~/models/user.server";
 
 export const loader = async ({ request }: LoaderArgs) => {
   const items = await getMembersPassbook();
-  return json({ items });
+  return json({
+    items,
+  });
 };
 
 export default function MemberPage() {
@@ -102,23 +104,17 @@ export default function MemberPage() {
                           )}
                         >
                           <span className="text-xs font-semibold leading-tight text-slate-500">
-                            {member.termDeposit$}
+                            {member.totalDeposit$}
 
-                            {member.deposit ? (
+                            {member.tallyDeposit ? (
                               <p className="mb-0 text-xs leading-tight text-slate-500">
-                                {member.deposit$}
+                                {member.termDeposit$} + {member.tallyDeposit$}
                               </p>
                             ) : (
                               ""
                             )}
                           </span>
                         </td>
-
-                        {/* <td className="whitespace-nowrap border-b bg-transparent p-2 text-center align-middle text-sm leading-normal shadow-transparent">
-                          <span className="text-xs font-semibold leading-tight text-slate-500">
-                            {member.userPassbook.depositInRupee}
-                          </span>
-                        </td> */}
                         <td
                           className={classNames(
                             "whitespace-nowrap bg-transparent p-2 text-center align-middle text-sm leading-normal shadow-transparent",
@@ -129,10 +125,9 @@ export default function MemberPage() {
                         >
                           <span className="text-xs font-semibold leading-tight text-slate-500">
                             {member.totalBalance$}
-
-                            {member.balance ? (
+                            {member.tallyBalance ? (
                               <p className="mb-0 text-xs leading-tight text-slate-500">
-                                {member.balance$}
+                                {member.termBalance} + {member.tallyBalance$}
                               </p>
                             ) : (
                               ""
@@ -148,7 +143,7 @@ export default function MemberPage() {
                           )}
                         >
                           <span className="text-xs font-semibold leading-tight text-slate-500">
-                            {member.profit$}
+                            {member.perMemberProfit$}
                           </span>
                         </td>
                         <td

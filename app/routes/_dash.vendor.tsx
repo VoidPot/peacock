@@ -127,7 +127,7 @@ export default function VendorPage() {
                           )}
                         >
                           <span className="text-xs font-semibold leading-tight text-slate-500">
-                            {vendor.termReturns$}
+                            {vendor.totalReturns$}
                           </span>
                         </td>
                         <td

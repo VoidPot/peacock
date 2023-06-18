@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE "Passbook" ADD COLUMN     "tallyBalance" DOUBLE PRECISION NOT NULL DEFAULT 0;

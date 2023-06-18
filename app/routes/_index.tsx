@@ -1,6 +1,5 @@
 import { Link } from "@remix-run/react";
 import type { V2_MetaFunction } from "@remix-run/node";
-import StackedBrand from "~/components/atoms/svg/stacked-brand";
 
 export const meta: V2_MetaFunction = () => [{ title: "Peacock Club" }];
 

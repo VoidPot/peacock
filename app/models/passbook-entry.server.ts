@@ -59,13 +59,21 @@ export const passbookMiddleware = async (params: any, result: Transaction) => {
       one: 1,
     };
 
+    if (["VENDOR_RETURN", "VENDOR_PERIODIC_RETURN"].includes(result.mode)) {
+      const from = passbooks.FROM;
+      if (from && from.calcProfit) {
+        values.profit =
+          from.totalReturns + result.amount - from.profit - from.totalInvest;
+      }
+    }
+
     const passbooksForUpdate: {
       where: Partial<Passbook>;
       data: Partial<Passbook>;
     }[] = [];
 
     const addEntry = (
-      passbook: any | null | undefined,
+      passbook: any | null | undefined | unknown,
       add: { [key in Passbook_Settings_Keys]?: number } = {},
       sub: { [key in Passbook_Settings_Keys]?: number } = {}
     ) => {

@@ -12,6 +12,7 @@ export type Passbook_Settings_Keys =
   | "withdraw"
   | "profitWithdraw"
   | "totalWithdraw"
+  | "tallyBalance"
   | "termInvest"
   | "invest"
   | "totalInvest"
@@ -21,6 +22,9 @@ export type Passbook_Settings_Keys =
   | "accountBalance"
   | "holdingAmount"
   | "profit"
+  | "tallyProfit"
+  | "totalProfit"
+  | "calcProfit"
   | "depositMonths"
   | "withdrawMonths"
   | "investMonths"
@@ -155,6 +159,9 @@ const passbook: PassbookConfig = {
           tallyDeposit: "amount",
           totalDeposit: "amount",
           accountBalance: "amount",
+        },
+        SUB: {
+          tallyBalance: "amount",
         },
       },
       TO: {
@@ -296,6 +303,7 @@ const passbook: PassbookConfig = {
           holdingAmount: "amount",
           accountBalance: "profit",
           profit: "profit",
+          totalProfit: "profit",
           returnsMonths: "one",
         },
       },
@@ -312,6 +320,7 @@ const passbook: PassbookConfig = {
           holdingAmount: "amount",
           accountBalance: "profit",
           profit: "profit",
+          totalProfit: "profit",
           returnsMonths: "one",
         },
       },
@@ -322,6 +331,7 @@ const passbook: PassbookConfig = {
           holdingAmount: "amount",
           accountBalance: "profit",
           profit: "profit",
+          totalProfit: "profit",
           returnsMonths: "one",
         },
       },
@@ -334,6 +344,7 @@ const passbook: PassbookConfig = {
           holdingAmount: "amount",
           accountBalance: "profit",
           profit: "profit",
+          totalProfit: "profit",
         },
       },
       TO: {
@@ -349,6 +360,7 @@ const passbook: PassbookConfig = {
           holdingAmount: "amount",
           accountBalance: "profit",
           profit: "profit",
+          totalProfit: "profit",
         },
       },
       CLUB: {
@@ -358,6 +370,7 @@ const passbook: PassbookConfig = {
           holdingAmount: "amount",
           accountBalance: "profit",
           profit: "profit",
+          totalProfit: "profit",
         },
       },
     },
@@ -461,7 +474,7 @@ const passbook: PassbookConfig = {
 const configContext = {
   user: {
     payExtra: {
-      payProfitOf: ["bank_interest", "chit_20"],
+      payProfitOf: ["initial_bank_interest", "chit_20l_2021"],
       joinedBefore: new Date("07/31/2023"),
       joinedAfter: new Date("09/01/2020"),
     },

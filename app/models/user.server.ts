@@ -2,7 +2,7 @@ import configContext from "~/configContext";
 import type { User } from "@prisma/client";
 import { prisma } from "~/db.server";
 import { formatMoney, getMonthYear } from "~/helpers/utils";
-import { formatPassbook } from "./passbook.server";
+import { formatPassbook, getClubPassbook } from "./passbook.server";
 
 export async function getMembersPassbook() {
   const members = await prisma.user.findMany({
@@ -11,29 +11,34 @@ export async function getMembersPassbook() {
       passbook: true,
     },
   });
-
-  return members.map((member) => {
-    const club = configContext.group(members.length).club;
-    const passbook = formatPassbook(member.passbook);
-    const balance = 0;
-    const termBalance = club.totalTermAmountPerPerson - passbook.termDeposit;
-    const totalBalance = termBalance + balance + passbook.tallyBalance;
-    const profit = 0;
-    const netAmount = passbook.totalDeposit + profit;
-    return {
-      ...member,
-      ...passbook,
-      joinedAt$: getMonthYear(member.joinedAt),
-      balance,
-      balance$: formatMoney(balance),
-      termBalance,
-      termBalance$: formatMoney(termBalance),
-      totalBalance,
-      totalBalance$: formatMoney(totalBalance),
-      netAmount,
-      netAmount$: formatMoney(netAmount),
-    };
-  });
+  const clubPassbook = await getClubPassbook();
+  const perMemberProfit = (clubPassbook?.totalProfit || 0) / members.length;
+  return members
+    .map((member) => {
+      const club = configContext.group(members.length).club;
+      const passbook = formatPassbook(member.passbook);
+      const balance = 0;
+      const termBalance = club.totalTermAmountPerPerson - passbook.termDeposit;
+      const totalBalance = termBalance + balance + passbook.tallyBalance;
+      const netAmount =
+        passbook.totalDeposit + perMemberProfit - passbook.tallyBalance;
+      return {
+        ...member,
+        ...passbook,
+        joinedAt$: getMonthYear(member.joinedAt),
+        balance,
+        balance$: formatMoney(balance),
+        termBalance,
+        termBalance$: formatMoney(termBalance),
+        totalBalance,
+        totalBalance$: formatMoney(totalBalance),
+        perMemberProfit,
+        perMemberProfit$: formatMoney(perMemberProfit),
+        netAmount,
+        netAmount$: formatMoney(netAmount),
+      };
+    })
+    .sort((a, b) => (a.nickName > b.nickName ? 1 : -1));
 }
 
 export async function getVendorsWithSummary() {
@@ -44,28 +49,16 @@ export async function getVendorsWithSummary() {
     },
   });
 
-  return vendors.map((vendor) => {
-    const club = configContext.group().club;
-    const passbook = formatPassbook(vendor.passbook);
-    const balance = 0;
-    const termBalance = club.totalTermAmountPerPerson - passbook.totalDeposit;
-    const totalBalance = termBalance + balance + passbook.tallyBalance;
-    const profit = 0;
-    const netAmount = passbook.totalDeposit + profit;
-    return {
-      ...vendor,
-      ...passbook,
-      joinedAt$: getMonthYear(vendor.joinedAt),
-      balance,
-      balance$: formatMoney(balance),
-      termBalance,
-      termBalance$: formatMoney(termBalance),
-      totalBalance,
-      totalBalance$: formatMoney(totalBalance),
-      netAmount,
-      netAmount$: formatMoney(netAmount),
-    };
-  });
+  return vendors
+    .map((vendor) => {
+      const passbook = formatPassbook(vendor.passbook);
+      return {
+        ...vendor,
+        ...passbook,
+        joinedAt$: getMonthYear(vendor.joinedAt),
+      };
+    })
+    .sort((a, b) => (a.nickName > b.nickName ? 1 : -1));
 }
 
 export async function getMembers() {

@@ -158,7 +158,10 @@ model Passbook {
   returns      Float @default(0)
   totalReturns Float @default(0)
 
-  profit Float @default(0)
+  profit      Float   @default(0)
+  tallyProfit Float   @default(0)
+  totalProfit Float   @default(0)
+  calcProfit  Boolean @default(true)
 
   holdingAmount Float @default(0)
 

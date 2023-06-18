@@ -22,13 +22,15 @@ export const formatPassbook = (passbook: Passbook) => {
     returns,
     totalReturns,
     profit,
+    tallyProfit,
+    totalProfit,
     holdingAmount,
     depositMonths,
     withdrawMonths,
     investMonths,
     returnsMonths,
   } = passbook;
-  // const totalProfit = totalReturns - totalInvest;
+
   return {
     ...passbook,
     termDeposit$: formatMoney(termDeposit),
@@ -47,7 +49,8 @@ export const formatPassbook = (passbook: Passbook) => {
     returns$: formatMoney(returns),
     totalReturns$: formatMoney(totalReturns),
     profit$: formatMoney(profit),
-    // totalProfit$: formatMoney(totalProfit),
+    tallyProfit$: formatMoney(tallyProfit),
+    totalProfit$: formatMoney(totalProfit),
     holdingAmount$: formatMoney(holdingAmount),
     termDeposit,
     deposit,
@@ -64,7 +67,8 @@ export const formatPassbook = (passbook: Passbook) => {
     termReturns,
     returns,
     totalReturns,
-    // totalProfit,
+    tallyProfit,
+    totalProfit,
     profit,
     holdingAmount,
     depositMonths,
@@ -133,4 +137,13 @@ export const getClubGroupPassbook = async () => {
         }),
       };
     });
+};
+
+export const getClubPassbook = async () => {
+  const club = await prisma.passbook.findFirst({
+    where: {
+      entryOf: "CLUB",
+    },
+  });
+  return club ? formatPassbook(club) : club;
 };

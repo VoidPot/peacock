@@ -1,4 +1,3 @@
-import type { Group } from "@prisma/client";
 import moment from "moment";
 
 export const getValidDate = (date: any) => (date ? new Date(date) : new Date());
@@ -9,7 +8,7 @@ export const getMonthYear = (input: any = new Date()) => {
 };
 
 export const formatMoney = (input: any | undefined = 0) => {
-  return `${Number(input).toLocaleString("en-IN") || 0} ₹`;
+  return `${Number(Number(input).toFixed(2)).toLocaleString("en-IN") || 0} ₹`;
 };
 
 export const getValidNumber = (input: any | undefined = 0) => {
@@ -27,28 +26,3 @@ export function numDifferentiation(value: number) {
   if (val >= 100000) return `${(value / 100000).toFixed(2)} Lac`;
   return value;
 }
-
-// ------------
-
-export const getClubTimes = () => {
-  const started = new Date("09/01/2020");
-  const now = moment();
-  const monthsDifDecimal = now.diff(new Date(started), "months", true);
-  return {
-    started: moment(started).format("MMMM YYYY"),
-    current: now.format("MMMM YYYY"),
-    monthsDifDecimal,
-    monthsDif: Math.ceil(monthsDifDecimal),
-  };
-};
-
-export const dateExtract = (from = new Date(), to = new Date()) => {
-  const now = moment(to);
-  const monthsDifDecimal = now.diff(new Date(from), "months", true);
-  return {
-    start: moment(from).format("MMM-YY"),
-    end: now.format("MMM-YY"),
-    monthsDifDecimal,
-    monthsDif: Math.ceil(monthsDifDecimal),
-  };
-};
