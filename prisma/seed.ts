@@ -108,45 +108,42 @@ async function seed() {
     },
   });
   const userSeed = userSeedMap();
-  await Promise.all(
-    userSeed.map(async (user) => {
-      await prisma.user.create({
-        data: {
-          ...user,
-          passbook: {
-            create: {
-              entryOf: "USER",
-            },
+
+  for (const user of userSeed) {
+    await prisma.user.create({
+      data: {
+        ...user,
+        passbook: {
+          create: {
+            entryOf: "USER",
           },
         },
-      });
-    })
-  );
+      },
+    });
+  }
 
   const users = await prisma.user.findMany();
 
   const userLinkIds = users.map((each) => ({ userId: each.id }));
 
-  await Promise.all(
-    seedData.group.map(async (each) => {
-      await prisma.group.create({
-        data: {
-          ...each,
-          passbook: {
-            create: {
-              entryOf: "GROUP",
-            },
-          },
-          links: {
-            createMany: {
-              data: userLinkIds,
-              skipDuplicates: true,
-            },
+  for (const each of seedData.group) {
+    await prisma.group.create({
+      data: {
+        ...each,
+        passbook: {
+          create: {
+            entryOf: "GROUP",
           },
         },
-      });
-    })
-  );
+        links: {
+          createMany: {
+            data: userLinkIds,
+            skipDuplicates: true,
+          },
+        },
+      },
+    });
+  }
 
   const alphaGroup = await prisma.group.findUnique({
     where: {
