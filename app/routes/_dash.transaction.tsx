@@ -1,18 +1,46 @@
 import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData, useSearchParams } from "@remix-run/react";
 import classNames from "classnames";
-import { getFirstLetterUpperCase } from "~/helpers/utils";
+import configContext from "~/configContext";
 import { findTransaction } from "~/models/transaction.server";
 import { getUserSelect } from "~/models/user.server";
 
+const transactionConfig = configContext.transaction;
+
+const getSearchParams = (searchParams: URLSearchParams) => {
+  return {
+    from: Number(searchParams.get("from")) || 0,
+    to: Number(searchParams.get("to")) || 0,
+    page: Number(searchParams.get("page")) || 1,
+    take: Number(searchParams.get("take")) || 10,
+    type: searchParams.get("type") || "",
+    mode: searchParams.get("mode") || "",
+    sort: searchParams.get("sort") || "dot",
+    order: searchParams.get("order") || "desc",
+  };
+};
+
+const setParams = (searchParams: URLSearchParams) => {
+  return {
+    from: searchParams.get("from") || "",
+    to: searchParams.get("to") || "",
+    page: searchParams.get("page") || "1",
+    type: searchParams.get("type") || "",
+    mode: searchParams.get("mode") || "",
+    sort: searchParams.get("sort") || "dot",
+    order: searchParams.get("order") || "desc",
+  };
+};
+
 export const loader = async ({ request }: LoaderArgs) => {
-  console.log({ request });
+  const url = new URL(request.url);
+  const queryParams = getSearchParams(url.searchParams);
   const users = await getUserSelect();
   const items = await findTransaction({
     options: {
-      take: 10,
-      skip: 0,
+      ...queryParams,
+      skip: queryParams.take * (queryParams.page - 1),
     },
   });
   return json({
@@ -23,6 +51,29 @@ export const loader = async ({ request }: LoaderArgs) => {
 
 export default function TransactionPage() {
   const { items, users } = useLoaderData<typeof loader>();
+  let [searchParams, setSearchParams] = useSearchParams({});
+  const queryParams = getSearchParams(searchParams);
+  const params = setParams(searchParams);
+
+  const handleSetSearchParams = (key: string, value: string | number) => {
+    setSearchParams({
+      ...params,
+      [key]: value.toString(),
+    });
+  };
+
+  const handleSelectOnChange = (event: any) => {
+    const { value, name } = event?.target || {};
+
+    if (name) {
+      setSearchParams({
+        ...params,
+        page: "1",
+        [name]: value.toString(),
+      });
+    }
+  };
+
   return (
     <div className="h-full w-full">
       <div className="flex flex-wrap">
@@ -32,55 +83,125 @@ export default function TransactionPage() {
               <h6 className="text-neutral">Transaction Table</h6>
               <div className="block w-full overflow-x-auto">
                 <div className="flex flex-row justify-start gap-4 py-4 lg:join lg:justify-center">
-                  <select className="select-bordered select input-xs min-h-10 w-auto pl-4 pr-10 lg:join-item">
+                  <select
+                    name="from"
+                    onChange={handleSelectOnChange}
+                    className="select-bordered select input-xs min-h-10 w-auto pl-4 pr-10 lg:join-item"
+                  >
                     <option disabled selected>
                       From
                     </option>
+                    <option value={""}>All</option>
                     {users.map((e, i) => (
-                      <option key={i} value={e.id}>
+                      <option
+                        key={i}
+                        value={e.id}
+                        selected={e.id === queryParams.from}
+                      >
                         {e.firstName} {e.lastName}
                       </option>
                     ))}
                   </select>
-                  <select className="select-bordered select input-xs min-h-10 w-auto pl-4 pr-10 lg:join-item">
+                  <select
+                    name="to"
+                    onChange={handleSelectOnChange}
+                    className="select-bordered select input-xs min-h-10 w-auto pl-4 pr-10 lg:join-item"
+                  >
                     <option disabled selected>
                       To
                     </option>
+                    <option value={""}>All</option>
                     {users.map((e, i) => (
-                      <option key={i} value={e.id}>
+                      <option
+                        key={i}
+                        value={e.id}
+                        selected={e.id === queryParams.to}
+                      >
                         {e.firstName} {e.lastName}
                       </option>
                     ))}
                   </select>
-                  <select className="select-bordered select input-xs min-h-10 w-auto pl-4 pr-10 lg:join-item">
+                  <select
+                    name="mode"
+                    onChange={handleSelectOnChange}
+                    className="select-bordered select input-xs min-h-10 w-auto pl-4 pr-10 lg:join-item"
+                  >
                     <option disabled selected>
-                      Method
+                      Mode
                     </option>
-                    <option>Sci-fi</option>
-                    <option>Drama</option>
-                    <option>Action</option>
+                    <option value={""}>All</option>
+                    {Object.entries(transactionConfig.mode).map(
+                      ([key, value]) => (
+                        <option
+                          key={key}
+                          value={key}
+                          selected={key === queryParams.mode}
+                        >
+                          {value}
+                        </option>
+                      )
+                    )}
                   </select>
-                  <select className="select-bordered select input-xs min-h-10 w-auto pl-4 pr-10 lg:join-item">
+                  <select
+                    name="type"
+                    onChange={handleSelectOnChange}
+                    className="select-bordered select input-xs min-h-10 w-auto pl-4 pr-10 lg:join-item"
+                  >
                     <option disabled selected>
                       Transaction Type
                     </option>
-                    <option>Transfer</option>
-                    <option>DEPOSIT</option>
-                    <option>WITHDRAWAL</option>
+                    <option value={""}>All</option>
+                    {Object.entries(transactionConfig.type).map(
+                      ([key, value]) => (
+                        <option
+                          key={key}
+                          value={key}
+                          selected={key === queryParams.type}
+                        >
+                          {value}
+                        </option>
+                      )
+                    )}
                   </select>
-                  <select className="select-bordered select input-xs min-h-10 w-auto pl-4 pr-10 lg:join-item">
+                  <select
+                    name="sort"
+                    onChange={handleSelectOnChange}
+                    className="select-bordered select input-xs min-h-10 w-auto pl-4 pr-10 lg:join-item"
+                  >
                     <option disabled selected>
                       Sort By
                     </option>
-                    <option value={"recently-added"}>Added Date</option>
-                    <option value={"recent"}>Transaction Date</option>
+                    {Object.entries(transactionConfig.sortBy).map(
+                      ([key, value]) => (
+                        <option
+                          key={key}
+                          value={key}
+                          selected={key === queryParams.sort}
+                        >
+                          {value}
+                        </option>
+                      )
+                    )}
                   </select>
-                  <select className="select-bordered select input-xs min-h-10 w-auto pl-4 pr-10 lg:join-item">
+                  <select
+                    name="order"
+                    onChange={handleSelectOnChange}
+                    className="select-bordered select input-xs min-h-10 w-auto pl-4 pr-10 lg:join-item"
+                  >
                     <option disabled selected>
                       Order By
                     </option>
-                    <option value={"ace"}>⬆ Ascending</option>
-                    <option value={"dce"}>⬇ Descending</option>
+                    {Object.entries(transactionConfig.orderby).map(
+                      ([key, value]) => (
+                        <option
+                          key={key}
+                          value={key}
+                          selected={key === queryParams.order}
+                        >
+                          {value}
+                        </option>
+                      )
+                    )}
                   </select>
                 </div>
               </div>
@@ -105,93 +226,107 @@ export default function TransactionPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {items.map(({ from, to, ...transaction }, index) => (
-                      <tr key={index}>
-                        <td
-                          className={classNames(
-                            "whitespace-nowrap bg-transparent p-2 align-middle shadow-transparent",
-                            {
-                              "border-b": index !== items.length - 1,
-                            }
-                          )}
-                        >
-                          <div className="flex px-2 py-1">
-                            <div>
-                              <img
-                                src={`https://file.iam-hussain.site/peacock/image/${from.avatar}`}
-                                className="mr-4 inline-flex h-9 w-9 items-center justify-center rounded-xl text-sm text-white transition-all duration-200 ease-soft-in-out"
-                                alt="user1"
-                              />
-                            </div>
-                            <div className="flex flex-col justify-center">
-                              <h6 className="mb-0 text-sm leading-normal">
-                                {from.firstName} {from.lastName}
-                              </h6>
-                              <p className="mb-0 text-xs leading-tight text-slate-500">
-                                {to.firstName} {to.lastName}
-                              </p>
-                            </div>
-                          </div>
-                        </td>
-                        <td
-                          className={classNames(
-                            "whitespace-nowrap bg-transparent p-2 text-center align-middle text-sm leading-normal shadow-transparent",
-                            {
-                              "border-b": index !== items.length - 1,
-                            }
-                          )}
-                        >
-                          <span className="text-xs font-semibold leading-tight text-slate-500">
-                            {transaction.amount$}
-                          </span>
-                        </td>
-                        <td
-                          className={classNames(
-                            "whitespace-nowrap bg-transparent p-2 text-center align-middle text-sm leading-normal shadow-transparent",
-                            {
-                              "border-b": index !== items.length - 1,
-                            }
-                          )}
-                        >
-                          <span className="text-xs font-semibold capitalize leading-tight text-slate-500">
-                            {getFirstLetterUpperCase(transaction.type)}
-                          </span>
-
-                          <p className="mb-0 text-xs leading-tight text-slate-500">
-                            {getFirstLetterUpperCase(
-                              transaction.mode.split("_").join(" ")
+                    {items.map(
+                      ({ primary, secondary, ...transaction }, index) => (
+                        <tr key={index}>
+                          <td
+                            className={classNames(
+                              "whitespace-nowrap bg-transparent p-2 align-middle shadow-transparent",
+                              {
+                                "border-b": index !== items.length - 1,
+                              }
                             )}
-                          </p>
-                        </td>
+                          >
+                            <div className="flex px-2 py-1">
+                              <div>
+                                <img
+                                  src={`https://file.iam-hussain.site/peacock/image/${primary.avatar}`}
+                                  className="mr-4 inline-flex h-9 w-9 items-center justify-center rounded-xl text-sm text-white transition-all duration-200 ease-soft-in-out"
+                                  alt="user1"
+                                />
+                              </div>
+                              <div className="flex flex-col justify-center">
+                                <h6 className="mb-0 text-sm leading-normal">
+                                  {primary.firstName} {primary.lastName}
+                                </h6>
+                                <p className="mb-0 text-xs leading-tight text-slate-500">
+                                  {secondary.firstName} {secondary.lastName}
+                                </p>
+                              </div>
+                            </div>
+                          </td>
+                          <td
+                            className={classNames(
+                              "whitespace-nowrap bg-transparent p-2 text-center align-middle text-sm leading-normal shadow-transparent",
+                              {
+                                "border-b": index !== items.length - 1,
+                              }
+                            )}
+                          >
+                            <span className="text-xs font-semibold leading-tight text-slate-500">
+                              {transaction.amount$}
+                            </span>
+                          </td>
+                          <td
+                            className={classNames(
+                              "whitespace-nowrap bg-transparent p-2 text-center align-middle text-sm leading-normal shadow-transparent",
+                              {
+                                "border-b": index !== items.length - 1,
+                              }
+                            )}
+                          >
+                            <span className="text-xs font-semibold capitalize leading-tight text-slate-500">
+                              {transactionConfig.type[transaction.type]}
+                            </span>
 
-                        <td
-                          className={classNames(
-                            "whitespace-nowrap bg-transparent p-2 text-center align-middle text-sm leading-normal shadow-transparent",
-                            {
-                              "border-b": index !== items.length - 1,
-                            }
-                          )}
-                        >
-                          <span className="text-xs font-semibold leading-tight text-slate-500">
-                            {transaction.dot$}
-                          </span>
-                          <p className="mb-0 text-xs leading-tight text-slate-500">
-                            {transaction.createdAt$}
-                          </p>
-                        </td>
-                      </tr>
-                    ))}
+                            <p className="mb-0 text-xs leading-tight text-slate-500">
+                              {transactionConfig.mode[transaction.mode]}
+                            </p>
+                          </td>
+
+                          <td
+                            className={classNames(
+                              "whitespace-nowrap bg-transparent p-2 text-center align-middle text-sm leading-normal shadow-transparent",
+                              {
+                                "border-b": index !== items.length - 1,
+                              }
+                            )}
+                          >
+                            <span className="text-xs font-semibold leading-tight text-slate-500">
+                              {transaction.dot$}
+                            </span>
+                            <p className="mb-0 text-xs leading-tight text-slate-500">
+                              {transaction.createdAt$}
+                            </p>
+                          </td>
+                        </tr>
+                      )
+                    )}
                   </tbody>
                 </table>
               </div>
             </div>
             <div className="flex w-full max-w-full items-center justify-center pb-4">
               <div className="join">
-                <button className="btn-base join-item btn text-xl text-secondary">
+                <button
+                  disabled={queryParams.page <= 1}
+                  className="btn-base join-item btn text-xl text-secondary"
+                  onClick={() =>
+                    handleSetSearchParams("page", queryParams.page - 1)
+                  }
+                >
                   «
                 </button>
-                <button className="btn-base join-item btn">Page 22</button>
-                <button className="btn-base join-item btn text-xl text-secondary">
+                <button className="btn-base join-item btn">
+                  Page {queryParams.page}
+                </button>
+                <button
+                  disabled={items.length < queryParams.take}
+                  className="btn-base join-item btn text-xl text-secondary"
+                  onClick={() =>
+                    handleSetSearchParams("page", queryParams.page + 1)
+                  }
+                >
                   »
                 </button>
               </div>

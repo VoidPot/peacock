@@ -501,14 +501,16 @@ const configContext = {
       VENDOR_INVEST: "Vendor Investment",
       VENDOR_RETURN: "Vendor Returns",
       OTHER_EXPENDITURE: "Other Expenditures",
+      MEMBER_EXIT_WITHDRAW: "Member Exit",
+      MEMBER_EXIT_PROFIT_WITHDRAW: "Member Exit Profit Withdraw",
     },
     sortBy: {
       createdAt: "Date of Added",
       dot: "Date of Transaction",
     },
     orderby: {
-      ACE: "⬆ Ascending",
-      DCE: "⬇ Descending",
+      ase: "⬆ Ascending",
+      desc: "⬇ Descending",
     },
   },
   group: function (membersCount: number = 0) {
