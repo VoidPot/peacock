@@ -280,22 +280,22 @@ export default function TransactionPage() {
               </div>
             </div>
             <div className="flex w-full max-w-full items-center justify-center pb-4 ">
-              <div className="bg-base bg-base join whitespace-nowrap rounded border border-solid border-gray-200">
+              <div className="join whitespace-nowrap rounded border border-solid border-gray-200 bg-base-100">
                 <button
                   disabled={queryParams.page <= 1}
-                  className="btn-base btn-md join-item btn text-2xl text-slate-600"
+                  className="btn-ghost btn-md join-item btn text-2xl text-slate-600"
                   onClick={() =>
                     handleSetSearchParams("page", queryParams.page - 1)
                   }
                 >
                   «
                 </button>
-                <span className="btn-base btn-md join-item btn select-none text-xs text-slate-500">
+                <span className="btn-ghost btn-md join-item btn select-none text-xs text-slate-500">
                   Page: {queryParams.page}
                 </span>
                 <button
                   disabled={items.length < queryParams.take}
-                  className="btn-base btn-md join-item btn text-2xl text-slate-600"
+                  className="btn-ghost btn-md join-item btn text-2xl text-slate-600"
                   onClick={() =>
                     handleSetSearchParams("page", queryParams.page + 1)
                   }
