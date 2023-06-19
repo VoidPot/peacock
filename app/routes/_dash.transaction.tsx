@@ -86,18 +86,13 @@ export default function TransactionPage() {
                   <select
                     name="from"
                     onChange={handleSelectOnChange}
+                    defaultValue={queryParams.from}
                     className="select-bordered select input-xs min-h-10 w-auto pl-4 pr-10 lg:join-item"
                   >
-                    <option disabled selected>
-                      From
-                    </option>
-                    <option value={""}>All</option>
+                    <option disabled>From</option>
+                    <option value={""}>From - ALL</option>
                     {users.map((e, i) => (
-                      <option
-                        key={i}
-                        value={e.id}
-                        selected={e.id === queryParams.from}
-                      >
+                      <option key={i} value={e.id}>
                         {e.firstName} {e.lastName}
                       </option>
                     ))}
@@ -105,18 +100,13 @@ export default function TransactionPage() {
                   <select
                     name="to"
                     onChange={handleSelectOnChange}
+                    defaultValue={queryParams.to}
                     className="select-bordered select input-xs min-h-10 w-auto pl-4 pr-10 lg:join-item"
                   >
-                    <option disabled selected>
-                      To
-                    </option>
-                    <option value={""}>All</option>
+                    <option disabled>To</option>
+                    <option value={""}>To - ALL</option>
                     {users.map((e, i) => (
-                      <option
-                        key={i}
-                        value={e.id}
-                        selected={e.id === queryParams.to}
-                      >
+                      <option key={i} value={e.id}>
                         {e.firstName} {e.lastName}
                       </option>
                     ))}
@@ -124,19 +114,14 @@ export default function TransactionPage() {
                   <select
                     name="mode"
                     onChange={handleSelectOnChange}
+                    defaultValue={queryParams.mode}
                     className="select-bordered select input-xs min-h-10 w-auto pl-4 pr-10 lg:join-item"
                   >
-                    <option disabled selected>
-                      Mode
-                    </option>
-                    <option value={""}>All</option>
+                    <option disabled>Mode</option>
+                    <option value={""}>Mode - ALL</option>
                     {Object.entries(transactionConfig.mode).map(
                       ([key, value]) => (
-                        <option
-                          key={key}
-                          value={key}
-                          selected={key === queryParams.mode}
-                        >
+                        <option key={key} value={key}>
                           {value}
                         </option>
                       )
@@ -145,19 +130,14 @@ export default function TransactionPage() {
                   <select
                     name="type"
                     onChange={handleSelectOnChange}
+                    defaultValue={queryParams.type}
                     className="select-bordered select input-xs min-h-10 w-auto pl-4 pr-10 lg:join-item"
                   >
-                    <option disabled selected>
-                      Transaction Type
-                    </option>
-                    <option value={""}>All</option>
+                    <option disabled>Transaction Type</option>
+                    <option value={""}>Transaction Type - ALL</option>
                     {Object.entries(transactionConfig.type).map(
                       ([key, value]) => (
-                        <option
-                          key={key}
-                          value={key}
-                          selected={key === queryParams.type}
-                        >
+                        <option key={key} value={key}>
                           {value}
                         </option>
                       )
@@ -166,18 +146,13 @@ export default function TransactionPage() {
                   <select
                     name="sort"
                     onChange={handleSelectOnChange}
+                    defaultValue={queryParams.sort}
                     className="select-bordered select input-xs min-h-10 w-auto pl-4 pr-10 lg:join-item"
                   >
-                    <option disabled selected>
-                      Sort By
-                    </option>
+                    <option disabled>Sort By</option>
                     {Object.entries(transactionConfig.sortBy).map(
                       ([key, value]) => (
-                        <option
-                          key={key}
-                          value={key}
-                          selected={key === queryParams.sort}
-                        >
+                        <option key={key} value={key}>
                           {value}
                         </option>
                       )
@@ -186,18 +161,13 @@ export default function TransactionPage() {
                   <select
                     name="order"
                     onChange={handleSelectOnChange}
+                    defaultValue={queryParams.order}
                     className="select-bordered select input-xs min-h-10 w-auto pl-4 pr-10 lg:join-item"
                   >
-                    <option disabled selected>
-                      Order By
-                    </option>
+                    <option disabled>Order By</option>
                     {Object.entries(transactionConfig.orderby).map(
                       ([key, value]) => (
-                        <option
-                          key={key}
-                          value={key}
-                          selected={key === queryParams.order}
-                        >
+                        <option key={key} value={key}>
                           {value}
                         </option>
                       )
@@ -260,10 +230,13 @@ export default function TransactionPage() {
                               "whitespace-nowrap bg-transparent p-2 text-center align-middle text-sm leading-normal shadow-transparent",
                               {
                                 "border-b": index !== items.length - 1,
+                                "text-error": transaction.type === "WITHDRAWAL",
+                                "text-success": transaction.type === "DEPOSIT",
+                                "text-info": transaction.type === "TRANSFER",
                               }
                             )}
                           >
-                            <span className="text-xs font-semibold leading-tight text-slate-500">
+                            <span className="text-xs font-semibold leading-tight ">
                               {transaction.amount$}
                             </span>
                           </td>
@@ -286,13 +259,13 @@ export default function TransactionPage() {
 
                           <td
                             className={classNames(
-                              "whitespace-nowrap bg-transparent p-2 text-center align-middle text-sm leading-normal shadow-transparent",
+                              "whitespace-nowrap bg-transparent p-2 text-center align-middle text-sm uppercase leading-normal shadow-transparent",
                               {
                                 "border-b": index !== items.length - 1,
                               }
                             )}
                           >
-                            <span className="text-xs font-semibold leading-tight text-slate-500">
+                            <span className="text-xs font-semibold leading-tight text-secondary">
                               {transaction.dot$}
                             </span>
                             <p className="mb-0 text-xs leading-tight text-slate-500">
@@ -306,23 +279,23 @@ export default function TransactionPage() {
                 </table>
               </div>
             </div>
-            <div className="flex w-full max-w-full items-center justify-center pb-4">
-              <div className="join">
+            <div className="flex w-full max-w-full items-center justify-center pb-4 ">
+              <div className="bg-base bg-base join whitespace-nowrap rounded border border-solid border-gray-200">
                 <button
                   disabled={queryParams.page <= 1}
-                  className="btn-base join-item btn text-xl text-secondary"
+                  className="btn-base btn-md join-item btn text-2xl text-slate-600"
                   onClick={() =>
                     handleSetSearchParams("page", queryParams.page - 1)
                   }
                 >
                   «
                 </button>
-                <button className="btn-base join-item btn">
-                  Page {queryParams.page}
-                </button>
+                <span className="btn-base btn-md join-item btn select-none text-xs text-slate-500">
+                  Page: {queryParams.page}
+                </span>
                 <button
                   disabled={items.length < queryParams.take}
-                  className="btn-base join-item btn text-xl text-secondary"
+                  className="btn-base btn-md join-item btn text-2xl text-slate-600"
                   onClick={() =>
                     handleSetSearchParams("page", queryParams.page + 1)
                   }

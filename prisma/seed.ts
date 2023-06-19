@@ -40,10 +40,14 @@ const transactionSeedMap = (users: any[], group: any) => {
 
       let mode: any = "MEMBERS_PERIODIC_DEPOSIT";
       let type: TRANSACTION_TYPE =
-        each.transactionType === "debit" ? "DEPOSIT" : "WITHDRAWAL";
+        each.transactionType === "credit" ? "DEPOSIT" : "WITHDRAWAL";
 
+      // console.log(each.method);
       if (each.method === "withdraw") {
         mode = "MEMBERS_WITHDRAW";
+      } else if (each.method === "deposit") {
+        mode = "MEMBERS_PERIODIC_DEPOSIT";
+        type = "DEPOSIT";
       } else if (each.method === "transfer") {
         mode = "INTER_CASH_TRANSFER";
         type = "TRANSFER";
@@ -51,19 +55,19 @@ const transactionSeedMap = (users: any[], group: any) => {
         mode = "OTHER_EXPENDITURE";
       } else if (each.method === "invest" && to.nickName === "chit_20l_2021") {
         mode = "VENDOR_PERIODIC_INVEST";
-        type = "WITHDRAWAL";
+        // type = "WITHDRAWAL";
       } else if (
         each.method === "return_on_invest" &&
         from.nickName === "chit_20l_2021"
       ) {
         mode = "VENDOR_RETURN";
-        type = "DEPOSIT";
+        // type = "DEPOSIT";
       } else if (each.method === "invest") {
         mode = "VENDOR_INVEST";
-        type = "WITHDRAWAL";
+        // type = "WITHDRAWAL";
       } else if (each.method === "return_on_invest") {
         mode = "VENDOR_RETURN";
-        type = "DEPOSIT";
+        // type = "DEPOSIT";
       }
 
       return {

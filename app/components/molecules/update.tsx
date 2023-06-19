@@ -1,5 +1,7 @@
+import configContext from "~/configContext";
 import type { findTransaction } from "~/models/transaction.server";
-import Icon from "../atoms/svg/icon";
+
+const transactionConfig = configContext.transaction;
 
 function UpdateCard({
   transactions,
@@ -7,7 +9,7 @@ function UpdateCard({
   transactions: Awaited<ReturnType<typeof findTransaction>>;
 }) {
   return (
-    <div className="relative flex h-full w-full flex-col break-words rounded-md border-0 border-solid border-black/12.5 bg-white bg-clip-border shadow-soft-xl">
+    <div className="relative hidden h-full w-full flex-col break-words rounded-md border-0 border-solid border-black/12.5 bg-white bg-clip-border shadow-soft-xl lg:flex">
       <div className="mb-0 rounded-t-2xl border-b-0 border-solid border-black/12.5 bg-white p-6 pb-0">
         <h6 className="text-neutral">Recent Transactions</h6>
       </div>
@@ -26,21 +28,28 @@ function UpdateCard({
               <div className="relative -top-1.5 ml-11.252 flex w-auto justify-between pt-1.4 lg:max-w-120">
                 <div>
                   <h6 className="mb-0 text-sm font-semibold leading-normal text-slate-600">
-                    <span className="text-blue-600">
+                    <span className="text-secondary">
                       {trans.from.firstName}
-                    </span>{" "}
-                    {trans.transactionStr}
+                    </span>
+                    <span className="mb-0 mt-1 text-xs font-semibold leading-tight text-slate-500">
+                      {" / "}
+                      {trans.to.firstName}
+                    </span>
                   </h6>
-                  <p className="mb-0 mt-1 text-xs font-semibold leading-tight text-slate-400">
-                    {trans.dot$} {" / "} {trans.to.firstName}
+                  <p className="mb-0 mt-1 text-xs font-semibold capitalize leading-tight text-slate-500">
+                    <span className="text-slate-600">
+                      {transactionConfig.type[trans.type]}
+                    </span>
+                    {" / "}
+                    {transactionConfig.mode[trans.mode]}
                   </p>
                 </div>
-                <div className="flex flex-col items-end">
+                <div className="flex flex-col items-end uppercase">
                   <h6 className="mb-0 text-sm font-semibold leading-normal text-slate-600">
                     {trans.amount$}
                   </h6>
-                  <p className="mb-0 mt-1 text-xs font-semibold leading-tight text-slate-400">
-                    {trans.to.firstName}
+                  <p className="mb-0 mt-1 text-xs font-semibold leading-tight text-slate-500">
+                    {trans.dot$}
                   </p>
                 </div>
               </div>

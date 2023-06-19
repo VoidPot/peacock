@@ -37,7 +37,7 @@ const Stat = ({
     <div className="w-full max-w-full">
       <div
         className={classNames(
-          "relative flex min-w-0 flex-col break-words rounded-md bg-base-100",
+          "relative flex min-w-0 flex-col break-words rounded-md bg-white",
           {
             "shadow-soft-md": theme === "default",
           }

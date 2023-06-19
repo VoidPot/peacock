@@ -120,7 +120,7 @@ export default function MemberPage() {
                             }
                           )}
                         >
-                          <span className="text-xs font-semibold leading-tight text-slate-500">
+                          <span className="text-xs font-semibold leading-tight text-error">
                             {member.totalBalance$}
                             {member.tallyBalance ? (
                               <p className="mb-0 text-xs leading-tight text-slate-500">
@@ -139,7 +139,7 @@ export default function MemberPage() {
                             }
                           )}
                         >
-                          <span className="text-xs font-semibold leading-tight text-slate-500">
+                          <span className="text-xs font-semibold leading-tight text-success">
                             {member.perMemberProfit$}
                           </span>
                         </td>
@@ -151,7 +151,7 @@ export default function MemberPage() {
                             }
                           )}
                         >
-                          <span className="text-xs font-semibold leading-tight text-slate-500">
+                          <span className="text-xs font-semibold leading-tight text-info">
                             {member.netAmount$}
                           </span>
                         </td>

@@ -101,7 +101,8 @@ export const getClubGroupPassbook = async () => {
     .then(([club, groups, membersCount]) => {
       const clubGroupConfig = configContext.group(membersCount).club;
       const termBalance = clubGroupConfig.totalTermAmount - club.termDeposit;
-
+      const perMemberNetValue =
+        (clubGroupConfig.totalTermAmount + club.totalProfit) / membersCount;
       return {
         club: {
           ...formatPassbook(club),
@@ -109,6 +110,8 @@ export const getClubGroupPassbook = async () => {
           ...clubGroupConfig,
           termBalance,
           termBalance$: formatMoney(termBalance),
+          perMemberNetValue,
+          perMemberNetValue$: formatMoney(perMemberNetValue),
         },
         groups: groups
           .map((e) => commuteGroup(e, membersCount))

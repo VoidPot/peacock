@@ -19,52 +19,61 @@ export const loader = async ({ request }: LoaderArgs) => {
 export default function IndexPage() {
   const { passbookData, transactions } = useLoaderData<typeof loader>();
   const { club, groups } = passbookData;
+  console.log({ club });
 
   const statsData: StatProps[] = [
     {
-      hed: "No Of Members",
-      dek: getValidNumber(club.membersCount),
-      iconName: "member",
+      hed: "Members - Club Age",
+      dek: `${getValidNumber(
+        club.membersCount
+      )} - ${configContext.club.clubAge()}`,
+      iconName: "home",
     },
     {
       hed: "Members Deposit",
       dek: club.termDeposit$,
       iconName: "archive",
-      hedColor: "secondary",
+      hedColor: "success",
     },
     {
       hed: "Members Balance",
       dek: club.termBalance$,
       iconName: "transaction",
-      hedColor: "accent",
+      hedColor: "error",
     },
     {
       hed: "Net Members Amount",
       dek: club.totalTermAmount$,
       iconName: "trans",
-      hedColor: "primary",
+      hedColor: "info",
     },
-    {
-      hed: "Club Age",
-      dek: configContext.club.clubAge(),
-      iconName: "team",
-    },
+    // {
+    //   hed: "Club Age",
+    //   dek: configContext.club.clubAge(),
+    //   iconName: "team",
+    // },
     {
       hed: "Net Profit",
-      dek: formatMoney(club.returns),
+      dek: club.totalProfit$,
       iconName: "team",
-      hedColor: "primary",
+      hedColor: "success",
     },
     {
-      hed: "Net Value",
-      dek: formatMoney(club.accountBalance),
-      iconName: "home",
-      hedColor: "secondary",
+      hed: "Net Value Per Member",
+      dek: club.perMemberNetValue$,
+      iconName: "member",
+      hedColor: "info",
     },
     {
       hed: "Net Liquidity",
-      dek: formatMoney(club.holdingAmount),
+      dek: club.holdingAmount$,
       iconName: "trans",
+      hedColor: "secondary",
+    },
+    {
+      hed: "Club Net Value",
+      dek: club.accountBalance$,
+      iconName: "dash",
       hedColor: "secondary",
     },
   ];

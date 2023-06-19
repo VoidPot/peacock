@@ -69,15 +69,23 @@ export async function getMembers() {
 }
 
 export async function getUserSelect() {
-  return prisma.user.findMany({
+  const users = prisma.user.findMany({
     where: { deleted: false },
     select: {
       id: true,
       firstName: true,
       lastName: true,
       nickName: true,
+      type: true,
     },
   });
+  const members = (await users)
+    .filter((e) => e.type === "MEMBER")
+    .sort((a, b) => (a.nickName > b.nickName ? 1 : -1));
+  const vendor = (await users)
+    .filter((e) => e.type === "VENDOR")
+    .sort((a, b) => (a.nickName > b.nickName ? 1 : -1));
+  return [...members, ...vendor];
 }
 
 export async function getVendors() {

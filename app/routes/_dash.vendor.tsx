@@ -11,7 +11,6 @@ export const loader = async ({ request }: LoaderArgs) => {
 
 export default function VendorPage() {
   const { items } = useLoaderData<typeof loader>();
-  console.log({ items });
   return (
     <div className="h-full w-full">
       <div className="flex flex-wrap">
@@ -127,7 +126,7 @@ export default function VendorPage() {
                             }
                           )}
                         >
-                          <span className="text-xs font-semibold leading-tight text-slate-500">
+                          <span className="text-xs font-semibold leading-tight text-success">
                             {vendor.holdingAmount$}
                           </span>
 

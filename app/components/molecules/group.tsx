@@ -8,18 +8,19 @@ function GroupCard(props: any) {
       dek: props.termDeposit$,
       iconName: "trans",
       align: "start",
+      hedColor: "success",
     },
     {
       hed: "Members Balance",
       dek: props.termBalance$,
       iconName: "trans",
       align: "end",
-      hedColor: "accent",
+      hedColor: "error",
     },
   ];
   return (
     <div className="mb-0 mt-0 w-full max-w-full text-center lg:mb-0 lg:flex-none">
-      <div className="relative z-20 flex min-w-0 flex-col break-words rounded-md bg-base-100 bg-clip-border p-4 shadow-soft-xl">
+      <div className="relative z-20 flex min-w-0 flex-col break-words rounded-md bg-white bg-clip-border p-4 shadow-soft-xl">
         <div className="flex flex-col">
           <div className="flex justify-between p-2 pb-4">
             <h3 className="m-0 uppercase text-neutral">{props.name}</h3>

@@ -9551,7 +9551,7 @@ const seedData = {
       updatedAt: "2023-05-15T07:57:22.677Z",
       __v: 0,
     },
-  ].filter((each) => each.deleted === false && each.method !== "transfer"),
+  ].filter((each) => each.deleted === false),
 };
 
 export default seedData;

@@ -47,24 +47,24 @@ export const profitCalculator = async () => {
           totalProfit: each.passbook.totalProfit + tallyProfit,
         },
       });
-      console.log({
-        id: each.passbook.id,
-        tallyProfit,
-        totalProfit: each.passbook.profit + tallyProfit,
-      });
+      // console.log({
+      //   id: each.passbook.id,
+      //   tallyProfit,
+      //   totalProfit: each.passbook.profit + tallyProfit,
+      // });
       let club = await prisma.passbook.findFirst({
         where: {
           entryOf: "CLUB",
         },
       });
       if (club) {
-        console.log({
-          isClub: true,
-          club: "hey",
-          id: club.id,
-          tallyProfit: club?.tallyProfit + tallyProfit,
-          totalProfit: club.totalProfit + tallyProfit,
-        });
+        // console.log({
+        //   isClub: true,
+        //   club: "hey",
+        //   id: club.id,
+        //   tallyProfit: club?.tallyProfit + tallyProfit,
+        //   totalProfit: club.totalProfit + tallyProfit,
+        // });
         await prisma.passbook.update({
           where: {
             id: club.id,

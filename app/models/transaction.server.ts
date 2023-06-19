@@ -1,7 +1,5 @@
-import configContext from "~/configContext";
 import { prisma } from "~/db.server";
 import { formatDate, formatMoney } from "~/helpers/utils";
-import type { Transaction } from "@prisma/client";
 
 type TransactionProps = {
   options?: {
@@ -38,14 +36,15 @@ export const findTransaction = async ({ options }: TransactionProps) => {
     where.mode = mode;
   }
 
-  // if (userId) {
-  //   where.OR = [
-  //     {
-  //       fromId: userId,
-  //     },
-  //     { toId: userId },
-  //   ];
-  // }
+  const modeCondition = {
+    mode: { in: ["VENDOR_PERIODIC_INVEST", "VENDOR_INVEST"] },
+  };
+  if (from) {
+    where.fromId = from;
+  }
+  if (to) {
+    where.toId = to;
+  }
 
   const transactions = await prisma.transaction.findMany({
     where: {

@@ -25,7 +25,7 @@ function SideBar({ isOpen, setOpen }: any) {
           }
         )}
       >
-        <div className="flex h-full flex-col rounded-md bg-base-100 shadow-soft-xl">
+        <div className="flex h-full flex-col rounded-md bg-white shadow-soft-xl">
           <div className="h-fit py-10 text-center">
             <Link
               to={"/"}
