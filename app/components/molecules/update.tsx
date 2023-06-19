@@ -21,8 +21,8 @@ function UpdateCard({
               className="relative mb-4 mt-0 after:clear-both after:table after:content-['']"
             >
               <img
-                src={`https://file.iam-hussain.site/peacock/image/${trans.from.avatar}`}
-                className="absolute left-4 z-10 inline-flex h-6.5 w-6.5 -translate-x-1/2 items-center justify-center rounded-full bg-white text-center text-base font-semibold"
+                src={`/image/${trans.from.avatar}`}
+                className="absolute left-4 z-10 inline-flex h-6.5 w-6.5 -translate-x-1/2 items-center justify-center rounded-md bg-white text-center text-base font-semibold"
                 alt="user1"
               />
               <div className="relative -top-1.5 ml-11.252 flex w-auto justify-between pt-1.4 lg:max-w-120">

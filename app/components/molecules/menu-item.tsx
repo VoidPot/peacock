@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import { Link, useMatches } from "@remix-run/react";
-import type { Icons } from "../atoms/svg/icon";
-import Icon from "../atoms/svg/icon";
+import type { Icons } from "../svg/icon";
+import Icon from "../svg/icon";
 
 interface MenuItemProps {
   hed: string;

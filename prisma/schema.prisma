@@ -94,6 +94,7 @@ model Transaction {
   mode      TRANSACTION_MODE   @default(MEMBERS_PERIODIC_DEPOSIT)
   dot       DateTime           @default(now())
   amount    Float              @default(0)
+  note      String?
   from      User               @relation(name: "from", fields: [fromId], references: [id])
   fromId    Int
   to        User               @relation(name: "to", fields: [toId], references: [id])

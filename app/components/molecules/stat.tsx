@@ -1,7 +1,6 @@
-import React from "react";
 import PropTypes from "prop-types";
-import type { Icons } from "../atoms/svg/icon";
-import Icon from "../atoms/svg/icon";
+import type { Icons } from "../svg/icon";
+import Icon from "../svg/icon";
 import classNames from "classnames";
 
 export interface StatProps {

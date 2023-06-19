@@ -60,7 +60,7 @@ export default function MemberPage() {
                           <div className="flex px-2 py-1">
                             <div>
                               <img
-                                src={`https://file.iam-hussain.site/peacock/image/${member.avatar}`}
+                                src={`/image/${member.avatar}`}
                                 className="mr-4 inline-flex h-9 w-9 items-center justify-center rounded-xl text-sm text-white transition-all duration-200 ease-soft-in-out"
                                 alt="user1"
                               />
