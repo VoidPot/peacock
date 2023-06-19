@@ -27,6 +27,12 @@ export const transactionString = (
   if (mode === "MEMBERS_PERIODIC_DEPOSIT") {
     return `deposited term amount`;
   }
+  if (mode === "MEMBERS_WITHDRAW") {
+    return `withdrawal amount`;
+  }
+  if (mode === "VENDOR_RETURN") {
+    return `returns amount form invest`;
+  }
 };
 
 type TransactionProps = {

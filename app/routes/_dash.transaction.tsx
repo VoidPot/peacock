@@ -7,8 +7,14 @@ import { findTransaction } from "~/models/transaction.server";
 import { getUserSelect } from "~/models/user.server";
 
 export const loader = async ({ request }: LoaderArgs) => {
+  console.log({ request });
   const users = await getUserSelect();
-  const items = await findTransaction({});
+  const items = await findTransaction({
+    options: {
+      take: 10,
+      skip: 0,
+    },
+  });
   return json({
     items,
     users,
@@ -17,7 +23,6 @@ export const loader = async ({ request }: LoaderArgs) => {
 
 export default function TransactionPage() {
   const { items, users } = useLoaderData<typeof loader>();
-  console.log({ items });
   return (
     <div className="h-full w-full">
       <div className="flex flex-wrap">
