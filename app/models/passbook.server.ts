@@ -29,6 +29,7 @@ export const formatPassbook = (passbook: Passbook) => {
     withdrawMonths,
     investMonths,
     returnsMonths,
+    calcProfit,
   } = passbook;
 
   return {
@@ -75,6 +76,7 @@ export const formatPassbook = (passbook: Passbook) => {
     withdrawMonths,
     investMonths,
     returnsMonths,
+    calcProfit,
   };
 };
 

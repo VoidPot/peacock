@@ -37,9 +37,6 @@ export default function VendorPage() {
                       <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
                         Total Invest
                       </th>
-                      {/* <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
-                        Deposit
-                      </th> */}
                       <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
                         Total Returns
                       </th>
@@ -71,14 +68,6 @@ export default function VendorPage() {
                               <h6 className="mb-0 text-sm leading-normal">
                                 {vendor.firstName} {vendor.lastName}
                               </h6>
-
-                              {vendor.holdingAmount ? (
-                                <p className="mb-0 text-xs leading-tight text-slate-500">
-                                  {vendor.holdingAmount$}
-                                </p>
-                              ) : (
-                                <></>
-                              )}
                             </div>
                           </div>
                         </td>
@@ -141,6 +130,14 @@ export default function VendorPage() {
                           <span className="text-xs font-semibold leading-tight text-slate-500">
                             {vendor.holdingAmount$}
                           </span>
+
+                          {vendor.calcProfit ? (
+                            <></>
+                          ) : (
+                            <p className="mb-0 text-xs leading-tight text-slate-500 ">
+                              Not Calculated
+                            </p>
+                          )}
                         </td>
                       </tr>
                     ))}

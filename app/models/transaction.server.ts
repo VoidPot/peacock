@@ -3,15 +3,41 @@ import { prisma } from "~/db.server";
 import { formatDate, formatMoney } from "~/helpers/utils";
 import type { Transaction } from "@prisma/client";
 
-export const formatTransaction = (transaction: Transaction) => {
-  const { amount } = transaction;
-  return {
-    ...transaction,
-    amount$: formatMoney(amount),
+export const transactionString = (
+  transaction: Transaction & {
+    from: {
+      id: number;
+      firstName: string | null;
+      lastName: string | null;
+      avatar: string | null;
+    };
+    to: {
+      id: number;
+      firstName: string | null;
+      lastName: string | null;
+      avatar: string | null;
+    };
+  }
+) => {
+  const { from, to, mode } = transaction;
+
+  if (mode === "INTER_CASH_TRANSFER") {
+    return `transferred cash`;
+  }
+  if (mode === "MEMBERS_PERIODIC_DEPOSIT") {
+    return `deposited term amount`;
+  }
+};
+
+type TransactionProps = {
+  options?: {
+    skip?: number;
+    take?: number;
   };
 };
 
-export const findTransaction = async () => {
+export const findTransaction = async ({ options }: TransactionProps) => {
+  const { skip = 0, take = 6 } = options || {};
   const transactions = await prisma.transaction.findMany({
     where: {
       deleted: false,
@@ -43,8 +69,8 @@ export const findTransaction = async () => {
     orderBy: {
       dot: "desc",
     },
-    skip: 0,
-    take: 10,
+    skip,
+    take,
   });
   return transactions.map((transaction) => {
     return {
@@ -52,6 +78,7 @@ export const findTransaction = async () => {
       dot$: formatDate(transaction.dot),
       createdAt$: formatDate(transaction.createdAt),
       amount$: formatMoney(transaction.amount),
+      transactionStr: transactionString(transaction),
     };
   });
 };

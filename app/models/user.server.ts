@@ -22,6 +22,9 @@ export async function getMembersPassbook() {
       const totalBalance = termBalance + balance + passbook.tallyBalance;
       const netAmount =
         passbook.totalDeposit + perMemberProfit - passbook.tallyBalance;
+      const actualMemberProfit = Number(
+        perMemberProfit - passbook.tallyBalance
+      ).toFixed(2);
       return {
         ...member,
         ...passbook,
@@ -32,8 +35,8 @@ export async function getMembersPassbook() {
         termBalance$: formatMoney(termBalance),
         totalBalance,
         totalBalance$: formatMoney(totalBalance),
-        perMemberProfit,
-        perMemberProfit$: formatMoney(perMemberProfit),
+        perMemberProfit: actualMemberProfit,
+        perMemberProfit$: formatMoney(actualMemberProfit),
         netAmount,
         netAmount$: formatMoney(netAmount),
       };

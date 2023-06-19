@@ -1,4 +1,4 @@
-import { useMatches } from "@remix-run/react";
+import { Link, useMatches } from "@remix-run/react";
 import classNames from "classnames";
 
 function NavBar({ isOpen, setOpen }: any) {
@@ -14,9 +14,11 @@ function NavBar({ isOpen, setOpen }: any) {
     >
       <div className="mx-auto flex w-full items-center justify-between px-0 py-3 align-middle flex-wrap-inherit lg:px-0">
         <nav>
-          <h6 className="m-0 p-0 font-brand uppercase tracking-normal text-neutral">
-            Peacock Club
-          </h6>
+          <Link to={"/"}>
+            <h6 className="m-0 p-0 font-brand uppercase tracking-normal text-neutral">
+              Peacock Club
+            </h6>
+          </Link>
           <ol className="mr-12 flex flex-wrap rounded-lg bg-transparent sm:mr-16">
             <li className="text-sm leading-normal">
               <span className="text-slate-700 opacity-50">Pages</span>

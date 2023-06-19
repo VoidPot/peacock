@@ -8,14 +8,16 @@ import UpdateCard from "~/components/molecules/update";
 import { getClubGroupPassbook } from "~/models/passbook.server";
 import configContext from "~/configContext";
 import { formatMoney, getValidNumber } from "~/helpers/utils";
+import { findTransaction } from "~/models/transaction.server";
 
 export const loader = async ({ request }: LoaderArgs) => {
   const passbookData = await getClubGroupPassbook();
-  return json({ passbookData });
+  const transactions = await findTransaction({});
+  return json({ passbookData, transactions });
 };
 
 export default function IndexPage() {
-  const { passbookData } = useLoaderData<typeof loader>();
+  const { passbookData, transactions } = useLoaderData<typeof loader>();
   const { club, groups } = passbookData;
 
   const statsData: StatProps[] = [
@@ -85,7 +87,7 @@ export default function IndexPage() {
           ))}
         </div>
         <div className="col-span-1 flex flex-col gap-6 lg:col-span-3">
-          <UpdateCard />
+          <UpdateCard transactions={transactions as any} />
         </div>
       </div>
     </>
