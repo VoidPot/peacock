@@ -5,7 +5,7 @@ export const meta: V2_MetaFunction = () => [{ title: "Peacock Club" }];
 
 export default function Index() {
   return (
-    <div className="h-full w-full select-none bg-white">
+    <div className="h-full w-full select-none  bg-gradient-to-tr from-base-100 to-emerald-50">
       <div className="m-auto grid h-full w-full max-w-6xl grid-cols-1 gap-8 px-8 align-middle lg:grid-cols-2 lg:flex-row">
         <div className="flex w-full items-end justify-center lg:items-center">
           <img

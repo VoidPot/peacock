@@ -7,7 +7,7 @@ import Stat from "~/components/molecules/stat";
 import UpdateCard from "~/components/molecules/update";
 import { getClubGroupPassbook } from "~/models/passbook.server";
 import configContext from "~/configContext";
-import { formatMoney, getValidNumber } from "~/helpers/utils";
+import { getValidNumber } from "~/helpers/utils";
 import { findTransaction } from "~/models/transaction.server";
 
 export const loader = async ({ request }: LoaderArgs) => {
@@ -47,11 +47,6 @@ export default function IndexPage() {
       iconName: "trans",
       hedColor: "info",
     },
-    // {
-    //   hed: "Club Age",
-    //   dek: configContext.club.clubAge(),
-    //   iconName: "team",
-    // },
     {
       hed: "Net Profit",
       dek: club.totalProfit$,

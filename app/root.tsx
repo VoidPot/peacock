@@ -25,7 +25,7 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body className="h-full w-full bg-base-200 bg-transparent font-body text-base font-normal leading-default text-neutral-500 antialiased">
+      <body className="h-full w-full bg-base-100 bg-transparent font-body text-base font-normal leading-default text-neutral-500 antialiased">
         <Outlet />
         <ScrollRestoration />
         <Scripts />
