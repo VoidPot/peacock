@@ -12,7 +12,6 @@ export default function BottomNav() {
         >
           <svg
             className="mb-1 h-6 w-6 text-gray-500 group-hover:text-[#349b7b] dark:text-gray-400 dark:group-hover:text-[#2a7d63]"
-            fill="currentColor"
             viewBox="0 0 20 20"
             xmlns="http://www.w3.org/2000/svg"
             aria-hidden="true"
@@ -38,7 +37,6 @@ export default function BottomNav() {
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
-            fill="currentColor"
             className="mb-1 h-6 w-6 text-gray-500 group-hover:text-[#349b7b] dark:text-gray-400 dark:group-hover:text-[#2a7d63]"
           >
             <path
@@ -67,7 +65,6 @@ export default function BottomNav() {
           >
             <svg
               className="h-6 w-6 text-white"
-              fill="currentColor"
               viewBox="0 0 20 20"
               xmlns="http://www.w3.org/2000/svg"
               aria-hidden="true"
@@ -98,7 +95,6 @@ export default function BottomNav() {
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
-            fill="currentColor"
             className="mb-1 h-6 w-6 text-gray-500 group-hover:text-[#349b7b] dark:text-gray-400 dark:group-hover:text-[#2a7d63]"
           >
             <path
@@ -128,7 +124,6 @@ export default function BottomNav() {
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
-            fill="currentColor"
             className="mb-1 h-6 w-6 text-gray-500 group-hover:text-[#349b7b] dark:text-gray-400 dark:group-hover:text-[#2a7d63]"
           >
             <path d="M4.5 3.75a3 3 0 00-3 3v.75h21v-.75a3 3 0 00-3-3h-15z" />

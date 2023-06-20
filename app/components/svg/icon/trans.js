@@ -5,7 +5,8 @@ function Trans({ className }) {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
-      fill="currentColor"
+      width="800px"
+      height="800px"
       className={className}
     >
       <path d="M4.5 3.75a3 3 0 00-3 3v.75h21v-.75a3 3 0 00-3-3h-15z" />
