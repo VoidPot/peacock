@@ -1,4 +1,5 @@
 import { cssBundleHref } from "@remix-run/css-bundle";
+import type { V2_MetaFunction } from "@remix-run/node";
 import type { LinksFunction } from "@remix-run/node";
 import {
   Links,
@@ -10,6 +11,20 @@ import {
 } from "@remix-run/react";
 
 import stylesheet from "~/tailwind.css";
+
+export const meta: V2_MetaFunction = () => {
+  return [
+    { title: "Peacock Club" },
+    {
+      property: "og:title",
+      content: "Peacock Club",
+    },
+    {
+      name: "description",
+      content: "Creating the environment for business",
+    },
+  ];
+};
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
