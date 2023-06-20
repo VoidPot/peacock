@@ -1,4 +1,4 @@
-import configContext from "~/configContext";
+import configContext from "~/config/configContext";
 import { prisma } from "~/db.server";
 
 export const profitCalculator = async () => {

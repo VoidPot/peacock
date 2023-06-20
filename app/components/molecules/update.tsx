@@ -1,4 +1,4 @@
-import configContext from "~/configContext";
+import configContext from "~/config/configContext";
 import type { findTransaction } from "~/models/transaction.server";
 
 const transactionConfig = configContext.transaction;

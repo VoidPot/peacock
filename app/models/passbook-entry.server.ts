@@ -1,6 +1,6 @@
 import { type Passbook, type Transaction } from "@prisma/client";
-import type { Passbook_Settings_Keys } from "~/configContext";
-import configContext from "~/configContext";
+import type { Passbook_Settings_Keys } from "~/config/configContext";
+import configContext from "~/config/configContext";
 import { prisma } from "~/db.server";
 
 const getUserPassbooks = async (from: number, to: number, groupId: number) => {

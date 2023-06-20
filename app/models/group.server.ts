@@ -1,6 +1,6 @@
 import type { Group, Passbook } from "@prisma/client";
-import type { GroupSlugs } from "~/configContext";
-import configContext from "~/configContext";
+import type { GroupSlugs } from "~/config/configContext";
+import configContext from "~/config/configContext";
 import { prisma } from "~/db.server";
 
 export const commuteGroup = (

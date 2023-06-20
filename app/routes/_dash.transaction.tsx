@@ -2,7 +2,7 @@ import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData, useSearchParams } from "@remix-run/react";
 import classNames from "classnames";
-import configContext from "~/configContext";
+import configContext from "~/config/configContext";
 import { findTransaction } from "~/models/transaction.server";
 import { getUserSelect } from "~/models/user.server";
 

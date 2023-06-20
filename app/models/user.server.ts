@@ -1,4 +1,4 @@
-import configContext from "~/configContext";
+import configContext from "~/config/configContext";
 import type { User } from "@prisma/client";
 import { prisma } from "~/db.server";
 import { formatMoney, getMonthYear } from "~/helpers/utils";

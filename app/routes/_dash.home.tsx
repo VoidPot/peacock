@@ -6,7 +6,7 @@ import type { StatProps } from "~/components/molecules/stat";
 import Stat from "~/components/molecules/stat";
 import UpdateCard from "~/components/molecules/update";
 import { getClubGroupPassbook } from "~/models/passbook.server";
-import configContext from "~/configContext";
+import configContext from "~/config/configContext";
 import { getValidNumber } from "~/helpers/utils";
 import { findTransaction } from "~/models/transaction.server";
 
