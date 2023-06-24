@@ -1,7 +1,6 @@
 import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import { useEffect } from "react";
 import TransactionForm from "~/components/forms/transaction-form";
 import { getUserSelect } from "~/models/user.server";
 
@@ -14,6 +13,7 @@ export const loader = async ({ request }: LoaderArgs) => {
 
 export async function action({ request }: any) {
   const formData = await request.formData();
+
   console.log({ formData });
   return json({ message: "created" });
 }

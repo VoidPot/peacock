@@ -11,6 +11,7 @@ import { TextInput, SelectInput } from "../inputs";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import type { getUserSelect } from "~/models/user.server";
+import type { findOneTransaction } from "~/models/transaction.server";
 
 const { transaction: transactionConfig, message } = configContext;
 
@@ -53,7 +54,7 @@ function TransactionForm({
 }: {
   className: string;
   userSelect: Awaited<ReturnType<typeof getUserSelect>>;
-  transaction: any;
+  transaction?: Awaited<ReturnType<typeof findOneTransaction>>;
 }) {
   const usersOptions = userSelect.map((e) => [
     e.id,

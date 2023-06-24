@@ -34,7 +34,7 @@ export default function TransactionPage() {
           <TransactionForm
             className="z-990 p-0"
             userSelect={userSelect}
-            transaction={transaction}
+            transaction={transaction as any}
           />
         </div>
       </dialog>
