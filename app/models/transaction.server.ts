@@ -36,9 +36,6 @@ export const findTransaction = async ({ options }: TransactionProps) => {
     where.mode = mode;
   }
 
-  const modeCondition = {
-    mode: { in: ["VENDOR_PERIODIC_INVEST", "VENDOR_INVEST"] },
-  };
   if (from) {
     where.fromId = from;
   }
@@ -100,4 +97,39 @@ export const findTransaction = async ({ options }: TransactionProps) => {
       secondary,
     };
   });
+};
+
+export const findOneTransaction = async (id: number) => {
+  const transactions = await prisma.transaction.findFirst({
+    where: {
+      id,
+      deleted: false,
+    },
+    include: {
+      from: {
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          avatar: true,
+        },
+      },
+      to: {
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          avatar: true,
+        },
+      },
+      group: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+    },
+  });
+
+  return transactions;
 };

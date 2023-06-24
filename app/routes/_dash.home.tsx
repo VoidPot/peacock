@@ -19,7 +19,6 @@ export const loader = async ({ request }: LoaderArgs) => {
 export default function IndexPage() {
   const { passbookData, transactions } = useLoaderData<typeof loader>();
   const { club, groups } = passbookData;
-  console.log({ club });
 
   const statsData: StatProps[] = [
     {

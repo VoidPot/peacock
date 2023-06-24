@@ -97,7 +97,7 @@ export default function AdminPage() {
       <div className="flex flex-wrap">
         <div className="w-full max-w-full flex-none">
           <div className="grid grid-cols-1 lg:grid-cols-5">
-            <TransactionForm className="col-span-3" />
+            {/* <TransactionForm className="col-span-3" /> */}
           </div>
         </div>
       </div>

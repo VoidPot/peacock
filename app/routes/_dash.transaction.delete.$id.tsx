@@ -1,12 +1,12 @@
 import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Link, Outlet, useLoaderData, useSearchParams } from "@remix-run/react";
+import { useLoaderData, useSearchParams } from "@remix-run/react";
 import classNames from "classnames";
-import TransactionTable from "~/components/organisms/transactionTable";
-import Icon from "~/components/svg/icon";
 import configContext from "~/config/configContext";
 import { findTransaction } from "~/models/transaction.server";
 import { getUserSelect } from "~/models/user.server";
+
+const transactionConfig = configContext.transaction;
 
 const getSearchParams = (searchParams: URLSearchParams) => {
   return {
@@ -76,14 +76,7 @@ export default function TransactionPage() {
 
   return (
     <div className="h-full w-full">
-      <Outlet />
-      <TransactionTable
-        handleSetSearchParams={handleSetSearchParams}
-        handleSelectOnChange={handleSelectOnChange}
-        queryParams={queryParams}
-        users={users}
-        items={items as unknown as Awaited<ReturnType<typeof findTransaction>>}
-      />
+      <div className="flex flex-wrap">Delete</div>
     </div>
   );
 }

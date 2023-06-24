@@ -1,14 +1,7 @@
 import { cssBundleHref } from "@remix-run/css-bundle";
 import type { V2_MetaFunction } from "@remix-run/node";
 import type { LinksFunction } from "@remix-run/node";
-import {
-  Links,
-  LiveReload,
-  Meta,
-  Outlet,
-  Scripts,
-  ScrollRestoration,
-} from "@remix-run/react";
+import { Links, LiveReload, Meta, Outlet, Scripts } from "@remix-run/react";
 
 import stylesheet from "~/tailwind.css";
 
@@ -42,7 +35,6 @@ export default function App() {
       </head>
       <body className="h-full w-full bg-base-100 bg-transparent font-body text-base font-normal leading-default text-neutral-500 antialiased">
         <Outlet />
-        <ScrollRestoration />
         <Scripts />
         <LiveReload />
       </body>

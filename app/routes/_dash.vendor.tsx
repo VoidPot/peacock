@@ -58,7 +58,7 @@ export default function VendorPage() {
                           <div className="flex px-2 py-1">
                             <div>
                               <img
-                                src={`https://file.iam-hussain.site/peacock/image/${vendor.avatar}`}
+                                src={`/image/${vendor.avatar}`}
                                 className="mr-4 inline-flex h-9 w-9 items-center justify-center rounded-xl text-sm text-white transition-all duration-200 ease-soft-in-out"
                                 alt="user1"
                               />

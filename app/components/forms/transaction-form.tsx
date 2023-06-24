@@ -1,17 +1,16 @@
-import { useLoaderData, useSubmit } from "@remix-run/react";
+import { Link, useSubmit } from "@remix-run/react";
 import classNames from "classnames";
 import type { SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import configContext from "~/config/configContext";
-import type { action, loader } from "~/routes/_dash.admin-panel";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { Form, useActionData } from "@remix-run/react";
+import { Form } from "@remix-run/react";
 
 import { TextInput, SelectInput } from "../inputs";
 import moment from "moment";
 import { useEffect, useState } from "react";
-import { json } from "@remix-run/server-runtime";
+import type { getUserSelect } from "~/models/user.server";
 
 const { transaction: transactionConfig, message } = configContext;
 
@@ -48,8 +47,19 @@ const key = {
   exit: "Person going out of club",
 };
 
-function TransactionForm({ className }: any) {
-  const { usersOptions } = useLoaderData<typeof loader>();
+function TransactionForm({
+  className,
+  userSelect,
+}: {
+  className: string;
+  userSelect: Awaited<ReturnType<typeof getUserSelect>>;
+  transaction: any;
+}) {
+  const usersOptions = userSelect.map((e) => [
+    e.id,
+    `${e.firstName} ${e.lastName}`,
+    e.type,
+  ]);
   // const response = useActionData<typeof action>();
 
   const submit = useSubmit();
@@ -116,23 +126,22 @@ function TransactionForm({ className }: any) {
     } else {
       setFromToNote([key.sender, key.receiver]);
     }
-  }, [memberOptions, selectedMode, usersOptions, vendorOptions]);
-
-  // useEffect(() => {
-  //   console.log({ response });
-  // }, [response]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedMode]);
 
   return (
     <div
       className={classNames(
-        "relative flex min-w-0 flex-col break-words rounded-md border-0 border-solid border-transparent bg-white bg-clip-border px-4 py-6 shadow-soft-xl lg:px-6",
+        "relative flex min-w-0 flex-col break-words rounded-md bg-white bg-clip-border",
         {
           [className]: Boolean(className),
         }
       )}
     >
-      <div className="border-b-solid rounded-t-2xl border-b-0 border-b-transparent bg-white pb-0">
-        <h6 className="text-neutral">Transaction</h6>
+      <div className="bg-white pb-0">
+        <div className="mb-2 flex items-center justify-between align-middle">
+          <h6 className="text-neutral">Add Transaction</h6>
+        </div>
       </div>
 
       <Form
@@ -196,8 +205,11 @@ function TransactionForm({ className }: any) {
           errors={errors}
         />
 
-        <div className="col-span-full mt-4 flex justify-center align-middle">
-          <button type="submit" className="btn-secondary btn px-6">
+        <div className="col-span-full mt-4 flex justify-between gap-2 align-middle">
+          <Link to={"/transaction"} className="btn-outline btn px-6">
+            Cancel
+          </Link>
+          <button type="submit" className="btn-primary btn px-6">
             Submit
           </button>
         </div>

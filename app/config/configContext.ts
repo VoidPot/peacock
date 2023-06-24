@@ -88,12 +88,12 @@ const configContext = {
       alpha: computeGroupData({
         amount: 1000,
         stateDate: new Date("09/01/2020"),
-        endDate: new Date("07/31/2023"),
+        endDate: new Date("08/31/2023"),
         membersCount,
       }),
       bravo: computeGroupData({
         amount: 2000,
-        stateDate: new Date("08/01/2023"),
+        stateDate: new Date("09/01/2023"),
         membersCount,
       }),
     };
