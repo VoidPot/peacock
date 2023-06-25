@@ -1,16 +1,12 @@
 import type { Prisma, TRANSACTION_TYPE } from "@prisma/client";
 import { PrismaClient } from "@prisma/client";
 import seedData from "./seeds/seed-data";
-import { passbookMiddleware } from "~/models/passbook-entry.server";
+import { usePassbookMiddleware } from "~/models/passbook-entry.server";
 import { profitCalculator } from "./seeds/seed-profit";
 
 const prisma = new PrismaClient();
 
-prisma.$use(async (param, next) => {
-  const result = await next(param);
-  await passbookMiddleware(param, result);
-  return result;
-});
+prisma.$use(usePassbookMiddleware);
 
 const userSeedMap = () =>
   seedData.users.map(

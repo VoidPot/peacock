@@ -1,4 +1,4 @@
-import { type Passbook, type Transaction } from "@prisma/client";
+import { Prisma, type Passbook, type Transaction } from "@prisma/client";
 import type { Passbook_Settings_Keys } from "~/config/passbookConfig";
 import configContext from "~/config/configContext";
 import { prisma } from "~/db.server";
@@ -39,92 +39,115 @@ const getUserPassbooks = async (from: number, to: number, groupId: number) => {
   }));
 };
 
-export const passbookMiddleware = async (params: any, result: Transaction) => {
-  const action = params.action;
-  if (params.model === "Transaction" && ["create", "delete"].includes(action)) {
-    const { mode, fromId, toId, groupId } = result;
+export const passbookEntry = async (
+  transaction: Transaction,
+  shouldReverse: boolean = false
+) => {
+  const { mode, fromId, toId, groupId } = transaction;
 
-    const group = groupId
-      ? await prisma.group.findUnique({ where: { id: groupId } })
-      : undefined;
+  const group = groupId
+    ? await prisma.group.findUnique({ where: { id: groupId } })
+    : undefined;
 
-    const passbooks: any = await getUserPassbooks(fromId, toId, groupId || 0);
+  const passbooks: any = await getUserPassbooks(fromId, toId, groupId || 0);
 
-    const values: any = {
-      amount: result.amount,
-      month: group ? Math.round(result.amount / group.amount) : 0,
-      profit: 0,
-      one: 1,
-    };
+  const values: any = {
+    amount: transaction.amount,
+    month: group ? Math.round(transaction.amount / group.amount) : 0,
+    profit: 0,
+    one: 1,
+  };
 
-    if (["VENDOR_RETURN", "VENDOR_PERIODIC_RETURN"].includes(result.mode)) {
-      const from = passbooks.FROM;
-      if (from && from.calcProfit) {
-        values.profit =
-          from.totalReturns + result.amount - from.profit - from.totalInvest;
-      }
+  if (["VENDOR_RETURN", "VENDOR_PERIODIC_RETURN"].includes(transaction.mode)) {
+    const from = passbooks.FROM;
+    if (from && from.calcProfit) {
+      values.profit =
+        from.totalReturns + transaction.amount - from.profit - from.totalInvest;
+    }
+  }
+
+  const passbooksForUpdate: {
+    where: Partial<Passbook>;
+    data: Partial<Passbook>;
+  }[] = [];
+
+  const addEntry = (
+    passbook: any | null | undefined | unknown,
+    add: { [key in Passbook_Settings_Keys]?: number } = {},
+    sub: { [key in Passbook_Settings_Keys]?: number } = {}
+  ) => {
+    if (passbook) {
+      passbooksForUpdate.push({
+        where: {
+          id: passbook.id,
+        },
+        data: {
+          ...Object.fromEntries(
+            Object.entries(add).map(([key, value]) => [
+              key,
+              Number(passbook[key]) + values[value],
+            ])
+          ),
+          ...Object.fromEntries(
+            Object.entries(sub).map(([key, value]) => [
+              key,
+              Number(passbook[key]) - values[value],
+            ])
+          ),
+        },
+      });
+    }
+    return;
+  };
+
+  const settings = configContext.passbook.settings;
+
+  Object.entries(settings).forEach(([key, value]) => {
+    if (mode === key) {
+      Object.entries(value).forEach(([pbKey, pbValue]: any[]) => {
+        if (shouldReverse) {
+          addEntry(passbooks[pbKey], pbValue?.SUB, pbValue?.ADD);
+        } else {
+          addEntry(passbooks[pbKey], pbValue?.ADD, pbValue?.SUB);
+        }
+      });
+    }
+  });
+
+  const mapper = passbooksForUpdate.map(({ where, data }) =>
+    prisma.passbook
+      .update({
+        where,
+        data,
+      })
+      .catch(console.error)
+  );
+
+  return await Promise.all(mapper).catch((e) => console.error(e));
+};
+
+export const usePassbookMiddleware: Prisma.Middleware = async (param, next) => {
+  const response = await next(param);
+  const { action, model } = param;
+
+  if (model === "Transaction") {
+    console.log({ action, param, response, data: param?.args });
+    if (action === "create") {
+      await passbookEntry(response, false);
     }
 
-    const passbooksForUpdate: {
-      where: Partial<Passbook>;
-      data: Partial<Passbook>;
-    }[] = [];
+    if (["update", "delete"].includes(action)) {
+      const id = param?.args?.data?.id || 0;
+      const transaction = await prisma.transaction.findFirst({ where: { id } });
 
-    const isReverse = action === "delete";
-
-    const addEntry = (
-      passbook: any | null | undefined | unknown,
-      add: { [key in Passbook_Settings_Keys]?: number } = {},
-      sub: { [key in Passbook_Settings_Keys]?: number } = {}
-    ) => {
-      if (passbook) {
-        passbooksForUpdate.push({
-          where: {
-            id: passbook.id,
-          },
-          data: {
-            ...Object.fromEntries(
-              Object.entries(add).map(([key, value]) => [
-                key,
-                Number(passbook[key]) + values[value],
-              ])
-            ),
-            ...Object.fromEntries(
-              Object.entries(sub).map(([key, value]) => [
-                key,
-                Number(passbook[key]) - values[value],
-              ])
-            ),
-          },
-        });
+      if (transaction && action === "update") {
+        await passbookEntry(transaction, true);
+        await passbookEntry(response, false);
+      } else if (transaction && action === "delete") {
+        await passbookEntry(transaction, true);
       }
-      return;
-    };
-
-    const settings = configContext.passbook.settings;
-
-    Object.entries(settings).forEach(([key, value]) => {
-      if (mode === key) {
-        Object.entries(value).forEach(([pbKey, pbValue]: any[]) => {
-          if (isReverse) {
-            addEntry(passbooks[pbKey], pbValue?.SUB, pbValue?.ADD);
-          } else {
-            addEntry(passbooks[pbKey], pbValue?.ADD, pbValue?.SUB);
-          }
-        });
-      }
-    });
-
-    const mapper = passbooksForUpdate.map(({ where, data }) =>
-      prisma.passbook
-        .update({
-          where,
-          data,
-        })
-        .catch(console.error)
-    );
-
-    await Promise.all(mapper).catch((e) => console.error(e));
+    }
   }
-  return;
+
+  return response;
 };

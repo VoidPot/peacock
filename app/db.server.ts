@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import invariant from "tiny-invariant";
-import { passbookMiddleware } from "./models/passbook-entry.server";
+import { usePassbookMiddleware } from "./models/passbook-entry.server";
 
 let prisma: PrismaClient;
 
@@ -58,11 +58,7 @@ function getClient() {
     },
   });
 
-  client.$use(async (param, next) => {
-    const result = await next(param);
-    await passbookMiddleware(param, result);
-    return result;
-  });
+  client.$use(usePassbookMiddleware);
 
   client.$use((params, next) => {
     // Check incoming query type
