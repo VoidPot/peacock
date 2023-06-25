@@ -1,82 +1,64 @@
 import type { LoaderArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
-import { useLoaderData, useSearchParams } from "@remix-run/react";
-import classNames from "classnames";
-import configContext from "~/config/configContext";
-import { findTransaction } from "~/models/transaction.server";
-import { getUserSelect } from "~/models/user.server";
+import { json, redirect } from "@remix-run/node";
+import { Form, Link, useLoaderData } from "@remix-run/react";
+import { prisma } from "~/db.server";
 
-const transactionConfig = configContext.transaction;
-
-const getSearchParams = (searchParams: URLSearchParams) => {
-  return {
-    from: Number(searchParams.get("from")) || 0,
-    to: Number(searchParams.get("to")) || 0,
-    page: Number(searchParams.get("page")) || 1,
-    take: Number(searchParams.get("take")) || 10,
-    type: searchParams.get("type") || "",
-    mode: searchParams.get("mode") || "",
-    sort: searchParams.get("sort") || "dot",
-    order: searchParams.get("order") || "desc",
-  };
-};
-
-const setParams = (searchParams: URLSearchParams) => {
-  return {
-    from: searchParams.get("from") || "",
-    to: searchParams.get("to") || "",
-    page: searchParams.get("page") || "1",
-    type: searchParams.get("type") || "",
-    mode: searchParams.get("mode") || "",
-    sort: searchParams.get("sort") || "dot",
-    order: searchParams.get("order") || "desc",
-  };
-};
-
-export const loader = async ({ request }: LoaderArgs) => {
-  const url = new URL(request.url);
-  const queryParams = getSearchParams(url.searchParams);
-  const users = await getUserSelect();
-  const items = await findTransaction({
-    options: {
-      ...queryParams,
-      skip: queryParams.take * (queryParams.page - 1),
-    },
-  });
+export const loader = async ({ request, params }: LoaderArgs) => {
+  const id = Number(params.id || 0);
+  if (!id || id === 0) {
+    return redirect("/transaction");
+  }
   return json({
-    items,
-    users,
+    id: Number(params.id || 0),
   });
 };
+
+export async function action({ request }: any) {
+  try {
+    const formData = await request.formData();
+
+    const created = await prisma.transaction.delete({
+      where: {
+        id: Number(formData.get("id") || 0),
+      },
+    });
+    return json({
+      success: true,
+      message: "transaction deleted successfully",
+      data: created,
+    });
+  } catch (err) {
+    console.error(err);
+    return json({
+      success: false,
+      message: "error on deleting the transaction",
+      data: {},
+    });
+  }
+}
 
 export default function TransactionPage() {
-  const { items, users } = useLoaderData<typeof loader>();
-  let [searchParams, setSearchParams] = useSearchParams({});
-  const queryParams = getSearchParams(searchParams);
-  const params = setParams(searchParams);
-
-  const handleSetSearchParams = (key: string, value: string | number) => {
-    setSearchParams({
-      ...params,
-      [key]: value.toString(),
-    });
-  };
-
-  const handleSelectOnChange = (event: any) => {
-    const { value, name } = event?.target || {};
-
-    if (name) {
-      setSearchParams({
-        ...params,
-        page: "1",
-        [name]: value.toString(),
-      });
-    }
-  };
+  const { id } = useLoaderData<typeof loader>();
 
   return (
-    <div className="h-full w-full">
-      <div className="flex flex-wrap">Delete</div>
-    </div>
+    <>
+      <dialog id="my_modal_1" className="modal" open>
+        <div className="modal-box bg-white">
+          <Form method="post">
+            <input name="id" defaultValue={id} className="hidden" />
+            <h6>Are you sure you wanna delete the transaction?</h6>
+
+            <div className="col-span-full mt-4 flex justify-between gap-2 align-middle ">
+              <Link to={"/transaction"} className="btn-outline btn-sm btn px-6">
+                Cancel
+              </Link>
+              <button type="submit" className="btn-primary btn-sm btn px-6">
+                Delete
+              </button>
+            </div>
+          </Form>
+        </div>
+      </dialog>
+    </>
   );
 }

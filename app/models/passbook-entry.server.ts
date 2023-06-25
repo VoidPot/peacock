@@ -127,19 +127,21 @@ export const passbookEntry = async (
 };
 
 export const usePassbookMiddleware: Prisma.Middleware = async (param, next) => {
-  const response = await next(param);
   const { action, model } = param;
-
+  let transaction;
+  if (model === "Transaction" && ["update", "delete"].includes(action)) {
+    const where = param?.args?.where;
+    transaction = where
+      ? await prisma.transaction.findFirst({ where })
+      : undefined;
+  }
+  const response = await next(param);
   if (model === "Transaction") {
-    console.log({ action, param, response, data: param?.args });
     if (action === "create") {
       await passbookEntry(response, false);
     }
 
     if (["update", "delete"].includes(action)) {
-      const id = param?.args?.data?.id || 0;
-      const transaction = await prisma.transaction.findFirst({ where: { id } });
-
       if (transaction && action === "update") {
         await passbookEntry(transaction, true);
         await passbookEntry(response, false);

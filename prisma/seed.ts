@@ -38,7 +38,6 @@ const transactionSeedMap = (users: any[], group: any) => {
       let type: TRANSACTION_TYPE =
         each.transactionType === "credit" ? "DEPOSIT" : "WITHDRAWAL";
 
-      // console.log(each.method);
       if (each.method === "withdraw") {
         mode = "MEMBERS_WITHDRAW";
       } else if (each.method === "deposit") {

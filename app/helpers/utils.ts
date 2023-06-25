@@ -39,3 +39,8 @@ export const validateLocalDate = (input: string) => {
   }
   return new Date();
 };
+
+export const formatLocalDate = (input: any = new Date()) => {
+  const date = moment(getValidDate(input));
+  return date.format("DD/MM/YYYY");
+};

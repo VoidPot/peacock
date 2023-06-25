@@ -51,11 +51,13 @@ const key = {
 function TransactionForm({
   className,
   userSelect,
+  transaction,
 }: {
   className: string;
   userSelect: Awaited<ReturnType<typeof getUserSelect>>;
   transaction?: Awaited<ReturnType<typeof findOneTransaction>>;
 }) {
+  const id = transaction?.id || 0;
   const usersOptions = userSelect.map((e) => [
     e.id,
     `${e.firstName} ${e.lastName}`,
@@ -80,9 +82,12 @@ function TransactionForm({
     formState: { errors },
   } = useForm<FormData | any>({
     resolver: yupResolver(schema),
-    defaultValues: {
-      dot: moment().format("DD/MM/YYYY"),
-    },
+    defaultValues:
+      transaction && Object.values(transaction).length
+        ? transaction
+        : {
+            dot: moment().format("DD/MM/YYYY"),
+          },
   });
   const onSubmit: SubmitHandler<FormData> = (data, event) => {
     console.log({ data, event });
@@ -141,7 +146,7 @@ function TransactionForm({
     >
       <div className="bg-white pb-0">
         <div className="mb-2 flex items-center justify-between align-middle">
-          <h6 className="text-neutral">Add Transaction</h6>
+          <h6 className="text-neutral">{id ? "Edit" : "Add"} Transaction</h6>
         </div>
       </div>
 
@@ -150,6 +155,11 @@ function TransactionForm({
         onSubmit={handleSubmit(onSubmit)}
         className="grid grid-cols-1 items-center justify-center gap-4 px-0 pb-2 pt-0 align-middle lg:grid-cols-6"
       >
+        <input
+          name="id"
+          className="hidden"
+          defaultValue={transaction?.id || 0}
+        />
         <SelectInput
           title="Transaction Mode"
           className="col-span-1 lg:col-span-4"
@@ -207,10 +217,10 @@ function TransactionForm({
         />
 
         <div className="col-span-full mt-4 flex justify-between gap-2 align-middle">
-          <Link to={"/transaction"} className="btn-outline btn px-6">
+          <Link to={"/transaction"} className="btn-outline btn-sm btn px-6">
             Cancel
           </Link>
-          <button type="submit" className="btn-primary btn px-6">
+          <button type="submit" className="btn-primary btn-sm btn px-6">
             Submit
           </button>
         </div>
