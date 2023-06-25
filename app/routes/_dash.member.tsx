@@ -120,7 +120,15 @@ export default function MemberPage() {
                             }
                           )}
                         >
-                          <span className="text-xs font-semibold leading-tight text-error">
+                          <span
+                            className={classNames(
+                              "text-xs font-semibold leading-tight",
+                              {
+                                "text-error": member.totalBalance > 0,
+                                "text-info": member.totalBalance <= 0,
+                              }
+                            )}
+                          >
                             {member.totalBalance$}
                             {member.tallyBalance ? (
                               <p className="mb-0 text-xs leading-tight text-slate-500">

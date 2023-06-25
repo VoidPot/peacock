@@ -72,9 +72,12 @@ export const findTransaction = async ({ options }: TransactionProps) => {
         },
       },
     },
-    orderBy: {
-      [sort]: order,
-    },
+    orderBy:
+      // sort === "dot"
+      //   ? { [sort]: order, createdAt: "desc" }
+      {
+        [sort]: order,
+      },
     skip,
     take,
   });

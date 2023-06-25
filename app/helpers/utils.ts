@@ -31,3 +31,11 @@ export function numDifferentiation(value: number) {
   if (val >= 100000) return `${(value / 100000).toFixed(2)} Lac`;
   return value;
 }
+
+export const validateLocalDate = (input: string) => {
+  const data = moment(input, "DD/MM/YYYY");
+  if (data.isValid()) {
+    return new Date(data.toString());
+  }
+  return new Date();
+};

@@ -1,5 +1,5 @@
 import { type Passbook, type Transaction } from "@prisma/client";
-import type { Passbook_Settings_Keys } from "~/config/configContext";
+import type { Passbook_Settings_Keys } from "~/config/passbookConfig";
 import configContext from "~/config/configContext";
 import { prisma } from "~/db.server";
 
@@ -41,9 +41,7 @@ const getUserPassbooks = async (from: number, to: number, groupId: number) => {
 
 export const passbookMiddleware = async (params: any, result: Transaction) => {
   const action = params.action;
-  if (params.model === "Transaction" && action === "create") {
-    // console.log({ data: params.args?.data, action, result });
-
+  if (params.model === "Transaction" && ["create", "delete"].includes(action)) {
     const { mode, fromId, toId, groupId } = result;
 
     const group = groupId
@@ -71,6 +69,8 @@ export const passbookMiddleware = async (params: any, result: Transaction) => {
       where: Partial<Passbook>;
       data: Partial<Passbook>;
     }[] = [];
+
+    const isReverse = action === "delete";
 
     const addEntry = (
       passbook: any | null | undefined | unknown,
@@ -106,7 +106,11 @@ export const passbookMiddleware = async (params: any, result: Transaction) => {
     Object.entries(settings).forEach(([key, value]) => {
       if (mode === key) {
         Object.entries(value).forEach(([pbKey, pbValue]: any[]) => {
-          addEntry(passbooks[pbKey], pbValue?.ADD, pbValue?.SUB);
+          if (isReverse) {
+            addEntry(passbooks[pbKey], pbValue?.SUB, pbValue?.ADD);
+          } else {
+            addEntry(passbooks[pbKey], pbValue?.ADD, pbValue?.SUB);
+          }
         });
       }
     });
