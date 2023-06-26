@@ -1,3 +1,4 @@
+import * as yup from "yup";
 import moment from "moment";
 import { formatMoney } from "../helpers/utils";
 import { passbookConfig } from "./passbookConfig";
@@ -39,6 +40,15 @@ const computeGroupData = ({
     totalTermAmount,
     totalTermAmount$: formatMoney(totalTermAmount),
   };
+};
+
+const message = {
+  default: "Unexpected error!",
+  required: "This field is required",
+  invalidDate: "This is an invalid date",
+  number: "This is an invalid number",
+  transactionCreated: "Transaction created successfully",
+  transactionCreateError: "Error on creating the transaction",
 };
 
 const configContext = {
@@ -124,11 +134,32 @@ const configContext = {
     },
   },
   passbook: passbookConfig,
-  message: {
-    default: "Unexpected error!",
-    required: "This field is required",
-    invalidDate: "This is an invalid date",
-    number: "This is an invalid number",
+  message,
+  schema: {
+    transaction: yup
+      .object({
+        note: yup.string().optional(),
+        mode: yup.string().required(message.required),
+        dot: yup
+          .string()
+          .required(message.required)
+          .matches(
+            /(((0[1-9]|[12]\d|3[01])\/(0[13578]|1[02])\/((19|[2-9]\d)\d{2}))|((0[1-9]|[12]\d|30)\/(0[13456789]|1[012])\/((19|[2-9]\d)\d{2}))|((0[1-9]|1\d|2[0-8])\/02\/((19|[2-9]\d)\d{2}))|(29\/02\/((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))/,
+            message.invalidDate
+          )
+          .test("dot", message.invalidDate, function (value) {
+            return moment(value, "DD/MM/YYYY").isValid();
+          }),
+        from: yup.string().required(message.required),
+        to: yup.string().required(message.required),
+        amount: yup
+          .number()
+          .typeError(message.number)
+          .min(1)
+          .max(10000000)
+          .required(message.required),
+      })
+      .required(),
   },
 };
 

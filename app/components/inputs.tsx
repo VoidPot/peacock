@@ -1,12 +1,11 @@
 import classNames from "classnames";
-import type { UseFormRegister } from "react-hook-form";
 
 interface InputProps {
   className?: string;
   title: string;
   name: string;
   errors?: any;
-  register: UseFormRegister<any>;
+  register: any;
   required?: boolean;
 }
 

@@ -1,10 +1,9 @@
-import { Link, useSubmit } from "@remix-run/react";
+import { Link } from "@remix-run/react";
+import { useRemixForm } from "remix-hook-form";
 import classNames from "classnames";
-import type { SubmitHandler } from "react-hook-form";
-import { useForm } from "react-hook-form";
 import configContext from "~/config/configContext";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
+import type * as yup from "yup";
 import { Form } from "@remix-run/react";
 
 import { TextInput, SelectInput } from "../inputs";
@@ -13,34 +12,9 @@ import { useEffect, useState } from "react";
 import type { getUserSelect } from "~/models/user.server";
 import type { findOneTransaction } from "~/models/transaction.server";
 
-const { transaction: transactionConfig, message } = configContext;
+const { transaction: transactionConfig, schema } = configContext;
 
-const schema = yup
-  .object({
-    note: yup.string().optional(),
-    mode: yup.string().required(message.required),
-    dot: yup
-      .string()
-      .required(message.required)
-      .matches(
-        /(((0[1-9]|[12]\d|3[01])\/(0[13578]|1[02])\/((19|[2-9]\d)\d{2}))|((0[1-9]|[12]\d|30)\/(0[13456789]|1[012])\/((19|[2-9]\d)\d{2}))|((0[1-9]|1\d|2[0-8])\/02\/((19|[2-9]\d)\d{2}))|(29\/02\/((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))/,
-        message.invalidDate
-      )
-      .test("dot", message.invalidDate, function (value) {
-        return moment(value, "DD/MM/YYYY").isValid();
-      }),
-    from: yup.string().required(message.required),
-    to: yup.string().required(message.required),
-    amount: yup
-      .number()
-      .typeError(message.number)
-      .min(1)
-      .max(10000000)
-      .required(message.required),
-  })
-  .required();
-
-type FormData = yup.InferType<typeof schema>;
+type FormData = yup.InferType<typeof schema.transaction>;
 
 const key = {
   sender: "Person sending money",
@@ -63,9 +37,7 @@ function TransactionForm({
     `${e.firstName} ${e.lastName}`,
     e.type,
   ]);
-  // const response = useActionData<typeof action>();
 
-  const submit = useSubmit();
   const memberOptions = usersOptions.filter((e) => e[2] === "MEMBER");
   const vendorOptions = usersOptions.filter((e) => e[2] === "VENDOR");
 
@@ -80,8 +52,9 @@ function TransactionForm({
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm<FormData | any>({
-    resolver: yupResolver(schema),
+  } = useRemixForm<FormData | any>({
+    resolver: yupResolver(schema.transaction),
+    mode: "onSubmit",
     defaultValues:
       transaction && Object.values(transaction).length
         ? transaction
@@ -89,12 +62,7 @@ function TransactionForm({
             dot: moment().format("DD/MM/YYYY"),
           },
   });
-  const onSubmit: SubmitHandler<FormData> = (data, event) => {
-    console.log({ data, event });
-    submit(event?.target, { method: "post" });
 
-    // response(data);
-  };
   const selectedMode = watch("mode");
 
   useEffect(() => {
@@ -151,8 +119,7 @@ function TransactionForm({
       </div>
 
       <Form
-        // method="post"
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit}
         className="grid grid-cols-1 items-center justify-center gap-4 px-0 pb-2 pt-0 align-middle lg:grid-cols-6"
       >
         <input

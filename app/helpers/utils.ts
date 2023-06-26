@@ -1,4 +1,7 @@
 import moment from "moment";
+import _ from "lodash";
+import { json } from "@remix-run/node";
+import configContext from "~/config/configContext";
 
 export const getValidDate = (date: any) => (date ? new Date(date) : new Date());
 
@@ -43,4 +46,32 @@ export const validateLocalDate = (input: string) => {
 export const formatLocalDate = (input: any = new Date()) => {
   const date = moment(getValidDate(input));
   return date.format("DD/MM/YYYY");
+};
+
+export const pickValidInObject = (obj: any) => {
+  return _.pickBy(obj, (e: any) => {
+    if (typeof e === "string" && e === "") {
+      return false;
+    }
+    return true;
+  });
+};
+
+export const responseData = ({
+  success = true,
+  message = "default",
+  data = {},
+  errors = {},
+}: {
+  success?: boolean;
+  message?: keyof typeof configContext.message;
+  data?: any;
+  errors?: any;
+}) => {
+  return json({
+    success,
+    message: configContext.message[message],
+    data,
+    errors,
+  });
 };

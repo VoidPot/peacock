@@ -1,10 +1,14 @@
 import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Link, Outlet, useLoaderData, useSearchParams } from "@remix-run/react";
-import classNames from "classnames";
+import {
+  Outlet,
+  useLoaderData,
+  useOutletContext,
+  useSearchParams,
+} from "@remix-run/react";
+import { useEffect } from "react";
 import TransactionTable from "~/components/organisms/transactionTable";
-import Icon from "~/components/svg/icon";
-import configContext from "~/config/configContext";
+import { pickValidInObject } from "~/helpers/utils";
 import { findTransaction } from "~/models/transaction.server";
 import { getUserSelect } from "~/models/user.server";
 
@@ -50,33 +54,46 @@ export const loader = async ({ request }: LoaderArgs) => {
 };
 
 export default function TransactionPage() {
+  const { alert, setAlert }: any = useOutletContext();
   const { items, users } = useLoaderData<typeof loader>();
   let [searchParams, setSearchParams] = useSearchParams({});
   const queryParams = getSearchParams(searchParams);
   const params = setParams(searchParams);
+  // const alertMsg = searchParams.get("alert") || "";
+
+  // useEffect(() => {
+  //   if (alertMsg) {
+  //     setAlert(alertMsg);
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [alertMsg]);
 
   const handleSetSearchParams = (key: string, value: string | number) => {
-    setSearchParams({
-      ...params,
-      [key]: value.toString(),
-    });
+    setSearchParams(
+      pickValidInObject({
+        ...params,
+        [key]: value.toString(),
+      })
+    );
   };
 
   const handleSelectOnChange = (event: any) => {
     const { value, name } = event?.target || {};
 
     if (name) {
-      setSearchParams({
-        ...params,
-        page: "1",
-        [name]: value.toString(),
-      });
+      setSearchParams(
+        pickValidInObject({
+          ...params,
+          page: "1",
+          [name]: value.toString(),
+        })
+      );
     }
   };
 
   return (
-    <div className="h-full w-full">
-      <Outlet />
+    <div className="flex h-full w-full flex-col gap-3">
+      <Outlet context={{ alert, setAlert }} />
       <TransactionTable
         handleSetSearchParams={handleSetSearchParams}
         handleSelectOnChange={handleSelectOnChange}
