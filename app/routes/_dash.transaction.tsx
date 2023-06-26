@@ -6,7 +6,6 @@ import {
   useOutletContext,
   useSearchParams,
 } from "@remix-run/react";
-import { useEffect } from "react";
 import TransactionTable from "~/components/organisms/transactionTable";
 import { pickValidInObject } from "~/helpers/utils";
 import { findTransaction } from "~/models/transaction.server";
@@ -59,14 +58,6 @@ export default function TransactionPage() {
   let [searchParams, setSearchParams] = useSearchParams({});
   const queryParams = getSearchParams(searchParams);
   const params = setParams(searchParams);
-  // const alertMsg = searchParams.get("alert") || "";
-
-  // useEffect(() => {
-  //   if (alertMsg) {
-  //     setAlert(alertMsg);
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [alertMsg]);
 
   const handleSetSearchParams = (key: string, value: string | number) => {
     setSearchParams(

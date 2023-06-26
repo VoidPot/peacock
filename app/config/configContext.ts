@@ -49,6 +49,10 @@ const message = {
   number: "This is an invalid number",
   transactionCreated: "Transaction created successfully",
   transactionCreateError: "Error on creating the transaction",
+  transactionEdited: "Transaction edited successfully",
+  transactionEditError: "Error on editing the transaction",
+  transactionDeleted: "Transaction deleted successfully",
+  transactionDeleteError: "Error on deleting the transaction",
 };
 
 const configContext = {
@@ -138,6 +142,7 @@ const configContext = {
   schema: {
     transaction: yup
       .object({
+        id: yup.number(),
         note: yup.string().optional(),
         mode: yup.string().required(message.required),
         dot: yup
@@ -150,8 +155,8 @@ const configContext = {
           .test("dot", message.invalidDate, function (value) {
             return moment(value, "DD/MM/YYYY").isValid();
           }),
-        from: yup.string().required(message.required),
-        to: yup.string().required(message.required),
+        from: yup.number().required(message.required),
+        to: yup.number().required(message.required),
         amount: yup
           .number()
           .typeError(message.number)

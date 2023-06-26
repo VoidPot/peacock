@@ -1,11 +1,29 @@
+import { yupResolver } from "@hookform/resolvers/yup";
+import type * as yup from "yup";
 import type { LoaderArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import {
+  useActionData,
+  useLoaderData,
+  useNavigate,
+  useOutletContext,
+} from "@remix-run/react";
+import { getValidatedFormData } from "remix-hook-form";
 import TransactionForm from "~/components/forms/transaction-form";
 import { prisma } from "~/db.server";
-import { formatLocalDate, validateLocalDate } from "~/helpers/utils";
-import { findOneTransaction } from "~/models/transaction.server";
+import {
+  formatLocalDate,
+  responseData,
+  validateLocalDate,
+} from "~/helpers/utils";
 import { getUserSelect } from "~/models/user.server";
+import configContext from "~/config/configContext";
+import type { Transaction } from ".prisma/client";
+import { useEffect } from "react";
+import { findOneTransaction } from "~/models/transaction.server";
+
+const { schema } = configContext;
+type FormData = yup.InferType<typeof schema.transaction>;
 
 export const loader = async ({ request, params }: LoaderArgs) => {
   const userSelect = await getUserSelect();
@@ -29,41 +47,61 @@ export const loader = async ({ request, params }: LoaderArgs) => {
 
 export async function action({ request }: any) {
   try {
-    const formData = await request.formData();
+    const { errors, data } = await getValidatedFormData<FormData>(
+      request,
+      yupResolver(schema.transaction) as any
+    );
+
+    if (errors) {
+      return responseData({ errors, success: false, message: "default" });
+    }
+
     const transaction = {
-      mode: formData.get("mode"),
-      dot: validateLocalDate(formData.get("dot")),
-      fromId: Number(formData.get("from")),
-      toId: Number(formData.get("to")),
-      amount: Number(formData.get("amount")) || 0,
-      note: formData.get("note") || "",
-    };
+      mode: data.mode,
+      dot: validateLocalDate(data.dot),
+      fromId: Number(data.from),
+      toId: Number(data.to),
+      amount: Number(data.amount) || 0,
+      note: data.note || "",
+    } as unknown as Transaction;
 
     const created = await prisma.transaction.update({
       data: {
         ...transaction,
       },
       where: {
-        id: Number(formData.get("id") || 0),
+        id: Number(data?.id || 0),
       },
     });
-    return json({
+    return responseData({
       success: true,
-      message: "transaction updated successfully",
+      message: "transactionEdited",
       data: created,
     });
   } catch (err) {
     console.error(err);
-    return json({
+    return responseData({
       success: false,
-      message: "error on updating the transaction",
-      data: {},
+      message: "transactionEditError",
     });
   }
 }
 
-export default function TransactionPage() {
+export default function TransactionEditPage() {
+  const navigate = useNavigate();
+  const { setAlert }: any = useOutletContext();
+
   const { userSelect, transaction } = useLoaderData<typeof loader>();
+  const data = useActionData<typeof action>();
+
+  useEffect(() => {
+    if (data?.success) {
+      setAlert(data);
+      navigate("/transaction");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
+
   return (
     <>
       <dialog id="my_modal_1" className="modal" open>

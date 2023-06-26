@@ -1,7 +1,7 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import type * as yup from "yup";
 import type { LoaderArgs } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import {
   useActionData,
   useLoaderData,
@@ -67,7 +67,7 @@ export async function action({ request }: any) {
   }
 }
 
-export default function TransactionPage() {
+export default function TransactionAddPage() {
   const navigate = useNavigate();
   const { setAlert }: any = useOutletContext();
 
@@ -75,7 +75,7 @@ export default function TransactionPage() {
   const data = useActionData<typeof action>();
 
   useEffect(() => {
-    console.log(data);
+    console.log({ data });
     if (data?.success) {
       setAlert(data);
       navigate("/transaction");
@@ -88,11 +88,6 @@ export default function TransactionPage() {
       <dialog id="my_modal_1" className="modal" open>
         <div className="modal-box bg-white">
           <TransactionForm className="z-990 p-0" userSelect={userSelect} />
-          {data?.success && (
-            <div>
-              <h1>Hello</h1>
-            </div>
-          )}
         </div>
       </dialog>
     </>

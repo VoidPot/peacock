@@ -127,6 +127,7 @@ function TransactionForm({
           className="hidden"
           defaultValue={transaction?.id || 0}
         />
+
         <SelectInput
           title="Transaction Mode"
           className="col-span-1 lg:col-span-4"

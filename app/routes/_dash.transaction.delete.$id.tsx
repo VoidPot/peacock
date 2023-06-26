@@ -5,10 +5,12 @@ import {
   Link,
   useActionData,
   useLoaderData,
+  useNavigate,
   useOutletContext,
 } from "@remix-run/react";
 import { useEffect } from "react";
 import { prisma } from "~/db.server";
+import { responseData } from "~/helpers/utils";
 
 export const loader = async ({ request, params }: LoaderArgs) => {
   const id = Number(params.id || 0);
@@ -30,28 +32,33 @@ export async function action({ request }: any) {
       },
     });
 
-    return redirect("/transaction?alert=transaction_created_success");
-    // return json({
-    //   success: true,
-    //   type: "success",
-    //   message: "Transaction deleted successfully",
-    //   data: created,
-    // });
+    return responseData({
+      success: true,
+      message: "transactionDeleted",
+    });
   } catch (err) {
     console.error(err);
-    return redirect("/transaction?alert=transaction_create_error");
-    // return json({
-    //   success: false,
-    //   type: "error",
-    //   message: "Error on deleting the transaction",
-    //   data: {},
-    // });
+    return responseData({
+      success: false,
+      message: "transactionDeleteError",
+    });
   }
 }
 
 export default function TransactionPage() {
+  const navigate = useNavigate();
+  const { setAlert }: any = useOutletContext();
+
   const { id } = useLoaderData<typeof loader>();
-  const actionReturn = useActionData<typeof action>();
+  const data = useActionData<typeof action>();
+
+  useEffect(() => {
+    if (data?.success) {
+      setAlert(data);
+      navigate("/transaction");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
 
   return (
     <>
