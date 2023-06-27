@@ -28,7 +28,7 @@ const getUser = (users: any[], oldId: string) => {
   return fromUser;
 };
 
-const transactionSeedMap = (users: any[], group: any) => {
+const transactionSeedMap = (users: any[]) => {
   const transactions: Prisma.Enumerable<Prisma.TransactionCreateInput>[] =
     seedData.transactions.map((each) => {
       const from = getUser(users, each.from);
@@ -81,11 +81,6 @@ const transactionSeedMap = (users: any[], group: any) => {
             id: to.id,
           },
         },
-        group: {
-          connect: {
-            id: group.id,
-          },
-        },
       };
     });
   return transactions;
@@ -125,11 +120,6 @@ async function seed() {
     await prisma.group.create({
       data: {
         ...each,
-        passbook: {
-          create: {
-            entryOf: "GROUP",
-          },
-        },
         links: {
           createMany: {
             data: userLinkIds,
@@ -140,13 +130,7 @@ async function seed() {
     });
   }
 
-  const alphaGroup = await prisma.group.findUnique({
-    where: {
-      slug: "alpha",
-    },
-  });
-
-  const transactions = transactionSeedMap(users, alphaGroup);
+  const transactions = transactionSeedMap(users);
 
   for (const each of transactions) {
     await prisma.transaction.create({

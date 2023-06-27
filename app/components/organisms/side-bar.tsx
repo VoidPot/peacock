@@ -56,14 +56,6 @@ function SideBar({ isOpen, setOpen }: any) {
                   iconName="trans"
                 />
               </li>
-              <li className="w-full">
-                <MenuItem
-                  onClick={() => setOpen(false)}
-                  pathName="/admin-panel"
-                  hed="Admin Panel"
-                  iconName="setting"
-                />
-              </li>
 
               <li className="mt-4 w-full">
                 <h6 className="ml-2 pl-6 text-xs font-bold uppercase leading-tight opacity-80">
@@ -86,6 +78,21 @@ function SideBar({ isOpen, setOpen }: any) {
                   pathName="/vendor"
                   hed="Vendors"
                   iconName="archive"
+                />
+              </li>
+
+              <li className="mt-4 w-full">
+                <h6 className="ml-2 pl-6 text-xs font-bold uppercase leading-tight opacity-80">
+                  Admin Access
+                </h6>
+              </li>
+
+              <li className="w-full">
+                <MenuItem
+                  onClick={() => setOpen(false)}
+                  pathName="/login"
+                  hed="Login"
+                  iconName="setting"
                 />
               </li>
             </ul>

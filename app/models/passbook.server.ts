@@ -80,6 +80,15 @@ export const formatPassbook = (passbook: Passbook) => {
   };
 };
 
+export const getClubPassbook = async () => {
+  const club = await prisma.passbook.findFirst({
+    where: {
+      entryOf: "CLUB",
+    },
+  });
+  return club ? formatPassbook(club) : club;
+};
+
 export const getClubGroupPassbook = async () => {
   return await Promise.all([
     prisma.passbook.findFirst({
@@ -88,8 +97,8 @@ export const getClubGroupPassbook = async () => {
       },
     }),
     prisma.group.findMany({
-      include: {
-        passbook: true,
+      where: {
+        deleted: false,
       },
     }),
     prisma.user.count({ where: { deleted: false, type: "MEMBER" } }),
@@ -105,9 +114,10 @@ export const getClubGroupPassbook = async () => {
         (clubGroupConfig.totalTermAmount + club.totalProfit) / membersCount;
       return {
         club: {
+          ...club,
+          ...clubGroupConfig,
           ...formatPassbook(club),
           membersCount,
-          ...clubGroupConfig,
           termBalance,
           termBalance$: formatMoney(termBalance),
           perMemberNetValue,
@@ -143,13 +153,4 @@ export const getClubGroupPassbook = async () => {
         }),
       };
     });
-};
-
-export const getClubPassbook = async () => {
-  const club = await prisma.passbook.findFirst({
-    where: {
-      entryOf: "CLUB",
-    },
-  });
-  return club ? formatPassbook(club) : club;
 };

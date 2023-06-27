@@ -65,12 +65,6 @@ export const findTransaction = async ({ options }: TransactionProps) => {
           avatar: true,
         },
       },
-      group: {
-        select: {
-          id: true,
-          name: true,
-        },
-      },
     },
     orderBy:
       // sort === "dot"

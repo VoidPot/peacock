@@ -1,9 +1,10 @@
-import { Prisma, type Passbook, type Transaction } from "@prisma/client";
+import type { Prisma } from "@prisma/client";
+import { type Passbook, type Transaction } from "@prisma/client";
 import type { Passbook_Settings_Keys } from "~/config/passbookConfig";
 import configContext from "~/config/configContext";
 import { prisma } from "~/db.server";
 
-const getUserPassbooks = async (from: number, to: number, groupId: number) => {
+const getUserPassbooks = async (from: number, to: number) => {
   return await Promise.all([
     await prisma.passbook.findFirst({
       where: {
@@ -21,20 +22,12 @@ const getUserPassbooks = async (from: number, to: number, groupId: number) => {
     }),
     await prisma.passbook.findFirst({
       where: {
-        group: {
-          id: groupId,
-        },
-      },
-    }),
-    await prisma.passbook.findFirst({
-      where: {
         entryOf: "CLUB",
       },
     }),
-  ]).then(([FROM, TO, GROUP, CLUB]) => ({
+  ]).then(([FROM, TO, CLUB]) => ({
     FROM,
     TO,
-    GROUP,
     CLUB,
   }));
 };
@@ -43,17 +36,13 @@ export const passbookEntry = async (
   transaction: Transaction,
   shouldReverse: boolean = false
 ) => {
-  const { mode, fromId, toId, groupId } = transaction;
+  const { mode, fromId, toId } = transaction;
 
-  const group = groupId
-    ? await prisma.group.findUnique({ where: { id: groupId } })
-    : undefined;
-
-  const passbooks: any = await getUserPassbooks(fromId, toId, groupId || 0);
+  const passbooks: any = await getUserPassbooks(fromId, toId);
 
   const values: any = {
     amount: transaction.amount,
-    month: group ? Math.round(transaction.amount / group.amount) : 0,
+    month: 0,
     profit: 0,
     one: 1,
   };

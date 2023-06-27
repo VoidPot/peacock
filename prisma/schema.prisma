@@ -49,21 +49,18 @@ model Extra {
 }
 
 model Group {
-  id           Int           @id @default(autoincrement())
-  name         String
-  slug         String        @unique
-  amount       Float         @default(0)
-  period       PERIOD        @default(MONTH)
-  startAt      DateTime      @default(now())
-  endAt        DateTime?
-  links        Link[]
-  transactions Transaction[]
-  passbook     Passbook      @relation(fields: [passbookId], references: [id])
-  passbookId   Int           @unique
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  deleted      Boolean       @default(false)
-  deletedAt    DateTime?
+  id        Int       @id @default(autoincrement())
+  name      String
+  slug      String    @unique
+  amount    Float     @default(0)
+  period    PERIOD    @default(MONTH)
+  startAt   DateTime  @default(now())
+  endAt     DateTime?
+  links     Link[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deleted   Boolean   @default(false)
+  deletedAt DateTime?
 }
 
 enum PERIOD {
@@ -99,8 +96,6 @@ model Transaction {
   fromId    Int
   to        User               @relation(name: "to", fields: [toId], references: [id])
   toId      Int
-  group     Group?             @relation(fields: [groupId], references: [id])
-  groupId   Int?
   createdAt DateTime           @default(now())
   updatedAt DateTime           @updatedAt
   deleted   Boolean            @default(false)
@@ -171,12 +166,10 @@ model Passbook {
   investMonths   Float @default(0)
   returnsMonths  Float @default(0)
 
-  user  User?
-  group Group?
+  user User?
 }
 
 enum PASSBOOK_ENTRY_OF {
   USER
-  GROUP
   CLUB
 }
