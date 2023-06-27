@@ -6,11 +6,11 @@ import {
   useActionData,
   useLoaderData,
   useNavigate,
-  useOutletContext,
 } from "@remix-run/react";
 import { useEffect } from "react";
 import { prisma } from "~/db.server";
 import { responseData } from "~/helpers/utils";
+import { toast } from "react-toastify";
 import { getIsLoggedIn } from "~/session.server";
 
 export const loader = async ({ request, params }: LoaderArgs) => {
@@ -30,16 +30,17 @@ export const loader = async ({ request, params }: LoaderArgs) => {
 export async function action({ request }: any) {
   try {
     const formData = await request.formData();
+    const id = Number(formData.get("id") || 0)
 
     await prisma.transaction.delete({
       where: {
-        id: Number(formData.get("id") || 0),
+        id,
       },
     });
-
     return responseData({
       success: true,
       message: "transactionDeleted",
+      data: {id}
     });
   } catch (err) {
     console.error(err);
@@ -52,14 +53,19 @@ export async function action({ request }: any) {
 
 export default function TransactionPage() {
   const navigate = useNavigate();
-  const { setAlert }: any = useOutletContext();
 
   const { id } = useLoaderData<typeof loader>();
   const data = useActionData<typeof action>();
 
   useEffect(() => {
+    if (data?.message) {
+      if(data?.success) {
+        toast.success(data?.message);
+      } else {
+        toast.error(data?.message);
+      }
+    }
     if (data?.success) {
-      setAlert(data);
       navigate("/transaction");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

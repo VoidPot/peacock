@@ -2,11 +2,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import type * as yup from "yup";
 import type { LoaderArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
+import { toast } from "react-toastify";
 import {
   useActionData,
   useLoaderData,
   useNavigate,
-  useOutletContext,
 } from "@remix-run/react";
 import { getValidatedFormData } from "remix-hook-form";
 import TransactionForm from "~/components/forms/transaction-form";
@@ -67,22 +67,25 @@ export async function action({ request }: any) {
     return responseData({
       success: false,
       message: "transactionCreateError",
-      data: {},
     });
   }
 }
 
 export default function TransactionAddPage() {
   const navigate = useNavigate();
-  const { setAlert }: any = useOutletContext();
 
   const { userSelect } = useLoaderData<typeof loader>();
   const data = useActionData<typeof action>();
 
   useEffect(() => {
-    console.log({ data });
+    if (data?.message) {
+      if(data?.success) {
+        toast.success(data?.message);
+      } else {
+        toast.error(data?.message);
+      }
+    }
     if (data?.success) {
-      setAlert(data);
       navigate("/transaction");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

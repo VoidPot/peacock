@@ -5,6 +5,11 @@ import configContext from "~/config/configContext";
 
 export const getValidDate = (date: any) => (date ? new Date(date) : new Date());
 
+export const getSecondDiff = (input: any = new Date()) =>
+  moment(new Date(), "DD/MM/YYYY HH:mm:ss").diff(
+    moment(getValidDate(input), "DD/MM/YYYY HH:mm:ss")
+  );
+
 export const getMonthYear = (input: any = new Date()) => {
   const date = moment(input);
   return date.format("MMM YYYY");
@@ -70,7 +75,7 @@ export const responseData = ({
 }) => {
   return json({
     success,
-    message: configContext.message[message],
+    message: `${configContext.message[message]}${data?.id? ` ID:${data?.id}` : ''}`,
     data,
     errors,
   });

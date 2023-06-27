@@ -2,11 +2,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import type * as yup from "yup";
 import type { LoaderArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
+import { toast } from "react-toastify";
 import {
   useActionData,
   useLoaderData,
   useNavigate,
-  useOutletContext,
 } from "@remix-run/react";
 import { getValidatedFormData } from "remix-hook-form";
 import TransactionForm from "~/components/forms/transaction-form";
@@ -61,6 +61,8 @@ export async function action({ request }: any) {
       return responseData({ errors, success: false, message: "default" });
     }
 
+    const id =  Number(data?.id || 0);
+
     const transaction = {
       mode: data.mode,
       dot: validateLocalDate(data.dot),
@@ -70,18 +72,18 @@ export async function action({ request }: any) {
       note: data.note || "",
     } as unknown as Transaction;
 
-    const created = await prisma.transaction.update({
+     await prisma.transaction.update({
       data: {
         ...transaction,
       },
       where: {
-        id: Number(data?.id || 0),
+        id: id,
       },
     });
     return responseData({
       success: true,
       message: "transactionEdited",
-      data: created,
+      data: {id},
     });
   } catch (err) {
     console.error(err);
@@ -94,14 +96,18 @@ export async function action({ request }: any) {
 
 export default function TransactionEditPage() {
   const navigate = useNavigate();
-  const { setAlert }: any = useOutletContext();
 
   const { userSelect, transaction } = useLoaderData<typeof loader>();
   const data = useActionData<typeof action>();
 
-  useEffect(() => {
+  useEffect(() => {    if (data?.message) {
+    if(data?.success) {
+      toast.success(data?.message);
+    } else {
+      toast.error(data?.message);
+    }
+  }
     if (data?.success) {
-      setAlert(data);
       navigate("/transaction");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

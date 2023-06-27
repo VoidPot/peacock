@@ -3,7 +3,6 @@ import { json } from "@remix-run/node";
 import {
   Outlet,
   useLoaderData,
-  useOutletContext,
   useSearchParams,
 } from "@remix-run/react";
 import TransactionTable from "~/components/organisms/transactionTable";
@@ -57,7 +56,6 @@ export const loader = async ({ request }: LoaderArgs) => {
 
 export default function TransactionPage() {
   const { items, users, isLoggedIn } = useLoaderData<typeof loader>();
-  const { alert, setAlert }: any = useOutletContext();
   let [searchParams, setSearchParams] = useSearchParams({});
   const queryParams = getSearchParams(searchParams);
   const params = setParams(searchParams);
@@ -87,7 +85,7 @@ export default function TransactionPage() {
 
   return (
     <div className="flex h-full w-full flex-col gap-3">
-      <Outlet context={{ alert, setAlert }} />
+      <Outlet />
       <TransactionTable
         handleSetSearchParams={handleSetSearchParams}
         handleSelectOnChange={handleSelectOnChange}
