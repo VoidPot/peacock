@@ -1,6 +1,5 @@
 import { Link } from "@remix-run/react";
 import classNames from "classnames";
-import { useNavigate } from "@remix-run/react";
 import Icon from "../svg/icon";
 import configContext from "~/config/configContext";
 import type { getUserSelect } from "~/models/user.server";
@@ -15,6 +14,7 @@ function TransactionTable({
   users,
   items,
   isLoggedIn,
+  params,
 }: {
   handleSetSearchParams: any;
   handleSelectOnChange: any;
@@ -22,8 +22,8 @@ function TransactionTable({
   users: Awaited<ReturnType<typeof getUserSelect>>;
   items: Awaited<ReturnType<typeof findTransaction>>;
   isLoggedIn: Boolean;
+  params: string;
 }) {
-  let navigate = useNavigate();
   return (
     <div className="flex flex-wrap">
       <div className="flex w-full max-w-full flex-col gap-6">
@@ -31,13 +31,15 @@ function TransactionTable({
           <div className="border-b-solid mb-0 rounded-t-2xl border-b-0 border-b-transparent bg-white p-6 pb-0">
             <div className="mb-2 flex items-center justify-between align-middle">
               <h6 className="m-0 text-neutral">Transaction Table</h6>
-              <button
-                type="button"
-                onClick={() => navigate("add")}
+              <Link
                 className="btn-ghost btn-square btn stroke-slate-500 hover:bg-white hover:stroke-secondary"
+                to={{
+                  pathname: `/transaction/add`,
+                  search: params || "",
+                }}
               >
                 <Icon name="add-box" className="h-6 w-6" />
-              </button>
+              </Link>
             </div>
             <div className="block w-full overflow-x-auto">
               <div className="flex flex-row justify-start gap-4 py-4 lg:join lg:justify-center">
@@ -263,6 +265,7 @@ function TransactionTable({
                             <Link
                               to={{
                                 pathname: `/transaction/edit/${transaction.id}`,
+                                search: params || "",
                               }}
                               className="btn-ghost btn-square btn w-auto stroke-slate-500 px-2 hover:bg-white hover:stroke-secondary"
                             >
@@ -271,6 +274,7 @@ function TransactionTable({
                             <Link
                               to={{
                                 pathname: `/transaction/delete/${transaction.id}`,
+                                search: params || "",
                               }}
                               className="btn-ghost btn-square btn w-auto stroke-slate-500 px-2 hover:bg-white hover:stroke-secondary"
                             >

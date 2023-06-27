@@ -7,6 +7,7 @@ import {
   useActionData,
   useLoaderData,
   useNavigate,
+  useSearchParams,
 } from "@remix-run/react";
 import { getValidatedFormData } from "remix-hook-form";
 import TransactionForm from "~/components/forms/transaction-form";
@@ -72,6 +73,7 @@ export async function action({ request }: any) {
 }
 
 export default function TransactionAddPage() {
+  const [searchParams] = useSearchParams({});
   const navigate = useNavigate();
 
   const { userSelect } = useLoaderData<typeof loader>();
@@ -79,14 +81,14 @@ export default function TransactionAddPage() {
 
   useEffect(() => {
     if (data?.message) {
-      if(data?.success) {
+      if (data?.success) {
         toast.success(data?.message);
       } else {
         toast.error(data?.message);
       }
     }
     if (data?.success) {
-      navigate("/transaction");
+      navigate(`/transaction?${searchParams.toString()}`);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);

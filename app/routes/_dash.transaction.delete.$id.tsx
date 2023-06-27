@@ -6,6 +6,7 @@ import {
   useActionData,
   useLoaderData,
   useNavigate,
+  useSearchParams,
 } from "@remix-run/react";
 import { useEffect } from "react";
 import { prisma } from "~/db.server";
@@ -30,7 +31,7 @@ export const loader = async ({ request, params }: LoaderArgs) => {
 export async function action({ request }: any) {
   try {
     const formData = await request.formData();
-    const id = Number(formData.get("id") || 0)
+    const id = Number(formData.get("id") || 0);
 
     await prisma.transaction.delete({
       where: {
@@ -40,7 +41,7 @@ export async function action({ request }: any) {
     return responseData({
       success: true,
       message: "transactionDeleted",
-      data: {id}
+      data: { id },
     });
   } catch (err) {
     console.error(err);
@@ -52,6 +53,7 @@ export async function action({ request }: any) {
 }
 
 export default function TransactionPage() {
+  const [searchParams] = useSearchParams({});
   const navigate = useNavigate();
 
   const { id } = useLoaderData<typeof loader>();
@@ -59,14 +61,14 @@ export default function TransactionPage() {
 
   useEffect(() => {
     if (data?.message) {
-      if(data?.success) {
+      if (data?.success) {
         toast.success(data?.message);
       } else {
         toast.error(data?.message);
       }
     }
     if (data?.success) {
-      navigate("/transaction");
+      navigate(`/transaction?${searchParams.toString()}`);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);

@@ -7,6 +7,7 @@ import {
   useActionData,
   useLoaderData,
   useNavigate,
+  useSearchParams,
 } from "@remix-run/react";
 import { getValidatedFormData } from "remix-hook-form";
 import TransactionForm from "~/components/forms/transaction-form";
@@ -61,7 +62,7 @@ export async function action({ request }: any) {
       return responseData({ errors, success: false, message: "default" });
     }
 
-    const id =  Number(data?.id || 0);
+    const id = Number(data?.id || 0);
 
     const transaction = {
       mode: data.mode,
@@ -72,7 +73,7 @@ export async function action({ request }: any) {
       note: data.note || "",
     } as unknown as Transaction;
 
-     await prisma.transaction.update({
+    await prisma.transaction.update({
       data: {
         ...transaction,
       },
@@ -83,7 +84,7 @@ export async function action({ request }: any) {
     return responseData({
       success: true,
       message: "transactionEdited",
-      data: {id},
+      data: { id },
     });
   } catch (err) {
     console.error(err);
@@ -95,20 +96,22 @@ export async function action({ request }: any) {
 }
 
 export default function TransactionEditPage() {
+  const [searchParams] = useSearchParams({});
   const navigate = useNavigate();
 
   const { userSelect, transaction } = useLoaderData<typeof loader>();
   const data = useActionData<typeof action>();
 
-  useEffect(() => {    if (data?.message) {
-    if(data?.success) {
-      toast.success(data?.message);
-    } else {
-      toast.error(data?.message);
+  useEffect(() => {
+    if (data?.message) {
+      if (data?.success) {
+        toast.success(data?.message);
+      } else {
+        toast.error(data?.message);
+      }
     }
-  }
     if (data?.success) {
-      navigate("/transaction");
+      navigate(`/transaction?${searchParams.toString()}`);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);

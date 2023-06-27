@@ -1,10 +1,6 @@
 import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import {
-  Outlet,
-  useLoaderData,
-  useSearchParams,
-} from "@remix-run/react";
+import { Outlet, useLoaderData, useSearchParams } from "@remix-run/react";
 import TransactionTable from "~/components/organisms/transactionTable";
 import { pickValidInObject } from "~/helpers/utils";
 import { findTransaction } from "~/models/transaction.server";
@@ -50,13 +46,13 @@ export const loader = async ({ request }: LoaderArgs) => {
   return json({
     items,
     users,
-    isLoggedIn
+    isLoggedIn,
   });
 };
 
 export default function TransactionPage() {
   const { items, users, isLoggedIn } = useLoaderData<typeof loader>();
-  let [searchParams, setSearchParams] = useSearchParams({});
+  const [searchParams, setSearchParams] = useSearchParams({});
   const queryParams = getSearchParams(searchParams);
   const params = setParams(searchParams);
 
@@ -93,6 +89,7 @@ export default function TransactionPage() {
         users={users}
         items={items as unknown as Awaited<ReturnType<typeof findTransaction>>}
         isLoggedIn={isLoggedIn}
+        params={searchParams.toString() || ""}
       />
     </div>
   );
