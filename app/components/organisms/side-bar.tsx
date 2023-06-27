@@ -1,9 +1,9 @@
 import classNames from "classnames";
 // import StackedBrand from "../atoms/svg/stacked-brand";
-import { Link } from "@remix-run/react";
+import { Form, Link } from "@remix-run/react";
 import MenuItem from "../molecules/menu-item";
 
-function SideBar({ isOpen, setOpen }: any) {
+function SideBar({ isOpen, setOpen, isLoggedIn }: any) {
   return (
     <>
       <div
@@ -88,12 +88,24 @@ function SideBar({ isOpen, setOpen }: any) {
               </li>
 
               <li className="w-full">
-                <MenuItem
-                  onClick={() => setOpen(false)}
-                  pathName="/login"
-                  hed="Login"
-                  iconName="setting"
-                />
+                {isLoggedIn ? (
+                  <Form action="/logout" method="post">
+                    <MenuItem
+                      type="submit"
+                      onClick={() => setOpen(false)}
+                      pathName="/logout"
+                      hed="Logout"
+                      iconName="close"
+                    />
+                  </Form>
+                ) : (
+                  <MenuItem
+                    onClick={() => setOpen(false)}
+                    pathName="/login"
+                    hed="Login"
+                    iconName="setting"
+                  />
+                )}
               </li>
             </ul>
           </div>

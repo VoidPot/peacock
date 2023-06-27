@@ -1,7 +1,7 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import type * as yup from "yup";
 import type { LoaderArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import {
   useActionData,
   useLoaderData,
@@ -16,11 +16,16 @@ import { getUserSelect } from "~/models/user.server";
 import configContext from "~/config/configContext";
 import type { Transaction } from ".prisma/client";
 import { useEffect } from "react";
+import { getIsLoggedIn } from "~/session.server";
 
 const { schema } = configContext;
 type FormData = yup.InferType<typeof schema.transaction>;
 
 export const loader = async ({ request }: LoaderArgs) => {
+  const isLoggedIn = await getIsLoggedIn(request);
+  if (!isLoggedIn) {
+    return redirect("/transaction");
+  }
   const userSelect = await getUserSelect();
   return json({
     userSelect,

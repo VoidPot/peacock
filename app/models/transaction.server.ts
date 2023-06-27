@@ -119,12 +119,6 @@ export const findOneTransaction = async (id: number) => {
           avatar: true,
         },
       },
-      group: {
-        select: {
-          id: true,
-          name: true,
-        },
-      },
     },
   });
 

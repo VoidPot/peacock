@@ -9,7 +9,7 @@ export const sessionStorage = createCookieSessionStorage({
     httpOnly: true,
     path: "/",
     sameSite: "lax",
-    secrets: [process.env.SESSION_SECRET],
+    secrets: [],
     secure: process.env.NODE_ENV === "production",
   },
 });
@@ -19,15 +19,15 @@ export async function getSession(request: Request) {
   return sessionStorage.getSession(cookie);
 }
 
-export async function getIsAdmin(request: Request): Promise<Boolean> {
+export async function getIsLoggedIn(request: Request): Promise<Boolean> {
   const session = await getSession(request);
   const isAdmin = session.get("IS_ADMIN");
   return Boolean(isAdmin);
 }
 
 export async function requireAdmin(request: Request) {
-  const isAdmin = await getIsAdmin(request);
-  if (isAdmin) return isAdmin;
+  const isLoggedIn = await getIsLoggedIn(request);
+  if (isLoggedIn) return isLoggedIn;
   throw await logout(request);
 }
 
@@ -37,7 +37,7 @@ export async function login(request: Request) {
   return redirect("/home", {
     headers: {
       "Set-Cookie": await sessionStorage.commitSession(session, {
-        maxAge: 60 * 60,
+        maxAge: 60 * 60 * 2,
       }),
     },
   });
@@ -50,4 +50,29 @@ export async function logout(request: Request) {
       "Set-Cookie": await sessionStorage.destroySession(session),
     },
   });
+}
+
+export async function setSessionData(
+  request: Request,
+  key: string,
+  value: any,
+  path?: string
+) {
+  const session = await getSession(request);
+  session.set(key, value);
+  return redirect(path || "/home", {
+    headers: {
+      "Set-Cookie": await sessionStorage.commitSession(session, {
+        maxAge: 60 * 60 * 2,
+      }),
+    },
+  });
+}
+
+export async function getSessionData(
+  request: Request,
+  key: string
+): Promise<Boolean> {
+  const session = await getSession(request);
+  return session.get(key);
 }

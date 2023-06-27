@@ -10,6 +10,7 @@ import TransactionTable from "~/components/organisms/transactionTable";
 import { pickValidInObject } from "~/helpers/utils";
 import { findTransaction } from "~/models/transaction.server";
 import { getUserSelect } from "~/models/user.server";
+import { getIsLoggedIn } from "~/session.server";
 
 const getSearchParams = (searchParams: URLSearchParams) => {
   return {
@@ -37,6 +38,7 @@ const setParams = (searchParams: URLSearchParams) => {
 };
 
 export const loader = async ({ request }: LoaderArgs) => {
+  const isLoggedIn = await getIsLoggedIn(request);
   const url = new URL(request.url);
   const queryParams = getSearchParams(url.searchParams);
   const users = await getUserSelect();
@@ -49,12 +51,13 @@ export const loader = async ({ request }: LoaderArgs) => {
   return json({
     items,
     users,
+    isLoggedIn
   });
 };
 
 export default function TransactionPage() {
+  const { items, users, isLoggedIn } = useLoaderData<typeof loader>();
   const { alert, setAlert }: any = useOutletContext();
-  const { items, users } = useLoaderData<typeof loader>();
   let [searchParams, setSearchParams] = useSearchParams({});
   const queryParams = getSearchParams(searchParams);
   const params = setParams(searchParams);
@@ -91,6 +94,7 @@ export default function TransactionPage() {
         queryParams={queryParams}
         users={users}
         items={items as unknown as Awaited<ReturnType<typeof findTransaction>>}
+        isLoggedIn={isLoggedIn}
       />
     </div>
   );

@@ -44,6 +44,7 @@ const computeGroupData = ({
 
 const message = {
   default: "Unexpected error!",
+  invalidPassword: "The password is incorrect",
   required: "This field is required",
   invalidDate: "This is an invalid date",
   number: "This is an invalid number",

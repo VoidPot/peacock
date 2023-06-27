@@ -1,11 +1,21 @@
-import { Outlet } from "@remix-run/react";
+import type { LoaderArgs } from "@remix-run/node";
+import { json } from "@remix-run/node";
+import { Outlet, useLoaderData } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import NavBar from "~/components/organisms/nav-bar";
 import SideBar from "~/components/organisms/side-bar";
 import type { Icons } from "~/components/svg/icon";
 import Icon from "~/components/svg/icon";
+import { getIsLoggedIn } from "~/session.server";
+
+export const loader = async ({ request }: LoaderArgs) => {
+  const isLoggedIn = await getIsLoggedIn(request);
+
+  return json({ isLoggedIn });
+};
 
 export default function DashTemplate() {
+  const { isLoggedIn } = useLoaderData<typeof loader>();
   const [alert, setAlert]: any = useState({});
   const [isOpen, setOpen] = useState(false);
 
@@ -23,7 +33,7 @@ export default function DashTemplate() {
   return (
     <>
       <div className="fixed left-0 right-0 top-0 -z-100 h-full w-full bg-gradient-to-tr from-base-100 to-blue-100"></div>
-      <SideBar isOpen={isOpen} setOpen={setOpen} />
+      <SideBar isOpen={isOpen} setOpen={setOpen} isLoggedIn={isLoggedIn} />
       {alert?.message && (
         <div
           className={`alert alert-${state} fixed left-4 right-4 top-8 z-990 flex w-auto lg:left-[unset]`}

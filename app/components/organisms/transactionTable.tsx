@@ -14,12 +14,14 @@ function TransactionTable({
   queryParams,
   users,
   items,
+  isLoggedIn,
 }: {
   handleSetSearchParams: any;
   handleSelectOnChange: any;
   queryParams: any;
   users: Awaited<ReturnType<typeof getUserSelect>>;
   items: Awaited<ReturnType<typeof findTransaction>>;
+  isLoggedIn: Boolean;
 }) {
   let navigate = useNavigate();
   return (
@@ -149,9 +151,11 @@ function TransactionTable({
                     <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
                       Transaction At / Added At
                     </th>
-                    <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
-                      Actions
-                    </th>
+                    {isLoggedIn && (
+                      <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
+                        Actions
+                      </th>
+                    )}
                   </tr>
                 </thead>
                 <tbody>
@@ -231,31 +235,33 @@ function TransactionTable({
                             {transaction.createdAt$}
                           </p>
                         </td>
-                        <td
-                          className={classNames(
-                            "whitespace-nowrap bg-transparent p-2 text-center align-middle text-sm uppercase leading-normal shadow-transparent",
-                            {
-                              "border-b": index !== items.length - 1,
-                            }
-                          )}
-                        >
-                          <Link
-                            to={{
-                              pathname: `/transaction/edit/${transaction.id}`,
-                            }}
-                            className="btn-ghost btn-square btn stroke-slate-500 hover:bg-white hover:stroke-secondary"
+                        {isLoggedIn && (
+                          <td
+                            className={classNames(
+                              "whitespace-nowrap bg-transparent p-2 text-center align-middle text-sm uppercase leading-normal shadow-transparent",
+                              {
+                                "border-b": index !== items.length - 1,
+                              }
+                            )}
                           >
-                            <Icon name="edit" className="h-4 w-4" />
-                          </Link>
-                          <Link
-                            to={{
-                              pathname: `/transaction/delete/${transaction.id}`,
-                            }}
-                            className="btn-ghost btn-square btn stroke-slate-500 hover:bg-white hover:stroke-secondary"
-                          >
-                            <Icon name="delete" className="h-4 w-4" />
-                          </Link>
-                        </td>
+                            <Link
+                              to={{
+                                pathname: `/transaction/edit/${transaction.id}`,
+                              }}
+                              className="btn-ghost btn-square btn stroke-slate-500 hover:bg-white hover:stroke-secondary"
+                            >
+                              <Icon name="edit" className="h-4 w-4" />
+                            </Link>
+                            <Link
+                              to={{
+                                pathname: `/transaction/delete/${transaction.id}`,
+                              }}
+                              className="btn-ghost btn-square btn stroke-slate-500 hover:bg-white hover:stroke-secondary"
+                            >
+                              <Icon name="delete" className="h-4 w-4" />
+                            </Link>
+                          </td>
+                        )}
                       </tr>
                     )
                   )}

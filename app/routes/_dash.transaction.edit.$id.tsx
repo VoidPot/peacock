@@ -21,11 +21,16 @@ import configContext from "~/config/configContext";
 import type { Transaction } from ".prisma/client";
 import { useEffect } from "react";
 import { findOneTransaction } from "~/models/transaction.server";
+import { getIsLoggedIn } from "~/session.server";
 
 const { schema } = configContext;
 type FormData = yup.InferType<typeof schema.transaction>;
 
 export const loader = async ({ request, params }: LoaderArgs) => {
+  const isLoggedIn = await getIsLoggedIn(request);
+  if (!isLoggedIn) {
+    return redirect("/transaction");
+  }
   const userSelect = await getUserSelect();
   const transaction = await findOneTransaction(Number(params.id || 0));
   if (!transaction) {

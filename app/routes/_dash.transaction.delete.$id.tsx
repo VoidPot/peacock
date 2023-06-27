@@ -11,8 +11,13 @@ import {
 import { useEffect } from "react";
 import { prisma } from "~/db.server";
 import { responseData } from "~/helpers/utils";
+import { getIsLoggedIn } from "~/session.server";
 
 export const loader = async ({ request, params }: LoaderArgs) => {
+  const isLoggedIn = await getIsLoggedIn(request);
+  if (!isLoggedIn) {
+    return redirect("/transaction");
+  }
   const id = Number(params.id || 0);
   if (!id || id === 0) {
     return redirect("/transaction");
