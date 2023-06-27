@@ -149,7 +149,10 @@ function TransactionTable({
                       Type / Mode
                     </th>
                     <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
-                      Transaction At / Added At
+                      Transaction At
+                    </th>
+                    <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
+                      ID / Added At
                     </th>
                     {isLoggedIn && (
                       <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
@@ -231,6 +234,19 @@ function TransactionTable({
                           <span className="text-xs font-semibold leading-tight text-secondary">
                             {transaction.dot$}
                           </span>
+                        </td>
+
+                        <td
+                          className={classNames(
+                            "whitespace-nowrap bg-transparent p-2 text-center align-middle text-sm uppercase leading-normal shadow-transparent",
+                            {
+                              "border-b": index !== items.length - 1,
+                            }
+                          )}
+                        >
+                          <span className="text-xs font-semibold leading-tight text-slate-500">
+                            {transaction.id}
+                          </span>
                           <p className="mb-0 text-xs leading-tight text-slate-500">
                             {transaction.createdAt$}
                           </p>
@@ -248,7 +264,7 @@ function TransactionTable({
                               to={{
                                 pathname: `/transaction/edit/${transaction.id}`,
                               }}
-                              className="btn-ghost btn-square btn stroke-slate-500 hover:bg-white hover:stroke-secondary"
+                              className="btn-ghost btn-square btn w-auto stroke-slate-500 px-2 hover:bg-white hover:stroke-secondary"
                             >
                               <Icon name="edit" className="h-4 w-4" />
                             </Link>
@@ -256,7 +272,7 @@ function TransactionTable({
                               to={{
                                 pathname: `/transaction/delete/${transaction.id}`,
                               }}
-                              className="btn-ghost btn-square btn stroke-slate-500 hover:bg-white hover:stroke-secondary"
+                              className="btn-ghost btn-square btn w-auto stroke-slate-500 px-2 hover:bg-white hover:stroke-secondary"
                             >
                               <Icon name="delete" className="h-4 w-4" />
                             </Link>

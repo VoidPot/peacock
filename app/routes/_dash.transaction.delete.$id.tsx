@@ -71,7 +71,10 @@ export default function TransactionPage() {
         <div className="modal-box bg-white">
           <Form method="post">
             <input name="id" defaultValue={id} className="hidden" />
-            <h6>Are you sure you wanna delete the transaction?</h6>
+            <p className="font-semibold text-error">
+              Are you sure you wanna delete the transaction{" "}
+              <span className="text-secondary">ID:{id}</span>?
+            </p>
 
             <div className="col-span-full mt-4 flex justify-between gap-2 align-middle ">
               <Link to={"/transaction"} className="btn-outline btn-sm btn px-6">

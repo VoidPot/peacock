@@ -114,7 +114,10 @@ function TransactionForm({
     >
       <div className="bg-white pb-0">
         <div className="mb-2 flex items-center justify-between align-middle">
-          <h6 className="text-neutral">{id ? "Edit" : "Add"} Transaction</h6>
+          <h6 className="text-neutral">
+            {id ? "Edit" : "Add"} Transaction{" "}
+            <span className="text-secondary">{id ? ` - ID:${id}` : ""}</span>
+          </h6>
         </div>
       </div>
 
