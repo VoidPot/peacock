@@ -119,25 +119,26 @@ export const getClubGroupPassbook = async () => {
       };
     })
     .then(({ club, groups }) => {
+      let clubTermDeposit = Number(club.termDeposit);
       return {
         club,
-        groups: groups.map((group, index) => {
-          const passbook = formatPassbook(group.passbook as Passbook);
-          const remainingTermAmount =
-            groups.slice(0, index).reduce((a, b) => {
-              a = a + b.totalTermAmount;
-              return a;
-            }, 0) + passbook.termDeposit;
+        groups: groups.map((group) => {
+          const groupBalance = group.totalTermAmount - clubTermDeposit;
+          const termDeposit =
+            groupBalance >= 0
+              ? group.totalTermAmount - groupBalance
+              : group.totalTermAmount;
 
-          const balance = group.totalTermAmount - remainingTermAmount;
-          const termBalance = Number(balance) >= 0 ? balance : 0;
+          const termBalance = Number(groupBalance) >= 0 ? groupBalance : 0;
+          clubTermDeposit = clubTermDeposit - termDeposit;
 
           return {
             ...group,
-            ...passbook,
             amount$: formatMoney(group.amount),
             termBalance,
             termBalance$: formatMoney(termBalance),
+            termDeposit,
+            termDeposit$: formatMoney(termDeposit),
           };
         }),
       };

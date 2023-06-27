@@ -70,14 +70,6 @@ export const passbookConfig: PassbookConfig = {
           holdingAmount: "amount",
         },
       },
-      GROUP: {
-        ADD: {
-          termDeposit: "amount",
-          totalDeposit: "amount",
-          accountBalance: "amount",
-          holdingAmount: "amount",
-        },
-      },
       CLUB: {
         ADD: {
           termDeposit: "amount",
@@ -100,14 +92,6 @@ export const passbookConfig: PassbookConfig = {
       },
       TO: {
         ADD: {
-          holdingAmount: "amount",
-        },
-      },
-      GROUP: {
-        ADD: {
-          tallyDeposit: "amount",
-          totalDeposit: "amount",
-          accountBalance: "amount",
           holdingAmount: "amount",
         },
       },
@@ -135,14 +119,6 @@ export const passbookConfig: PassbookConfig = {
           holdingAmount: "amount",
         },
       },
-      GROUP: {
-        SUB: {
-          withdraw: "amount",
-          totalWithdraw: "amount",
-          accountBalance: "amount",
-          holdingAmount: "amount",
-        },
-      },
       CLUB: {
         SUB: {
           withdraw: "amount",
@@ -159,17 +135,6 @@ export const passbookConfig: PassbookConfig = {
         },
       },
       TO: {
-        ADD: {
-          termInvest: "amount",
-          totalInvest: "amount",
-          investMonths: "one",
-        },
-        SUB: {
-          holdingAmount: "amount",
-          profit: "profit",
-        },
-      },
-      GROUP: {
         ADD: {
           termInvest: "amount",
           totalInvest: "amount",
@@ -208,16 +173,6 @@ export const passbookConfig: PassbookConfig = {
           profit: "profit",
         },
       },
-      GROUP: {
-        ADD: {
-          invest: "amount",
-          totalInvest: "amount",
-        },
-        SUB: {
-          holdingAmount: "amount",
-          profit: "profit",
-        },
-      },
       CLUB: {
         ADD: {
           invest: "amount",
@@ -245,17 +200,6 @@ export const passbookConfig: PassbookConfig = {
         ADD: {
           holdingAmount: "amount",
           accountBalance: "profit",
-        },
-      },
-      GROUP: {
-        ADD: {
-          termReturns: "amount",
-          totalReturns: "amount",
-          holdingAmount: "amount",
-          accountBalance: "profit",
-          profit: "profit",
-          totalProfit: "profit",
-          returnsMonths: "one",
         },
       },
       CLUB: {
@@ -287,16 +231,6 @@ export const passbookConfig: PassbookConfig = {
           accountBalance: "profit",
         },
       },
-      GROUP: {
-        ADD: {
-          returns: "amount",
-          totalReturns: "amount",
-          holdingAmount: "amount",
-          accountBalance: "profit",
-          profit: "profit",
-          totalProfit: "profit",
-        },
-      },
       CLUB: {
         ADD: {
           returns: "amount",
@@ -319,14 +253,6 @@ export const passbookConfig: PassbookConfig = {
         SUB: {
           withdraw: "amount",
           totalWithdraw: "amount",
-        },
-      },
-      GROUP: {
-        SUB: {
-          withdraw: "amount",
-          totalWithdraw: "amount",
-          accountBalance: "amount",
-          holdingAmount: "amount",
         },
       },
       CLUB: {
@@ -353,14 +279,6 @@ export const passbookConfig: PassbookConfig = {
           holdingAmount: "amount",
         },
       },
-      GROUP: {
-        SUB: {
-          withdraw: "amount",
-          totalWithdraw: "amount",
-          accountBalance: "amount",
-          holdingAmount: "amount",
-        },
-      },
       CLUB: {
         SUB: {
           withdraw: "amount",
@@ -378,14 +296,6 @@ export const passbookConfig: PassbookConfig = {
         },
       },
       TO: {
-        SUB: {
-          withdraw: "amount",
-          totalWithdraw: "amount",
-          accountBalance: "amount",
-          holdingAmount: "amount",
-        },
-      },
-      GROUP: {
         SUB: {
           withdraw: "amount",
           totalWithdraw: "amount",
