@@ -75,15 +75,15 @@ export const findTransaction = async ({ options }: TransactionProps) => {
     skip,
     take,
   });
-  return transactions.map((transaction) => {
-    let primary = transaction.from;
-    let secondary = transaction.to;
+  return transactions.map(({ from, to, ...transaction }) => {
+    let primary = { ...from };
+    let secondary = { ...to };
 
     if (
       ["VENDOR_PERIODIC_INVEST", "VENDOR_INVEST"].includes(transaction.mode)
     ) {
-      primary = transaction.to;
-      secondary = transaction.from;
+      primary = { ...to };
+      secondary = { ...from };
     }
     return {
       ...transaction,
