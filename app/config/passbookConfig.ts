@@ -175,7 +175,6 @@ export const passbookConfig: PassbookConfig = {
       TO: {
         ADD: {
           holdingAmount: "amount",
-          accountBalance: "profit",
         },
       },
       CLUB: {
@@ -242,20 +241,17 @@ export const passbookConfig: PassbookConfig = {
     },
     MEMBERS_WITHDRAW: {
       FROM: {
+        SUB: {
+          holdingAmount: "amount",
+        },
+      },
+      TO: {
         ADD: {
           withdraw: "amount",
           totalWithdraw: "amount",
         },
         SUB: {
           accountBalance: "amount",
-        },
-      },
-      TO: {
-        SUB: {
-          withdraw: "amount",
-          totalWithdraw: "amount",
-          accountBalance: "amount",
-          holdingAmount: "amount",
         },
       },
       CLUB: {
@@ -269,20 +265,17 @@ export const passbookConfig: PassbookConfig = {
     },
     MEMBERS_WITHDRAW_PROFIT: {
       FROM: {
+        SUB: {
+          holdingAmount: "amount",
+        },
+      },
+      TO: {
         ADD: {
           profitWithdraw: "amount",
           totalWithdraw: "amount",
         },
         SUB: {
           accountBalance: "amount",
-        },
-      },
-      TO: {
-        SUB: {
-          withdraw: "amount",
-          totalWithdraw: "amount",
-          accountBalance: "amount",
-          holdingAmount: "amount",
         },
       },
       CLUB: {

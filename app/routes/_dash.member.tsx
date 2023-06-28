@@ -126,7 +126,7 @@ export default function MemberPage() {
                           )}
                         >
                           <span className="text-xs font-semibold leading-tight text-slate-500">
-                            {member.totalDeposit$}
+                            {member.accountBalance$}
 
                             {member.tallyDeposit ? (
                               <p className="mb-0 text-xs leading-tight text-slate-500">

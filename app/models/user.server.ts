@@ -17,11 +17,10 @@ export async function getMembersPassbook() {
     .map((member) => {
       const club = configContext.group(members.length).club;
       const passbook = formatPassbook(member.passbook);
-      const balance = 0;
-      const termBalance = club.totalTermAmountPerPerson - passbook.termDeposit;
-      const totalBalance = termBalance + balance + passbook.tallyBalance;
-      const netAmount =
-        passbook.totalDeposit + perMemberProfit - passbook.tallyBalance;
+      const termBalance =
+        club.totalTermAmountPerPerson - passbook.accountBalance;
+      const totalBalance = termBalance + passbook.tallyBalance;
+      const netAmount = passbook.accountBalance + perMemberProfit;
       const actualMemberProfit = Number(
         perMemberProfit - passbook.tallyBalance
       ).toFixed(2);
@@ -30,8 +29,6 @@ export async function getMembersPassbook() {
         ...passbook,
         id: member.id,
         joinedAt$: getMonthYear(member.joinedAt),
-        balance,
-        balance$: formatMoney(balance),
         termBalance,
         termBalance$: formatMoney(termBalance),
         totalBalance,
