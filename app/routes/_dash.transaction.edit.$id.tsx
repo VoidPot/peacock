@@ -124,6 +124,7 @@ export default function TransactionEditPage() {
             className="z-990 p-0"
             userSelect={userSelect}
             transaction={transaction as any}
+            cancelPath={`/transaction?${searchParams.toString()}`}
           />
         </div>
       </dialog>

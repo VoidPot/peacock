@@ -1,25 +1,42 @@
 import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { Link, Outlet, useLoaderData } from "@remix-run/react";
 import classNames from "classnames";
+import Icon from "~/components/svg/icon";
 import { getMembersPassbook } from "~/models/user.server";
+import { getIsLoggedIn } from "~/session.server";
 
 export const loader = async ({ request }: LoaderArgs) => {
+  const isLoggedIn = await getIsLoggedIn(request);
   const items = await getMembersPassbook();
   return json({
     items,
+    isLoggedIn,
   });
 };
 
 export default function MemberPage() {
-  const { items } = useLoaderData<typeof loader>();
+  const { items, isLoggedIn } = useLoaderData<typeof loader>();
   return (
-    <div className="h-full w-full">
+    <div className="flex h-full w-full flex-col gap-3">
+      <Outlet />
       <div className="flex flex-wrap">
         <div className="w-full max-w-full flex-none">
           <div className="relative mb-6 flex min-w-0 flex-col break-words rounded-md border-0 border-solid border-transparent bg-white bg-clip-border shadow-soft-xl">
             <div className="border-b-solid mb-0 rounded-t-2xl border-b-0 border-b-transparent bg-white p-6 pb-0">
-              <h6 className="text-neutral">Members Table</h6>
+              <div className="mb-2 flex items-center justify-between align-middle">
+                <h6 className="m-0 text-neutral">Members Table</h6>
+                {isLoggedIn && (
+                  <Link
+                    className="btn-ghost btn-square btn stroke-slate-500 hover:bg-white hover:stroke-secondary"
+                    to={{
+                      pathname: `/member/add`,
+                    }}
+                  >
+                    <Icon name="add-box" className="h-6 w-6" />
+                  </Link>
+                )}
+              </div>
             </div>
             <div className="flex-auto px-0 pb-2 pt-0">
               <div className="overflow-x-auto p-0">
@@ -30,7 +47,7 @@ export default function MemberPage() {
                         Name
                       </th>
                       <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
-                        Joined At
+                        ID / Joined At
                       </th>
                       <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
                         Term / Other Deposit
@@ -44,6 +61,11 @@ export default function MemberPage() {
                       <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
                         Net Value
                       </th>
+                      {isLoggedIn && (
+                        <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
+                          Actions
+                        </th>
+                      )}
                     </tr>
                   </thead>
                   <tbody>
@@ -89,8 +111,11 @@ export default function MemberPage() {
                           )}
                         >
                           <span className="text-xs font-semibold leading-tight text-slate-500">
-                            {member.joinedAt$}
+                            {member.id}
                           </span>
+                          <p className="mb-0 text-xs leading-tight text-slate-500">
+                            {member.joinedAt$}
+                          </p>
                         </td>
                         <td
                           className={classNames(
@@ -165,6 +190,33 @@ export default function MemberPage() {
                             {member.netAmount$}
                           </span>
                         </td>
+                        {isLoggedIn && (
+                          <td
+                            className={classNames(
+                              "whitespace-nowrap bg-transparent p-2 text-center align-middle text-sm uppercase leading-normal shadow-transparent",
+                              {
+                                "border-b": index !== items.length - 1,
+                              }
+                            )}
+                          >
+                            <Link
+                              to={{
+                                pathname: `/member/edit/${member.id}`,
+                              }}
+                              className="btn-ghost btn-square btn w-auto stroke-slate-500 px-2 hover:bg-white hover:stroke-secondary"
+                            >
+                              <Icon name="edit" className="h-4 w-4" />
+                            </Link>
+                            <Link
+                              to={{
+                                pathname: `/transaction/delete/${member.id}`,
+                              }}
+                              className="btn-ghost btn-square btn w-auto stroke-slate-500 px-2 hover:bg-white hover:stroke-secondary"
+                            >
+                              <Icon name="delete" className="h-4 w-4" />
+                            </Link>
+                          </td>
+                        )}
                       </tr>
                     ))}
                   </tbody>

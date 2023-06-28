@@ -31,15 +31,17 @@ function TransactionTable({
           <div className="border-b-solid mb-0 rounded-t-2xl border-b-0 border-b-transparent bg-white p-6 pb-0">
             <div className="mb-2 flex items-center justify-between align-middle">
               <h6 className="m-0 text-neutral">Transaction Table</h6>
-              <Link
-                className="btn-ghost btn-square btn stroke-slate-500 hover:bg-white hover:stroke-secondary"
-                to={{
-                  pathname: `/transaction/add`,
-                  search: params || "",
-                }}
-              >
-                <Icon name="add-box" className="h-6 w-6" />
-              </Link>
+              {isLoggedIn && (
+                <Link
+                  className="btn-ghost btn-square btn stroke-slate-500 hover:bg-white hover:stroke-secondary"
+                  to={{
+                    pathname: `/transaction/add`,
+                    search: params || "",
+                  }}
+                >
+                  <Icon name="add-box" className="h-6 w-6" />
+                </Link>
+              )}
             </div>
             <div className="block w-full overflow-x-auto">
               <div className="flex flex-row justify-start gap-4 py-4 lg:join lg:justify-center">

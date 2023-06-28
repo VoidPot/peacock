@@ -79,16 +79,19 @@ export default function TransactionPage() {
         <div className="modal-box bg-white">
           <Form method="post">
             <input name="id" defaultValue={id} className="hidden" />
-            <p className="font-semibold text-error">
+            <p className="font-semibold text-slate-600">
               Are you sure you wanna delete the transaction{" "}
               <span className="text-secondary">ID:{id}</span>?
             </p>
 
             <div className="col-span-full mt-4 flex justify-between gap-2 align-middle ">
-              <Link to={"/transaction"} className="btn-outline btn-sm btn px-6">
+              <Link
+                to={`/transaction?${searchParams.toString()}`}
+                className="btn-outline btn-sm btn px-6"
+              >
                 Cancel
               </Link>
-              <button type="submit" className="btn-primary btn-sm btn px-6">
+              <button type="submit" className="btn-error btn-sm btn px-6">
                 Delete
               </button>
             </div>

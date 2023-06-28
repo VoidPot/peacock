@@ -10,73 +10,83 @@ import {
   useSearchParams,
 } from "@remix-run/react";
 import { getValidatedFormData } from "remix-hook-form";
-import TransactionForm from "~/components/forms/transaction-form";
 import { prisma } from "~/db.server";
 import { responseData, validateLocalDate } from "~/helpers/utils";
-import { getUserSelect } from "~/models/user.server";
 import configContext from "~/config/configContext";
-import type { Transaction } from ".prisma/client";
+import type { User } from ".prisma/client";
 import { useEffect } from "react";
 import { getIsLoggedIn } from "~/session.server";
+import MemberForm from "~/components/forms/member-form";
+import { getGroupsLinks } from "~/models/group.server";
 
 const { schema } = configContext;
-type FormData = yup.InferType<typeof schema.transaction>;
+type FormData = yup.InferType<typeof schema.member>;
 
 export const loader = async ({ request }: LoaderArgs) => {
   const isLoggedIn = await getIsLoggedIn(request);
   if (!isLoggedIn) {
-    return redirect("/transaction");
+    return redirect("/member");
   }
-  const userSelect = await getUserSelect();
-  return json({
-    userSelect,
-  });
+  return json({});
 };
 
 export async function action({ request }: any) {
   try {
     const { errors, data } = await getValidatedFormData<FormData>(
       request,
-      yupResolver(schema.transaction) as any
+      yupResolver(schema.member) as any
     );
 
     if (errors) {
       return responseData({ errors, success: false, message: "default" });
     }
 
-    const transaction = {
-      mode: data.mode,
-      dot: validateLocalDate(data.dot),
-      fromId: Number(data.from),
-      toId: Number(data.to),
-      amount: Number(data.amount) || 0,
-      note: data.note || "",
-    } as unknown as Transaction;
+    const user = {
+      firstName: data.firstName || "",
+      lastName: data.lastName || "",
+      email: data.email || "",
+      mobileNumber: data.mobileNumber || "",
+      nickName: data.nickName || "",
+      avatar: "no_image_available.jpeg",
+      type: "MEMBER",
+      joinedAt: validateLocalDate(data.joinedAt),
+    } as unknown as any;
 
-    const created = await prisma.transaction.create({
+    const groupLinks = await getGroupsLinks();
+
+    const created = await prisma.user.create({
       data: {
-        ...transaction,
+        ...user,
+        links: {
+          createMany: {
+            data: groupLinks,
+            skipDuplicates: true,
+          },
+        },
+        passbook: {
+          create: {
+            entryOf: "USER",
+          },
+        },
       },
     });
     return responseData({
       success: true,
-      message: "transactionCreated",
+      message: "memberCreated",
       data: created,
     });
   } catch (err) {
     console.error(err);
     return responseData({
       success: false,
-      message: "transactionCreateError",
+      message: "memberCreateError",
     });
   }
 }
 
 export default function TransactionAddPage() {
-  const [searchParams] = useSearchParams({});
   const navigate = useNavigate();
 
-  const { userSelect } = useLoaderData<typeof loader>();
   const data = useActionData<typeof action>();
 
   useEffect(() => {
@@ -88,7 +98,7 @@ export default function TransactionAddPage() {
       }
     }
     if (data?.success) {
-      navigate(`/transaction?${searchParams.toString()}`);
+      navigate("/member");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
@@ -97,7 +107,7 @@ export default function TransactionAddPage() {
     <>
       <dialog id="my_modal_1" className="modal" open>
         <div className="modal-box bg-white">
-          <TransactionForm className="z-990 p-0" userSelect={userSelect} />
+          <MemberForm className="z-990 p-0" />
         </div>
       </dialog>
     </>

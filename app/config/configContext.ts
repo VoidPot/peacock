@@ -46,7 +46,10 @@ const message = {
   default: "Unexpected error!",
   invalidPassword: "The password is incorrect",
   required: "This field is required",
+  invalid: "The value is invalid",
   invalidDate: "This is an invalid date",
+  invalidSlug: "Must be small case a-z and numbers",
+  minTwo: "Must be at least 2 characters",
   number: "This is an invalid number",
   transactionCreated: "Transaction created successfully",
   transactionCreateError: "Error on creating the transaction",
@@ -54,6 +57,14 @@ const message = {
   transactionEditError: "Error on editing the transaction",
   transactionDeleted: "Transaction deleted successfully",
   transactionDeleteError: "Error on deleting the transaction",
+  memberCreated: "Member created successfully",
+  memberCreateError: "Error on creating the member",
+  memberEdited: "Member edited successfully",
+  memberEditError: "Error on editing the member",
+  vendorCreated: "Vendor created successfully",
+  vendorCreateError: "Error on creating the vendor",
+  vendorEdited: "Vendor edited successfully",
+  vendorEditError: "Error on editing the vendor",
 };
 
 const configContext = {
@@ -164,6 +175,30 @@ const configContext = {
           .min(1)
           .max(10000000)
           .required(message.required),
+      })
+      .required(),
+    member: yup
+      .object({
+        id: yup.number(),
+        firstName: yup.string().required(message.required),
+        lastName: yup.string().optional(),
+        email: yup.string().email().optional(),
+        mobileNumber: yup.string().required(message.required),
+        nickName: yup
+          .string()
+          .min(2, message.minTwo)
+          .required(message.required)
+          .matches(/^[a-z0-9-]+$/, message.invalidSlug),
+        joinedAt: yup
+          .string()
+          .required(message.required)
+          .matches(
+            /(((0[1-9]|[12]\d|3[01])\/(0[13578]|1[02])\/((19|[2-9]\d)\d{2}))|((0[1-9]|[12]\d|30)\/(0[13456789]|1[012])\/((19|[2-9]\d)\d{2}))|((0[1-9]|1\d|2[0-8])\/02\/((19|[2-9]\d)\d{2}))|(29\/02\/((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))/,
+            message.invalidDate
+          )
+          .test("joinedAt", message.invalidDate, function (value) {
+            return moment(value, "DD/MM/YYYY").isValid();
+          }),
       })
       .required(),
   },

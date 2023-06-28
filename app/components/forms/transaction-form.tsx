@@ -26,10 +26,12 @@ function TransactionForm({
   className,
   userSelect,
   transaction,
+  cancelPath,
 }: {
   className: string;
   userSelect: Awaited<ReturnType<typeof getUserSelect>>;
   transaction?: Awaited<ReturnType<typeof findOneTransaction>>;
+  cancelPath?: string;
 }) {
   const id = transaction?.id || 0;
   const usersOptions = userSelect.map((e) => [
@@ -188,7 +190,10 @@ function TransactionForm({
         />
 
         <div className="col-span-full mt-4 flex justify-between gap-2 align-middle">
-          <Link to={"/transaction"} className="btn-outline btn-sm btn px-6">
+          <Link
+            to={cancelPath ? cancelPath : "/transaction"}
+            className="btn-outline btn-sm btn px-6"
+          >
             Cancel
           </Link>
           <button type="submit" className="btn-primary btn-sm btn px-6">

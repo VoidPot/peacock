@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 import type { Group, Passbook } from "@prisma/client";
 import type { GroupSlugs } from "~/config/configContext";
 import configContext from "~/config/configContext";
@@ -45,4 +46,11 @@ export async function getGroups() {
 export async function getGroupById(id: Group["id"]) {
   const group = await prisma.group.findUnique({ where: { id } });
   return group ? commuteGroup(group) : group;
+}
+
+export async function getGroupsLinks() {
+  const group = await prisma.group.findMany({});
+  return group.map((each) => ({
+    groupId: each.id,
+  }));
 }

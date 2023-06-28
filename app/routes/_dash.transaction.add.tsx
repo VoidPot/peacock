@@ -97,7 +97,11 @@ export default function TransactionAddPage() {
     <>
       <dialog id="my_modal_1" className="modal" open>
         <div className="modal-box bg-white">
-          <TransactionForm className="z-990 p-0" userSelect={userSelect} />
+          <TransactionForm
+            className="z-990 p-0"
+            userSelect={userSelect}
+            cancelPath={`/transaction?${searchParams.toString()}`}
+          />
         </div>
       </dialog>
     </>
