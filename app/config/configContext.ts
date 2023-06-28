@@ -101,8 +101,7 @@ const configContext = {
       VENDOR_INVEST: "Vendor Investment",
       VENDOR_RETURN: "Vendor Returns",
       OTHER_EXPENDITURE: "Other Expenditures",
-      MEMBER_EXIT_WITHDRAW: "Member Exit",
-      MEMBER_EXIT_PROFIT_WITHDRAW: "Member Exit With Profit",
+      MEMBERS_WITHDRAW_PROFIT: "Member Profit Withdrawal",
     },
     sortBy: {
       createdAt: "Date of Added",

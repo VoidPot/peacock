@@ -35,25 +35,13 @@ export async function action({ request }: any) {
   try {
     const formData = await request.formData();
     const id = Number(formData.get("id") || 0);
-    // const amount = Number(formData.get("amount") || 0);
-    // const profit = Number(formData.get("profit") || 0);
-
-    // await prisma.transaction.create({
-    //   data: {
-    //     mode: "MEMBER_EXIT_WITHDRAW",
-    //     type: "WITHDRAWAL",
-    //     method: 'ACCOUNT',
-    //     dot: new Date(),
-    //     amount: amount,
-
-    //   }
-    // })
 
     await prisma.user.delete({
       where: {
         id,
       },
     });
+
     return responseData({
       success: true,
       message: "memberDeleted",

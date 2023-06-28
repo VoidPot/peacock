@@ -264,31 +264,7 @@ export const passbookConfig: PassbookConfig = {
         },
       },
     },
-    MEMBER_EXIT_WITHDRAW: {
-      FROM: {
-        SUB: {
-          holdingAmount: "amount",
-          accountBalance: "amount",
-        },
-      },
-      TO: {
-        SUB: {
-          withdraw: "amount",
-          totalWithdraw: "amount",
-          accountBalance: "amount",
-          holdingAmount: "amount",
-        },
-      },
-      CLUB: {
-        SUB: {
-          withdraw: "amount",
-          totalWithdraw: "amount",
-          accountBalance: "amount",
-          holdingAmount: "amount",
-        },
-      },
-    },
-    MEMBER_EXIT_PROFIT_WITHDRAW: {
+    MEMBERS_WITHDRAW_PROFIT: {
       FROM: {
         SUB: {
           holdingAmount: "amount",

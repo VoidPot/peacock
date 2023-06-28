@@ -46,7 +46,7 @@ export const passbookEntry = async (
     profit: 0,
     one: 1,
   };
-  console.log({ values });
+  // console.log({ values });
 
   if (["VENDOR_RETURN", "VENDOR_PERIODIC_RETURN"].includes(transaction.mode)) {
     const from = passbooks.FROM;

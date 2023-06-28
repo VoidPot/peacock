@@ -74,8 +74,7 @@ function TransactionForm({
         "MEMBERS_WITHDRAW",
         "NEW_MEMBER_PAST_TALLY",
         "INTER_CASH_TRANSFER",
-        "MEMBER_EXIT_WITHDRAW",
-        "MEMBER_EXIT_PROFIT_WITHDRAW",
+        "MEMBERS_WITHDRAW_PROFIT",
       ].includes(selectedMode)
     ) {
       setFromToOptions([memberOptions, memberOptions]);
@@ -93,11 +92,7 @@ function TransactionForm({
       setFromToOptions([usersOptions, usersOptions]);
     }
 
-    if (
-      ["MEMBER_EXIT_WITHDRAW", "MEMBER_EXIT_PROFIT_WITHDRAW"].includes(
-        selectedMode
-      )
-    ) {
+    if (["MEMBERS_WITHDRAW_PROFIT"].includes(selectedMode)) {
       setFromToNote([key.sender, key.exit]);
     } else {
       setFromToNote([key.sender, key.receiver]);

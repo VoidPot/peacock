@@ -24,7 +24,6 @@ function UserForm({
   user?: Awaited<ReturnType<typeof getUserById>>;
   type?: User["type"];
 }) {
-  console.log({ type });
   const id = user?.id || 0;
 
   const {
