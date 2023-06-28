@@ -62,6 +62,24 @@ export async function action({ request }: any) {
       return responseData({ errors, success: false, message: "default" });
     }
 
+    let type = "DEPOSIT";
+
+    if (data.mode === "INTER_CASH_TRANSFER") {
+      type = "TRANSFER";
+    }
+
+    if (
+      [
+        "MEMBERS_WITHDRAW",
+        "MEMBERS_WITHDRAW_PROFIT",
+        "VENDOR_PERIODIC_INVEST",
+        "VENDOR_INVEST",
+        "OTHER_EXPENDITURE",
+      ].includes(data.mode)
+    ) {
+      type = "WITHDRAWAL";
+    }
+
     const id = Number(data?.id || 0);
 
     const transaction = {
@@ -70,7 +88,9 @@ export async function action({ request }: any) {
       fromId: Number(data.from),
       toId: Number(data.to),
       amount: Number(data.amount) || 0,
+      method: data.method || "ACCOUNT",
       note: data.note || "",
+      type,
     } as unknown as Transaction;
 
     await prisma.transaction.update({

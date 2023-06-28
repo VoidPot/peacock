@@ -169,7 +169,7 @@ function TransactionForm({
 
         <TextInput
           title="Amount"
-          className="col-span-1 lg:col-span-2"
+          className="col-span-1 lg:col-span-3"
           placeholder="1000"
           register={register}
           name="amount"
@@ -177,9 +177,20 @@ function TransactionForm({
           errors={errors}
         />
 
+        <SelectInput
+          title="Method"
+          className="col-span-1 lg:col-span-3"
+          options={Object.entries(transactionConfig.method).sort((a, b) =>
+            a[1] > b[1] ? 1 : -1
+          )}
+          register={register}
+          name="method"
+          errors={errors}
+        />
+
         <TextInput
           title="Note"
-          className="col-span-1 lg:col-span-4"
+          className="col-span-1 lg:col-span-6"
           placeholder="Some message..."
           register={register}
           name="note"

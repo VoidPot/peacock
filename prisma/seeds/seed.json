@@ -10791,7 +10791,7 @@
         "transactionOn": "2022-04-14T03:20:12.000Z",
         "amount": 22350,
         "notes": "",
-        "deleted": false,
+        "deleted": true,
         "_id": "645c5f1a0d74eb74bbd5d83f",
         "transactionType": "debit",
         "method": "invest",

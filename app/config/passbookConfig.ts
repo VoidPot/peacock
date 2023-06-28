@@ -104,30 +104,6 @@ export const passbookConfig: PassbookConfig = {
         },
       },
     },
-    MEMBERS_WITHDRAW: {
-      FROM: {
-        SUB: {
-          holdingAmount: "amount",
-          accountBalance: "amount",
-        },
-      },
-      TO: {
-        SUB: {
-          withdraw: "amount",
-          totalWithdraw: "amount",
-          accountBalance: "amount",
-          holdingAmount: "amount",
-        },
-      },
-      CLUB: {
-        SUB: {
-          withdraw: "amount",
-          totalWithdraw: "amount",
-          accountBalance: "amount",
-          holdingAmount: "amount",
-        },
-      },
-    },
     VENDOR_PERIODIC_INVEST: {
       FROM: {
         SUB: {
@@ -264,10 +240,40 @@ export const passbookConfig: PassbookConfig = {
         },
       },
     },
+    MEMBERS_WITHDRAW: {
+      FROM: {
+        ADD: {
+          withdraw: "amount",
+          totalWithdraw: "amount",
+        },
+        SUB: {
+          accountBalance: "amount",
+        },
+      },
+      TO: {
+        SUB: {
+          withdraw: "amount",
+          totalWithdraw: "amount",
+          accountBalance: "amount",
+          holdingAmount: "amount",
+        },
+      },
+      CLUB: {
+        SUB: {
+          withdraw: "amount",
+          totalWithdraw: "amount",
+          accountBalance: "amount",
+          holdingAmount: "amount",
+        },
+      },
+    },
     MEMBERS_WITHDRAW_PROFIT: {
       FROM: {
+        ADD: {
+          profitWithdraw: "amount",
+          totalWithdraw: "amount",
+        },
         SUB: {
-          holdingAmount: "amount",
           accountBalance: "amount",
         },
       },

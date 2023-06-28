@@ -22,10 +22,10 @@ export default function IndexPage() {
 
   const statsData: StatProps[] = [
     {
-      hed: "Members - Club Age",
+      hed: "Members / Club Age",
       dek: `${getValidNumber(
         club.membersCount
-      )} - ${configContext.club.clubAge()}`,
+      )} /  ${configContext.club.clubAge()}`,
       iconName: "home",
     },
     {

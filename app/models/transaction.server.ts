@@ -80,7 +80,12 @@ export const findTransaction = async ({ options }: TransactionProps) => {
     let secondary = { ...to };
 
     if (
-      ["VENDOR_PERIODIC_INVEST", "VENDOR_INVEST"].includes(transaction.mode)
+      [
+        "VENDOR_PERIODIC_INVEST",
+        "VENDOR_INVEST",
+        "MEMBERS_WITHDRAW",
+        "MEMBERS_WITHDRAW_PROFIT",
+      ].includes(transaction.mode)
     ) {
       primary = { ...to };
       secondary = { ...from };

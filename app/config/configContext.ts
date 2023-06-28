@@ -171,6 +171,7 @@ const configContext = {
             return moment(value, "DD/MM/YYYY").isValid();
           }),
         from: yup.number().required(message.required),
+        method: yup.string().required(message.required),
         to: yup.number().required(message.required),
         amount: yup
           .number()
