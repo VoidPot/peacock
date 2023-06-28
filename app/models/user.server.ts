@@ -35,7 +35,7 @@ export async function getMembersPassbook() {
         termBalance$: formatMoney(termBalance),
         totalBalance,
         totalBalance$: formatMoney(totalBalance),
-        perMemberProfit: actualMemberProfit,
+        perMemberProfit: Number(actualMemberProfit),
         perMemberProfit$: formatMoney(actualMemberProfit),
         netAmount,
         netAmount$: formatMoney(netAmount),

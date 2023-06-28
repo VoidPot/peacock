@@ -74,6 +74,5 @@ export async function getSessionData(
   key: string
 ): Promise<any> {
   const session = await getSession(request);
-  console.log({ session, key });
   return session.get(key);
 }

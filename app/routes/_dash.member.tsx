@@ -144,6 +144,8 @@ export default function MemberPage() {
                             "whitespace-nowrap bg-transparent p-2 text-center align-middle text-sm leading-normal shadow-transparent",
                             {
                               "border-b": index !== items.length - 1,
+                              "text-error": member.perMemberProfit > 0,
+                              "text-info": member.perMemberProfit <= 0,
                             }
                           )}
                         >
