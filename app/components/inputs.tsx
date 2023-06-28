@@ -7,6 +7,7 @@ interface InputProps {
   errors?: any;
   register: any;
   required?: boolean;
+  disabled?: boolean;
 }
 
 export interface TextInputProps extends InputProps {
@@ -23,6 +24,7 @@ export function TextInput({
   errors = {},
   register,
   required = true,
+  disabled = false,
 }: TextInputProps) {
   return (
     <div
@@ -38,6 +40,7 @@ export function TextInput({
       )}
       <input
         type={type}
+        disabled={disabled}
         placeholder={placeholder}
         className={classNames("input-bordered input w-full", {
           "input-error": Boolean(errors[name]?.message),

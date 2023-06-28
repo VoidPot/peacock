@@ -8,35 +8,40 @@ import { Form } from "@remix-run/react";
 
 import { TextInput } from "../inputs";
 import moment from "moment";
-import type { getUserById, getUserSelect } from "~/models/user.server";
+import type { getUserById } from "~/models/user.server";
+import { User } from "@prisma/client";
 
 const { schema } = configContext;
 
-type FormData = yup.InferType<typeof schema.member>;
+type FormData = yup.InferType<typeof schema.user>;
 
-function MemberForm({
+function UserForm({
   className,
-  member,
+  user,
+  type = "MEMBER",
 }: {
   className: string;
-  member?: Awaited<ReturnType<typeof getUserById>>;
+  user?: Awaited<ReturnType<typeof getUserById>>;
+  type?: User["type"];
 }) {
-  const id = member?.id || 0;
+  console.log({ type });
+  const id = user?.id || 0;
 
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useRemixForm<FormData | any>({
-    resolver: yupResolver(schema.member),
+    resolver: yupResolver(schema.user),
     mode: "onSubmit",
     defaultValues:
-      member && Object.values(member).length
-        ? member
+      user && Object.values(user).length
+        ? user
         : {
             joinedAt: moment().format("DD/MM/YYYY"),
           },
   });
+  const isMember = Boolean(type === "MEMBER");
 
   return (
     <div
@@ -50,7 +55,7 @@ function MemberForm({
       <div className="bg-white pb-0">
         <div className="mb-2 flex items-center justify-between align-middle">
           <h6 className="text-neutral">
-            {id ? "Edit" : "Add"} Member{" "}
+            {id ? "Edit" : "Add"} {isMember ? "Member" : "Vendor"}{" "}
             <span className="text-secondary">{id ? ` - ID:${id}` : ""}</span>
           </h6>
         </div>
@@ -60,21 +65,21 @@ function MemberForm({
         onSubmit={handleSubmit}
         className="grid grid-cols-1 items-center justify-center gap-4 px-0 pb-2 pt-0 align-middle lg:grid-cols-6"
       >
-        <input name="id" className="hidden" defaultValue={member?.id || 0} />
+        <input name="id" className="hidden" defaultValue={user?.id || 0} />
 
         <TextInput
-          title="First Name"
+          title={isMember ? "First Name" : "Title"}
           className="col-span-1 lg:col-span-3"
-          placeholder="Enter first name"
+          placeholder={isMember ? "Enter first name" : "Enter the title"}
           register={register}
           name="firstName"
           errors={errors}
         />
 
         <TextInput
-          title="Last Name"
+          title={isMember ? "Last Name" : "Tag"}
           className="col-span-1 lg:col-span-3"
-          placeholder="Enter last name"
+          placeholder={isMember ? "Enter last name" : "Enter tag name"}
           register={register}
           name="lastName"
           errors={errors}
@@ -117,7 +122,10 @@ function MemberForm({
         />
 
         <div className="col-span-full mt-4 flex justify-between gap-2 align-middle">
-          <Link to={"/member"} className="btn-outline btn-sm btn px-6">
+          <Link
+            to={isMember ? "/member" : "/vendor"}
+            className="btn-outline btn-sm btn px-6"
+          >
             Cancel
           </Link>
           <button type="submit" className="btn-primary btn-sm btn px-6">
@@ -129,4 +137,4 @@ function MemberForm({
   );
 }
 
-export default MemberForm;
+export default UserForm;

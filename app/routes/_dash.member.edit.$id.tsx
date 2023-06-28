@@ -3,25 +3,44 @@ import type * as yup from "yup";
 import type { LoaderArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { toast } from "react-toastify";
-import { useActionData, useNavigate } from "@remix-run/react";
+import { useActionData, useLoaderData, useNavigate } from "@remix-run/react";
 import { getValidatedFormData } from "remix-hook-form";
 import { prisma } from "~/db.server";
-import { responseData, validateLocalDate } from "~/helpers/utils";
+import {
+  formatLocalDate,
+  responseData,
+  validateLocalDate,
+} from "~/helpers/utils";
 import configContext from "~/config/configContext";
 import { useEffect } from "react";
 import { getIsLoggedIn } from "~/session.server";
 import UserForm from "~/components/forms/user-form";
-import { getGroupsLinks } from "~/models/group.server";
+import { getUserFindFirst } from "~/models/user.server";
 
 const { schema } = configContext;
 type FormData = yup.InferType<typeof schema.user>;
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request, params }: LoaderArgs) => {
   const isLoggedIn = await getIsLoggedIn(request);
   if (!isLoggedIn) {
     return redirect("/member");
   }
-  return json({});
+  const user = await getUserFindFirst(Number(params.id || 0), "MEMBER");
+  if (!user) {
+    return redirect("/member");
+  }
+
+  return json({
+    user: {
+      id: user.id,
+      firstName: user.firstName || "",
+      lastName: user.lastName || "",
+      email: user.email || "",
+      mobileNumber: user.mobileNumber || "",
+      nickName: user.nickName || "",
+      joinedAt: formatLocalDate(user.joinedAt),
+    },
+  });
 };
 
 export async function action({ request }: any) {
@@ -35,39 +54,28 @@ export async function action({ request }: any) {
       return responseData({ errors, success: false, message: "default" });
     }
 
+    const id = Number(data?.id || 0);
     const user = {
       firstName: data.firstName || "",
       lastName: data.lastName || "",
       email: data.email || "",
       mobileNumber: data.mobileNumber || "",
       nickName: data.nickName || "",
-      avatar: "no_image_available.jpeg",
-      type: "MEMBER",
       joinedAt: validateLocalDate(data.joinedAt),
     } as unknown as any;
 
-    const groupLinks = await getGroupsLinks();
-
-    const created = await prisma.user.create({
+    await prisma.user.update({
       data: {
         ...user,
-        links: {
-          createMany: {
-            data: groupLinks,
-            skipDuplicates: true,
-          },
-        },
-        passbook: {
-          create: {
-            entryOf: "USER",
-          },
-        },
+      },
+      where: {
+        id,
       },
     });
     return responseData({
       success: true,
       message: "memberCreated",
-      data: created,
+      data: { id },
     });
   } catch (err) {
     console.error(err);
@@ -78,9 +86,10 @@ export async function action({ request }: any) {
   }
 }
 
-export default function MemberAddPage() {
+export default function TransactionAddPage() {
   const navigate = useNavigate();
 
+  const { user } = useLoaderData<typeof loader>();
   const data = useActionData<typeof action>();
 
   useEffect(() => {
@@ -101,7 +110,7 @@ export default function MemberAddPage() {
     <>
       <dialog id="my_modal_1" className="modal" open>
         <div className="modal-box bg-white">
-          <UserForm className="z-990 p-0" />
+          <UserForm className="z-990 p-0" user={user as any} />
         </div>
       </dialog>
     </>

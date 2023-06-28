@@ -61,10 +61,14 @@ const message = {
   memberCreateError: "Error on creating the member",
   memberEdited: "Member edited successfully",
   memberEditError: "Error on editing the member",
+  memberDeleted: "Member deleted successfully",
+  memberDeleteError: "Error on deleting the member",
   vendorCreated: "Vendor created successfully",
   vendorCreateError: "Error on creating the vendor",
   vendorEdited: "Vendor edited successfully",
   vendorEditError: "Error on editing the vendor",
+  vendorDeleted: "Member deleted successfully",
+  vendorDeleteError: "Error on deleting the member",
 };
 
 const configContext = {
@@ -177,7 +181,7 @@ const configContext = {
           .required(message.required),
       })
       .required(),
-    member: yup
+    user: yup
       .object({
         id: yup.number(),
         firstName: yup.string().required(message.required),
@@ -188,7 +192,7 @@ const configContext = {
           .string()
           .min(2, message.minTwo)
           .required(message.required)
-          .matches(/^[a-z0-9-]+$/, message.invalidSlug),
+          .matches(/^[a-z0-9_-]+$/, message.invalidSlug),
         joinedAt: yup
           .string()
           .required(message.required)

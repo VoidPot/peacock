@@ -28,6 +28,7 @@ export async function getMembersPassbook() {
       return {
         ...member,
         ...passbook,
+        id: member.id,
         joinedAt$: getMonthYear(member.joinedAt),
         balance,
         balance$: formatMoney(balance),
@@ -58,6 +59,7 @@ export async function getVendorsWithSummary() {
       return {
         ...vendor,
         ...passbook,
+        id: vendor.id,
         joinedAt$: getMonthYear(vendor.joinedAt),
       };
     })
@@ -70,7 +72,6 @@ export async function getMembers() {
 
 export async function getUserSelect() {
   const users = prisma.user.findMany({
-    where: { deleted: false },
     select: {
       id: true,
       firstName: true,
@@ -97,5 +98,18 @@ export async function getMembersCount() {
 }
 
 export async function getUserById(id: User["id"]) {
-  return prisma.user.findUnique({ where: { id } });
+  return prisma.user.findFirst({ where: { id } });
+}
+
+export async function getUserFindFirst(id: User["id"], type: User["type"]) {
+  return prisma.user.findFirst({ where: { id, type } });
+}
+
+export async function findUserWithPassbook(id: User["id"], type: User["type"]) {
+  return prisma.user.findFirst({
+    where: { id, type },
+    include: {
+      passbook: true,
+    },
+  });
 }

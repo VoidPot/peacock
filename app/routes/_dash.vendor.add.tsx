@@ -19,7 +19,7 @@ type FormData = yup.InferType<typeof schema.user>;
 export const loader = async ({ request }: LoaderArgs) => {
   const isLoggedIn = await getIsLoggedIn(request);
   if (!isLoggedIn) {
-    return redirect("/member");
+    return redirect("/vendor");
   }
   return json({});
 };
@@ -42,7 +42,7 @@ export async function action({ request }: any) {
       mobileNumber: data.mobileNumber || "",
       nickName: data.nickName || "",
       avatar: "no_image_available.jpeg",
-      type: "MEMBER",
+      type: "VENDOR",
       joinedAt: validateLocalDate(data.joinedAt),
     } as unknown as any;
 
@@ -66,19 +66,19 @@ export async function action({ request }: any) {
     });
     return responseData({
       success: true,
-      message: "memberCreated",
+      message: "vendorCreated",
       data: created,
     });
   } catch (err) {
     console.error(err);
     return responseData({
       success: false,
-      message: "memberCreateError",
+      message: "vendorCreateError",
     });
   }
 }
 
-export default function MemberAddPage() {
+export default function VendorAddPage() {
   const navigate = useNavigate();
 
   const data = useActionData<typeof action>();
@@ -92,7 +92,7 @@ export default function MemberAddPage() {
       }
     }
     if (data?.success) {
-      navigate("/member");
+      navigate("/vendor");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
@@ -101,7 +101,7 @@ export default function MemberAddPage() {
     <>
       <dialog id="my_modal_1" className="modal" open>
         <div className="modal-box bg-white">
-          <UserForm className="z-990 p-0" />
+          <UserForm className="z-990 p-0" type="VENDOR" />
         </div>
       </dialog>
     </>
