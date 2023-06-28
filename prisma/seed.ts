@@ -66,6 +66,7 @@ const transactionSeedMap = (users: any[]) => {
       }
 
       return {
+        createdAt: new Date(each.createdAt),
         type,
         method: "ACCOUNT",
         mode,
