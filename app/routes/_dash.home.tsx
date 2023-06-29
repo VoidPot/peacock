@@ -30,19 +30,19 @@ export default function IndexPage() {
     },
     {
       hed: "Members Deposit",
-      dek: club.termDeposit$,
+      dek: club.accountBalance$,
       iconName: "archive",
       hedColor: "success",
     },
     {
       hed: "Members Balance",
-      dek: club.termBalance$,
+      dek: club.totalBalance$,
       iconName: "transaction",
       hedColor: "error",
     },
     {
       hed: "Net Members Amount",
-      dek: club.totalTermAmount$,
+      dek: club.netMemberAmount$,
       iconName: "trans",
       hedColor: "info",
     },
@@ -66,7 +66,7 @@ export default function IndexPage() {
     },
     {
       hed: "Club Net Value",
-      dek: club.accountBalance$,
+      dek: club.netAmount$,
       iconName: "dash",
       hedColor: "secondary",
     },

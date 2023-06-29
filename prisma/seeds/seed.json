@@ -400,20 +400,6 @@
       {
         "joined": "2020-08-31T18:30:00.000Z",
         "role": "vendor",
-        "_id": "62f67cfdfb784f767de79ffe",
-        "value": "others",
-        "name": "Other Entries",
-        "description": "Add other entries here with notes",
-        "phone": "",
-        "image": "no_image_available.jpeg",
-        "createdAt": "2022-08-12T16:17:01.643Z",
-        "updatedAt": "2022-08-12T16:17:01.643Z",
-        "__v": 0,
-        "id": "62f67cfdfb784f767de79ffe"
-      },
-      {
-        "joined": "2020-08-31T18:30:00.000Z",
-        "role": "vendor",
         "_id": "62f67cfdfb784f767de7a000",
         "value": "bank_interest",
         "name": "Bank Interest",
