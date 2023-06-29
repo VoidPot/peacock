@@ -6,21 +6,21 @@ import { prisma } from "~/db.server";
 
 const getUserPassbooks = async (from: number, to: number) => {
   return await Promise.all([
-    await prisma.passbook.findFirst({
+    prisma.passbook.findFirst({
       where: {
         user: {
           id: from,
         },
       },
     }),
-    await prisma.passbook.findFirst({
+    prisma.passbook.findFirst({
       where: {
         user: {
           id: to,
         },
       },
     }),
-    await prisma.passbook.findFirst({
+    prisma.passbook.findFirst({
       where: {
         entryOf: "CLUB",
       },
@@ -32,7 +32,7 @@ const getUserPassbooks = async (from: number, to: number) => {
   }));
 };
 
-export const passbookEntry = async (
+const passbookEntry = async (
   transaction: Transaction,
   shouldReverse: boolean = false
 ) => {

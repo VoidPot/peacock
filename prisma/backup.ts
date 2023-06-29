@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 
 async function backup() {
   return await Promise.all([
-    await prisma.user.findMany({
+    prisma.user.findMany({
       select: {
         id: true,
         mobileNumber: true,
@@ -21,7 +21,7 @@ async function backup() {
         deletedAt: true,
       },
     }),
-    await prisma.group.findMany({
+    prisma.group.findMany({
       select: {
         id: true,
         name: true,
@@ -34,7 +34,7 @@ async function backup() {
         deletedAt: true,
       },
     }),
-    await prisma.transaction.findMany({
+    prisma.transaction.findMany({
       select: {
         id: true,
         type: true,
@@ -60,7 +60,7 @@ async function backup() {
         deletedAt: true,
       },
     }),
-    await prisma.vendorUnlink.findMany({
+    prisma.vendorUnlink.findMany({
       select: {
         id: true,
         vendor: {
