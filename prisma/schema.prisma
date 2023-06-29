@@ -8,25 +8,25 @@ generator client {
 }
 
 model User {
-  id              Int           @id @default(autoincrement())
-  mobileNumber    String        @unique
-  email           String?
-  firstName       String?
-  lastName        String?
-  nickName        String        @unique
-  avatar          String?
-  type            USER_TYPE     @default(MEMBER)
-  joinedAt        DateTime      @default(now())
-  password        Extra?
-  links           Link[]
-  transactionFrom Transaction[] @relation("from")
-  transactionTo   Transaction[] @relation("to")
-  passbook        Passbook      @relation(fields: [passbookId], references: [id])
-  passbookId      Int           @unique
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
-  deleted         Boolean       @default(false)
-  deletedAt       DateTime?
+  id               Int            @id @default(autoincrement())
+  mobileNumber     String         @unique
+  email            String?
+  firstName        String?
+  lastName         String?
+  nickName         String         @unique
+  avatar           String?
+  type             USER_TYPE      @default(MEMBER)
+  joinedAt         DateTime       @default(now())
+  transactionFrom  Transaction[]  @relation("from")
+  transactionTo    Transaction[]  @relation("to")
+  passbook         Passbook       @relation(fields: [passbookId], references: [id])
+  passbookId       Int            @unique
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  deleted          Boolean        @default(false)
+  deletedAt        DateTime?
+  unlinkedOfVendor VendorUnlink[] @relation("vendor")
+  unlinkedOfMember VendorUnlink[] @relation("member")
 }
 
 enum USER_TYPE {
@@ -34,18 +34,18 @@ enum USER_TYPE {
   VENDOR
 }
 
-model Extra {
-  password       String?
-  passcode       String?
-  mobileVerified Boolean   @default(false)
-  isPasswordSet  Boolean   @default(false)
-  isPasscodeSet  Boolean   @default(false)
-  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId         Int       @unique
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
-  deleted        Boolean   @default(false)
-  deletedAt      DateTime?
+model VendorUnlink {
+  id        Int       @id @default(autoincrement())
+  vendor    User      @relation(name: "vendor", fields: [vendorId], references: [id])
+  vendorId  Int
+  member    User      @relation(name: "member", fields: [memberId], references: [id])
+  memberId  Int
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deleted   Boolean   @default(false)
+  deletedAt DateTime?
+
+  @@unique([vendorId, memberId])
 }
 
 model Group {
@@ -56,7 +56,6 @@ model Group {
   period    PERIOD    @default(MONTH)
   startAt   DateTime  @default(now())
   endAt     DateTime?
-  links     Link[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deleted   Boolean   @default(false)
@@ -68,20 +67,6 @@ enum PERIOD {
   WEEK
   MONTH
   YEAR
-}
-
-model Link {
-  id        Int       @id @default(autoincrement())
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    Int
-  group     Group     @relation(fields: [groupId], references: [id], onDelete: Cascade)
-  groupId   Int
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deleted   Boolean   @default(false)
-  deletedAt DateTime?
-
-  @@unique([userId, groupId])
 }
 
 model Transaction {

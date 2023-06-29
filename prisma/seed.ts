@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 prisma.$use(usePassbookMiddleware);
 async function seed() {
   await prisma.transaction.deleteMany();
-  await prisma.link.deleteMany();
+  await prisma.vendorUnlink.deleteMany();
   await prisma.group.deleteMany();
   await prisma.user.deleteMany();
   await prisma.passbook.deleteMany();
@@ -25,6 +25,24 @@ async function seed() {
         passbook: {
           create: {
             entryOf: "USER",
+          },
+        },
+      },
+    });
+  }
+
+  for (const { id, vendor, member, ...vendorUnlink } of seedData.vendorUnlink) {
+    await prisma.vendorUnlink.create({
+      data: {
+        ...(vendorUnlink as any),
+        vendor: {
+          connect: {
+            nickName: vendor.nickName,
+          },
+        },
+        member: {
+          connect: {
+            nickName: member.nickName,
           },
         },
       },
