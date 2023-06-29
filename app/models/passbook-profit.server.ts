@@ -79,8 +79,6 @@ export const profitCalculator = async () => {
     data,
   }));
 
-  console.log(JSON.stringify({ array }));
-
   for (let item of array) {
     await prisma.passbook.update(item);
   }
