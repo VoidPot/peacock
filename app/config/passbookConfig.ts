@@ -7,10 +7,9 @@ export type PassbookConfig = {
         [key in "ADD" | "SUB"]?: {
           [key in Passbook_Settings_Keys]?:
             | "amount"
-            | "month"
             | "balance"
             | "profit"
-            | "one";
+            | "onePlus";
         };
       };
     };
@@ -114,7 +113,7 @@ export const passbookConfig: PassbookConfig = {
         ADD: {
           termInvest: "amount",
           totalInvest: "amount",
-          investMonths: "one",
+          investMonths: "onePlus",
         },
         SUB: {
           holdingAmount: "amount",
@@ -125,7 +124,7 @@ export const passbookConfig: PassbookConfig = {
         ADD: {
           termInvest: "amount",
           totalInvest: "amount",
-          investMonths: "one",
+          investMonths: "onePlus",
         },
         SUB: {
           holdingAmount: "amount",
@@ -169,7 +168,7 @@ export const passbookConfig: PassbookConfig = {
           accountBalance: "amount",
           profit: "profit",
           totalProfit: "profit",
-          returnsMonths: "one",
+          returnsMonths: "onePlus",
         },
       },
       TO: {
@@ -184,7 +183,7 @@ export const passbookConfig: PassbookConfig = {
           holdingAmount: "amount",
           profit: "profit",
           totalProfit: "profit",
-          returnsMonths: "one",
+          returnsMonths: "onePlus",
         },
       },
     },

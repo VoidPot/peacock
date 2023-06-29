@@ -42,24 +42,21 @@ export const passbookEntry = async (
 
   const values: any = {
     amount: transaction.amount,
-    month: 0,
     profit: 0,
-    one: 1,
+    onePlus: 1,
   };
-  // console.log({ values });
 
   if (["VENDOR_RETURN", "VENDOR_PERIODIC_RETURN"].includes(transaction.mode)) {
     const from = passbooks.FROM;
     if (from && from.calcProfit) {
-      values.profit =
-        from.totalReturns + transaction.amount - from.profit - from.totalInvest;
+      values.profit = from.totalReturns + transaction.amount - from.totalInvest;
 
-      // console.log({ values });
-      // if (shouldReverse) {
-      //   values.profit = values.profit - (values.profit + values.profit);
-
-      //   console.log({ shouldReverse, values });
-      // }
+      if (shouldReverse) {
+        values.profit =
+          transaction.amount -
+          from.totalInvest -
+          (from.totalReturns - transaction.amount);
+      }
     }
   }
 
