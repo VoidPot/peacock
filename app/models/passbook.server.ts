@@ -141,7 +141,7 @@ export const getClubGroupPassbook = async () => {
       };
     })
     .then(({ club, groups }) => {
-      let clubTermDeposit = Number(club.termDeposit);
+      let clubTermDeposit = Number(club.accountBalance);
       return {
         club,
         groups: groups.map((group) => {
