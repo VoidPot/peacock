@@ -5,12 +5,64 @@ const prisma = new PrismaClient();
 
 async function backup() {
   return await Promise.all([
-    await prisma.user.findMany({}),
-    await prisma.group.findMany({}),
-    await prisma.transaction.findMany({}),
+    await prisma.user.findMany({
+      select: {
+        id: true,
+        mobileNumber: true,
+        email: true,
+        firstName: true,
+        lastName: true,
+        nickName: true,
+        avatar: true,
+        type: true,
+        joinedAt: true,
+        createdAt: true,
+        deleted: true,
+        deletedAt: true,
+      },
+    }),
+    await prisma.group.findMany({
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        amount: true,
+        period: true,
+        startAt: true,
+        createdAt: true,
+        deleted: true,
+        deletedAt: true,
+      },
+    }),
+    await prisma.transaction.findMany({
+      select: {
+        id: true,
+        type: true,
+        method: true,
+        mode: true,
+        dot: true,
+        amount: true,
+        note: true,
+        from: {
+          select: {
+            id: true,
+            nickName: true,
+          },
+        },
+        to: {
+          select: {
+            id: true,
+            nickName: true,
+          },
+        },
+        createdAt: true,
+        deleted: true,
+        deletedAt: true,
+      },
+    }),
   ])
     .then(([user, group, transaction]) => ({ user, group, transaction }))
-    .then((data) => fs.writeJson("./prisma/seeds.json", data))
+    .then((data) => fs.writeJson("./public/seed.json", data))
     .catch((error) => {
       console.error(error);
       process.exit(1);
