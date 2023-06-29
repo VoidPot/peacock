@@ -3,6 +3,7 @@ import { type Passbook, type Transaction } from "@prisma/client";
 import type { Passbook_Settings_Keys } from "~/config/passbookConfig";
 import configContext from "~/config/configContext";
 import { prisma } from "~/db.server";
+import { profitCalculator } from "./passbook-profit.server";
 
 const getUserPassbooks = async (from: number, to: number) => {
   return await Promise.all([
@@ -142,6 +143,15 @@ export const usePassbookMiddleware: Prisma.Middleware = async (param, next) => {
       } else if (transaction && action === "delete") {
         await passbookEntry(transaction, true);
       }
+    }
+
+    if (
+      (response &&
+        ["VENDOR_RETURN", "VENDOR_PERIODIC_RETURN"].includes(response?.mode)) ||
+      (transaction &&
+        ["VENDOR_RETURN", "VENDOR_PERIODIC_RETURN"].includes(transaction?.mode))
+    ) {
+      await profitCalculator();
     }
   }
 
