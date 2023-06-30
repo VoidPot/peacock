@@ -27,47 +27,62 @@ export const profitCalculator = async () => {
       },
     }),
   ]);
+  let profitWithdraw = club?.profitWithdraw || 0;
+
   const data = new Map();
+  const clubId = club?.id || undefined;
+
+  if (club && !data.has(clubId)) {
+    data.set(clubId, { tallyProfit: 0, totalProfit: 0 });
+  }
+
+  for (let member of members) {
+    const memberId = member.passbook.id;
+    if (!data.has(memberId)) {
+      data.set(memberId, { tallyBalance: 0, profit: 0 });
+    }
+  }
+
   for (let vendor of vendors) {
     const unlinkMemberIds = vendor.unlinkedOfVendor.map((e) => e.memberId);
     const unlinkMembers = members.filter((e) => unlinkMemberIds.includes(e.id));
     const linkMembers = members.filter((e) => !unlinkMemberIds.includes(e.id));
-    const linkedPersonShare = vendor.passbook.profit / linkMembers.length;
-    const tallyProfit = unlinkMembers.length * linkedPersonShare;
-    const totalProfit = vendor.passbook.profit + tallyProfit;
 
-    const vendorId = vendor.passbook.id;
-    const clubId = club?.id || undefined;
+    const vendorProfit = vendor.passbook.profit;
 
-    if (!data.has(vendorId)) {
-      data.set(vendorId, { tallyProfit: 0, totalProfit: 0 });
-    }
-    if (club && !data.has(clubId)) {
-      data.set(clubId, { tallyProfit: 0, totalProfit: 0 });
-    }
+    const shareSubProfit = vendorProfit - profitWithdraw;
+    profitWithdraw = 0;
 
-    const vendorMap = data.get(vendorId);
-    const clubMap = data.get(clubId);
+    const perPersonProfit = shareSubProfit / linkMembers.length;
 
-    data.set(vendorId, {
-      tallyProfit: vendorMap.tallyProfit + tallyProfit,
-      totalProfit: vendorMap.totalProfit + totalProfit,
-    });
+    // const tallyProfit = perPersonProfit * unlinkMembers.length;
+    // const totalProfit = vendor.passbook.profit + tallyProfit;
 
-    data.set(clubId, {
-      tallyProfit: clubMap.tallyProfit + tallyProfit,
-      totalProfit: clubMap.totalProfit + totalProfit,
-    });
+    // const clubMap = data.get(clubId);
+
+    // data.set(clubId, {
+    //   ...clubMap,
+    //   tallyProfit: clubMap.tallyProfit + tallyProfit,
+    //   totalProfit: clubMap.totalProfit + totalProfit,
+    // });
 
     for (const member of unlinkMembers) {
       const memberId = member.passbook.id;
-      if (!data.has(memberId)) {
-        data.set(memberId, { tallyBalance: 0 });
-      }
       const memberMap = data.get(memberId);
 
       data.set(memberId, {
-        tallyBalance: memberMap.tallyBalance + linkedPersonShare,
+        ...memberMap,
+        tallyBalance: memberMap.tallyBalance + perPersonProfit,
+      });
+    }
+
+    for (const member of linkMembers) {
+      const memberId = member.passbook.id;
+      const memberMap = data.get(memberId);
+
+      data.set(memberId, {
+        ...memberMap,
+        profit: memberMap.profit + perPersonProfit,
       });
     }
   }

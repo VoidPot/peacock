@@ -174,8 +174,10 @@ const configContext = {
         method: yup.string().required(message.required),
         to: yup.number().required(message.required),
         amount: yup
-          .number()
-          .typeError(message.number)
+          .string()
+          .test("amount", message.number, function (value) {
+            return !isNaN(Number(value));
+          })
           .min(1)
           .max(10000000)
           .required(message.required),

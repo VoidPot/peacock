@@ -1,7 +1,7 @@
 import configContext from "~/config/configContext";
 import { prisma } from "~/db.server";
 import { commuteGroup } from "./group.server";
-import { formatMoney } from "~/helpers/utils";
+import { formatMoney, formatNumber } from "~/helpers/utils";
 import type { Group, Passbook } from "@prisma/client";
 
 export const formatPassbook = (passbook: Passbook) => {
@@ -53,25 +53,25 @@ export const formatPassbook = (passbook: Passbook) => {
     tallyProfit$: formatMoney(tallyProfit),
     totalProfit$: formatMoney(totalProfit),
     holdingAmount$: formatMoney(holdingAmount),
-    termDeposit,
-    deposit,
-    tallyBalance,
-    tallyDeposit,
-    totalDeposit,
-    withdraw,
-    profitWithdraw,
-    totalWithdraw,
-    accountBalance,
-    termInvest,
-    invest,
-    totalInvest,
-    termReturns,
-    returns,
-    totalReturns,
-    tallyProfit,
-    totalProfit,
-    profit,
-    holdingAmount,
+    termDeposit: formatNumber(termDeposit),
+    deposit: formatNumber(deposit),
+    tallyDeposit: formatNumber(tallyDeposit),
+    totalDeposit: formatNumber(totalDeposit),
+    tallyBalance: formatNumber(tallyBalance),
+    withdraw: formatNumber(withdraw),
+    profitWithdraw: formatNumber(profitWithdraw),
+    totalWithdraw: formatNumber(totalWithdraw),
+    accountBalance: formatNumber(accountBalance),
+    termInvest: formatNumber(termInvest),
+    invest: formatNumber(invest),
+    totalInvest: formatNumber(totalInvest),
+    termReturns: formatNumber(termReturns),
+    returns: formatNumber(returns),
+    totalReturns: formatNumber(totalReturns),
+    profit: formatNumber(profit),
+    tallyProfit: formatNumber(tallyProfit),
+    totalProfit: formatNumber(totalProfit),
+    holdingAmount: formatNumber(holdingAmount),
     depositMonths,
     withdrawMonths,
     investMonths,

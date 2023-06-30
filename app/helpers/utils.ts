@@ -19,6 +19,10 @@ export const formatMoney = (input: any | undefined = 0) => {
   return `${Number(Number(input).toFixed(2)).toLocaleString("en-IN") || 0} ₹`;
 };
 
+export const formatNumber = (input: any | undefined = 0) => {
+  return Number(Number(input).toFixed(2)) || 0;
+};
+
 export const formatDate = (input: any = new Date()) => {
   const date = moment(getValidDate(input));
   return date.format("DD MMM YYYY");
@@ -75,7 +79,9 @@ export const responseData = ({
 }) => {
   return json({
     success,
-    message: `${configContext.message[message]}${data?.id? ` ID:${data?.id}` : ''}`,
+    message: `${configContext.message[message]}${
+      data?.id ? ` ID:${data?.id}` : ""
+    }`,
     data,
     errors,
   });

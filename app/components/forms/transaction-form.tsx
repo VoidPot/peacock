@@ -173,7 +173,7 @@ function TransactionForm({
           placeholder="1000"
           register={register}
           name="amount"
-          type="number"
+          type="string"
           errors={errors}
         />
 

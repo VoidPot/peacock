@@ -9,10 +9,12 @@ import { getClubGroupPassbook } from "~/models/passbook.server";
 import configContext from "~/config/configContext";
 import { getValidNumber } from "~/helpers/utils";
 import { findTransaction } from "~/models/transaction.server";
+import { profitCalculator } from "~/models/passbook-profit.server";
 
 export const loader = async ({ request }: LoaderArgs) => {
   const passbookData = await getClubGroupPassbook();
   const transactions = await findTransaction({});
+  await profitCalculator();
   return json({ passbookData, transactions });
 };
 
@@ -48,7 +50,7 @@ export default function IndexPage() {
     },
     {
       hed: "Net Profit",
-      dek: club.totalProfit$,
+      dek: club.profit$,
       iconName: "team",
       hedColor: "success",
     },

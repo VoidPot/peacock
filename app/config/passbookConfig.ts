@@ -251,9 +251,11 @@ export const passbookConfig: PassbookConfig = {
         },
       },
       CLUB: {
-        SUB: {
+        ADD: {
           withdraw: "amount",
           totalWithdraw: "amount",
+        },
+        SUB: {
           accountBalance: "amount",
           holdingAmount: "amount",
         },
@@ -275,9 +277,11 @@ export const passbookConfig: PassbookConfig = {
         },
       },
       CLUB: {
-        SUB: {
-          withdraw: "amount",
+        ADD: {
+          profitWithdraw: "amount",
           totalWithdraw: "amount",
+        },
+        SUB: {
           accountBalance: "amount",
           holdingAmount: "amount",
         },

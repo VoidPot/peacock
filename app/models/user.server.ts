@@ -12,7 +12,6 @@ export async function getMembersPassbook() {
     },
   });
   const clubPassbook = await getClubPassbook();
-  const perMemberProfit = (clubPassbook?.totalProfit || 0) / members.length;
   return members
     .map((member) => {
       const club = configContext.group(members.length).club;
@@ -20,10 +19,8 @@ export async function getMembersPassbook() {
       const termBalance =
         club.totalTermAmountPerPerson - passbook.accountBalance;
       const totalBalance = termBalance + passbook.tallyBalance;
-      const netAmount = passbook.accountBalance + perMemberProfit;
-      const actualMemberProfit = Number(
-        perMemberProfit - passbook.tallyBalance
-      ).toFixed(2);
+      const netAmount = passbook.accountBalance + passbook.profit;
+
       return {
         ...member,
         ...passbook,
@@ -33,8 +30,6 @@ export async function getMembersPassbook() {
         termBalance$: formatMoney(termBalance),
         totalBalance,
         totalBalance$: formatMoney(totalBalance),
-        perMemberProfit: Number(actualMemberProfit),
-        perMemberProfit$: formatMoney(actualMemberProfit),
         netAmount,
         netAmount$: formatMoney(netAmount),
       };

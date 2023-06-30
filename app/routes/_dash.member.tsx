@@ -157,7 +157,7 @@ export default function MemberPage() {
                             {member.totalBalance$}
                             {member.tallyBalance ? (
                               <p className="mb-0 text-xs leading-tight text-slate-500">
-                                {member.termBalance} + {member.tallyBalance$}
+                                {member.termBalance$} + {member.tallyBalance$}
                               </p>
                             ) : (
                               ""
@@ -169,13 +169,13 @@ export default function MemberPage() {
                             "whitespace-nowrap bg-transparent p-2 text-center align-middle text-sm leading-normal shadow-transparent",
                             {
                               "border-b": index !== items.length - 1,
-                              "text-error": member.perMemberProfit > 0,
-                              "text-info": member.perMemberProfit <= 0,
+                              "text-error": member.profit < 0,
+                              "text-info": member.profit >= 0,
                             }
                           )}
                         >
                           <span className="text-xs font-semibold leading-tight text-success">
-                            {member.perMemberProfit$}
+                            {member.profit$}
                           </span>
                         </td>
                         <td
