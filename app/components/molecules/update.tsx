@@ -32,7 +32,7 @@ function UpdateCard({
                       {trans.primary.firstName}
                     </span>
                     <span className="hidden lg:block"> {" / "}</span>
-                    <span className="mb-0 mt-1 text-xs font-semibold leading-tight text-slate-500">
+                    <span className="m-0 text-xs font-semibold leading-tight text-slate-500 lg:mt-1">
                       {trans.secondary.firstName}
                     </span>
                   </h6>
@@ -46,11 +46,11 @@ function UpdateCard({
                     </span>
                   </div>
                 </div>
-                <div className="flex flex-col items-end uppercase">
+                <div className="flex flex-col items-end gap-1 uppercase">
                   <h6 className="mb-0 text-sm font-semibold leading-normal text-slate-600">
                     {trans.amount$}
                   </h6>
-                  <p className="mb-0 mt-1 text-xs font-semibold leading-tight text-slate-500">
+                  <p className="m-0 text-xs font-semibold leading-tight text-slate-500">
                     {trans.dot$}
                   </p>
                   <span className="block text-xs font-semibold leading-tight text-slate-500 lg:hidden">
