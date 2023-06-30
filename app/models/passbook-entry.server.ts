@@ -131,6 +131,7 @@ export const usePassbookMiddleware: Prisma.Middleware = async (param, next) => {
       : undefined;
   }
   const response = await next(param);
+
   if (model === "Transaction") {
     if (action === "create") {
       await passbookEntry(response, false);
