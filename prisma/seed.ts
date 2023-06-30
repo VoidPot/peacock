@@ -21,16 +21,7 @@ async function seed() {
     }),
   ];
 
-  const member = seedData.user
-    .filter((e) => e.type === "MEMBER")
-    .sort((a, b) => (a.nickName < b.nickName ? 1 : -1))
-    .sort((a, b) => (new Date(a.joinedAt) > new Date(b.joinedAt) ? 1 : -1));
-
-  const vendor = seedData.user
-    .filter((e) => e.type === "VENDOR")
-    .sort((a, b) => (a.nickName < b.nickName ? 1 : -1));
-
-  for (const { id, nickName, ...user } of [...member, ...vendor]) {
+  for (const { id, nickName, ...user } of seedData.user) {
     sqlTransaction.push(
       prisma.user.create({
         data: {
