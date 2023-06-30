@@ -11,10 +11,10 @@ CREATE TYPE "TRANSACTION_TYPE" AS ENUM ('TRANSFER', 'DEPOSIT', 'WITHDRAWAL');
 CREATE TYPE "TRANSACTION_METHOD" AS ENUM ('CASH', 'ACCOUNT', 'UPI', 'BANK');
 
 -- CreateEnum
-CREATE TYPE "TRANSACTION_MODE" AS ENUM ('MEMBERS_PERIODIC_DEPOSIT', 'MEMBERS_WITHDRAW', 'NEW_MEMBER_PAST_TALLY', 'INTER_CASH_TRANSFER', 'VENDOR_PERIODIC_INVEST', 'VENDOR_PERIODIC_RETURN', 'VENDOR_INVEST', 'VENDOR_RETURN', 'OTHER_EXPENDITURE', 'MEMBER_EXIT_WITHDRAW', 'MEMBER_EXIT_PROFIT_WITHDRAW');
+CREATE TYPE "TRANSACTION_MODE" AS ENUM ('MEMBERS_PERIODIC_DEPOSIT', 'MEMBERS_WITHDRAW', 'MEMBERS_WITHDRAW_PROFIT', 'NEW_MEMBER_PAST_TALLY', 'INTER_CASH_TRANSFER', 'VENDOR_PERIODIC_INVEST', 'VENDOR_PERIODIC_RETURN', 'VENDOR_INVEST', 'VENDOR_RETURN', 'OTHER_EXPENDITURE');
 
 -- CreateEnum
-CREATE TYPE "PASSBOOK_ENTRY_OF" AS ENUM ('USER', 'GROUP', 'CLUB');
+CREATE TYPE "PASSBOOK_ENTRY_OF" AS ENUM ('USER', 'CLUB');
 
 -- CreateTable
 CREATE TABLE "User" (
@@ -37,17 +37,16 @@ CREATE TABLE "User" (
 );
 
 -- CreateTable
-CREATE TABLE "Extra" (
-    "password" TEXT,
-    "passcode" TEXT,
-    "mobileVerified" BOOLEAN NOT NULL DEFAULT false,
-    "isPasswordSet" BOOLEAN NOT NULL DEFAULT false,
-    "isPasscodeSet" BOOLEAN NOT NULL DEFAULT false,
-    "userId" INTEGER NOT NULL,
+CREATE TABLE "VendorUnlink" (
+    "id" SERIAL NOT NULL,
+    "vendorId" INTEGER NOT NULL,
+    "memberId" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "deleted" BOOLEAN NOT NULL DEFAULT false,
-    "deletedAt" TIMESTAMP(3)
+    "deletedAt" TIMESTAMP(3),
+
+    CONSTRAINT "VendorUnlink_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -59,26 +58,12 @@ CREATE TABLE "Group" (
     "period" "PERIOD" NOT NULL DEFAULT 'MONTH',
     "startAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "endAt" TIMESTAMP(3),
-    "passbookId" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     "deletedAt" TIMESTAMP(3),
 
     CONSTRAINT "Group_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "Link" (
-    "id" SERIAL NOT NULL,
-    "userId" INTEGER NOT NULL,
-    "groupId" INTEGER NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-    "deleted" BOOLEAN NOT NULL DEFAULT false,
-    "deletedAt" TIMESTAMP(3),
-
-    CONSTRAINT "Link_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -92,7 +77,6 @@ CREATE TABLE "Transaction" (
     "note" TEXT,
     "fromId" INTEGER NOT NULL,
     "toId" INTEGER NOT NULL,
-    "groupId" INTEGER,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "deleted" BOOLEAN NOT NULL DEFAULT false,
@@ -143,37 +127,22 @@ CREATE UNIQUE INDEX "User_nickName_key" ON "User"("nickName");
 CREATE UNIQUE INDEX "User_passbookId_key" ON "User"("passbookId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Extra_userId_key" ON "Extra"("userId");
+CREATE UNIQUE INDEX "VendorUnlink_vendorId_memberId_key" ON "VendorUnlink"("vendorId", "memberId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Group_slug_key" ON "Group"("slug");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Group_passbookId_key" ON "Group"("passbookId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Link_userId_groupId_key" ON "Link"("userId", "groupId");
 
 -- AddForeignKey
 ALTER TABLE "User" ADD CONSTRAINT "User_passbookId_fkey" FOREIGN KEY ("passbookId") REFERENCES "Passbook"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Extra" ADD CONSTRAINT "Extra_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "VendorUnlink" ADD CONSTRAINT "VendorUnlink_vendorId_fkey" FOREIGN KEY ("vendorId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Group" ADD CONSTRAINT "Group_passbookId_fkey" FOREIGN KEY ("passbookId") REFERENCES "Passbook"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Link" ADD CONSTRAINT "Link_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Link" ADD CONSTRAINT "Link_groupId_fkey" FOREIGN KEY ("groupId") REFERENCES "Group"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "VendorUnlink" ADD CONSTRAINT "VendorUnlink_memberId_fkey" FOREIGN KEY ("memberId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Transaction" ADD CONSTRAINT "Transaction_fromId_fkey" FOREIGN KEY ("fromId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Transaction" ADD CONSTRAINT "Transaction_toId_fkey" FOREIGN KEY ("toId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Transaction" ADD CONSTRAINT "Transaction_groupId_fkey" FOREIGN KEY ("groupId") REFERENCES "Group"("id") ON DELETE SET NULL ON UPDATE CASCADE;
