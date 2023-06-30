@@ -2,6 +2,7 @@ import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Link, Outlet, useLoaderData } from "@remix-run/react";
 import classNames from "classnames";
+import { useMemo, useState } from "react";
 import Icon from "~/components/svg/icon";
 import { getMembersPassbook } from "~/models/user.server";
 import { getIsLoggedIn } from "~/session.server";
@@ -10,13 +11,21 @@ export const loader = async ({ request }: LoaderArgs) => {
   const isLoggedIn = await getIsLoggedIn(request);
   const items = await getMembersPassbook();
   return json({
-    items,
+    allMembers: items,
+    activeMembers: items.filter((e) => !e.deleted),
     isLoggedIn,
   });
 };
 
 export default function MemberPage() {
-  const { items, isLoggedIn } = useLoaderData<typeof loader>();
+  const [fetchDeleted, setFetchDeleted] = useState(false);
+  const { allMembers, activeMembers, isLoggedIn } =
+    useLoaderData<typeof loader>();
+
+  const items = useMemo(() => {
+    return fetchDeleted ? allMembers : activeMembers;
+  }, [activeMembers, allMembers, fetchDeleted]);
+
   return (
     <div className="flex h-full w-full flex-col gap-3">
       <Outlet />
@@ -27,14 +36,28 @@ export default function MemberPage() {
               <div className="mb-2 flex items-center justify-between align-middle">
                 <h6 className="m-0 text-neutral">Members Table</h6>
                 {isLoggedIn && (
-                  <Link
-                    className="btn-ghost btn-square btn stroke-slate-500 hover:bg-white hover:stroke-secondary"
-                    to={{
-                      pathname: `/member/add`,
-                    }}
-                  >
-                    <Icon name="add-box" className="h-6 w-6" />
-                  </Link>
+                  <div className="flex items-center justify-center">
+                    <div className="form-control w-52">
+                      <label className="label cursor-pointer justify-center gap-2">
+                        <span className="label-text">With Deleted</span>
+                        <input
+                          type="checkbox"
+                          className="toggle-primary toggle"
+                          onChange={(e: any) =>
+                            setFetchDeleted(e.target.checked)
+                          }
+                        />
+                      </label>
+                    </div>
+                    <Link
+                      className="btn-ghost btn-square btn stroke-slate-500 hover:bg-white hover:stroke-secondary"
+                      to={{
+                        pathname: `/member/add`,
+                      }}
+                    >
+                      <Icon name="add-box" className="h-6 w-6" />
+                    </Link>
+                  </div>
                 )}
               </div>
             </div>
@@ -199,22 +222,30 @@ export default function MemberPage() {
                               }
                             )}
                           >
-                            <Link
-                              to={{
-                                pathname: `/member/edit/${member.id}`,
-                              }}
-                              className="btn-ghost btn-square btn w-auto stroke-slate-500 px-2 hover:bg-white hover:stroke-secondary"
-                            >
-                              <Icon name="edit" className="h-4 w-4" />
-                            </Link>
-                            <Link
-                              to={{
-                                pathname: `/member/exit/${member.id}`,
-                              }}
-                              className="btn-ghost btn-square btn w-auto stroke-slate-500 px-2 hover:bg-white hover:stroke-secondary"
-                            >
-                              <Icon name="delete" className="h-4 w-4" />
-                            </Link>
+                            {!member.deleted ? (
+                              <>
+                                <Link
+                                  to={{
+                                    pathname: `/member/edit/${member.id}`,
+                                  }}
+                                  className="btn-ghost btn-square btn w-auto stroke-slate-500 px-2 hover:bg-white hover:stroke-secondary"
+                                >
+                                  <Icon name="edit" className="h-4 w-4" />
+                                </Link>
+                                <Link
+                                  to={{
+                                    pathname: `/member/exit/${member.id}`,
+                                  }}
+                                  className="btn-ghost btn-square btn w-auto stroke-slate-500 px-2 hover:bg-white hover:stroke-secondary"
+                                >
+                                  <Icon name="delete" className="h-4 w-4" />
+                                </Link>
+                              </>
+                            ) : (
+                              <span className="text-xs font-semibold leading-tight text-error">
+                                Inactive
+                              </span>
+                            )}
                           </td>
                         )}
                       </tr>

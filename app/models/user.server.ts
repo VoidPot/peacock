@@ -6,7 +6,7 @@ import { formatPassbook } from "./passbook.server";
 
 export async function getMembersPassbook() {
   const members = await prisma.user.findMany({
-    where: { type: "MEMBER", deleted: false },
+    where: { type: "MEMBER" },
     include: {
       passbook: true,
     },
