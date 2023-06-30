@@ -117,11 +117,10 @@ export const getClubGroupPassbook = async () => {
 
       const totalProfit = club.profit + club.tallyProfit - club.profitWithdraw;
 
-      const perMemberNetValue =
-        (clubGroupConfig.totalTermAmount + totalProfit) / membersCount;
-      const netMemberAmount =
-        club.accountBalance + totalBalance + club.tallyProfit;
+      const netMemberAmount = club.accountBalance + totalBalance;
       const netAmount = netMemberAmount + club.profit;
+
+      const perMemberNetValue = Math.round(netAmount / membersCount);
 
       return {
         club: {

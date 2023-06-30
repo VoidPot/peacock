@@ -53,9 +53,9 @@ export const profitCalculator = async () => {
     const shareSubProfit = vendorProfit - profitWithdraw;
     profitWithdraw = 0;
 
-    const perPersonProfit = shareSubProfit / linkMembers.length;
+    const perPersonProfit = Math.round(shareSubProfit / linkMembers.length);
 
-    const tallyProfit = perPersonProfit * unlinkMembers.length;
+    const tallyProfit = Math.round(perPersonProfit * unlinkMembers.length);
 
     const clubMap = data.get(clubId);
 
