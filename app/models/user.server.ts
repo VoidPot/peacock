@@ -2,7 +2,7 @@ import configContext from "~/config/configContext";
 import type { User } from "@prisma/client";
 import { prisma } from "~/db.server";
 import { formatMoney, getMonthYear } from "~/helpers/utils";
-import { formatPassbook, getClubPassbook } from "./passbook.server";
+import { formatPassbook } from "./passbook.server";
 
 export async function getMembersPassbook() {
   const members = await prisma.user.findMany({
@@ -11,14 +11,16 @@ export async function getMembersPassbook() {
       passbook: true,
     },
   });
-  const clubPassbook = await getClubPassbook();
+
   return members
     .map((member) => {
       const club = configContext.group(members.length).club;
       const passbook = formatPassbook(member.passbook);
       const termBalance =
         club.totalTermAmountPerPerson - passbook.accountBalance;
-      const totalBalance = termBalance + passbook.tallyBalance;
+      const tallyBalance = passbook.tallyBalance - passbook.tallyDeposit;
+      const totalBalance = termBalance + tallyBalance;
+
       const netAmount = passbook.accountBalance + passbook.profit;
 
       return {
@@ -28,6 +30,8 @@ export async function getMembersPassbook() {
         joinedAt$: getMonthYear(member.joinedAt),
         termBalance,
         termBalance$: formatMoney(termBalance),
+        tallyBalance,
+        tallyBalance$: formatMoney(tallyBalance),
         totalBalance,
         totalBalance$: formatMoney(totalBalance),
         netAmount,

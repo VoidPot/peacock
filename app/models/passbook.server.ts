@@ -112,13 +112,16 @@ export const getClubGroupPassbook = async () => {
 
       const totalBalance =
         clubGroupConfig.totalTermAmount +
-        club.tallyBalance -
+        club.tallyProfit -
         club.accountBalance;
 
+      const totalProfit = club.profit + club.tallyProfit - club.profitWithdraw;
+
       const perMemberNetValue =
-        (clubGroupConfig.totalTermAmount + club.totalProfit) / membersCount;
-      const netMemberAmount = club.accountBalance + totalBalance;
-      const netAmount = netMemberAmount + club.totalProfit;
+        (clubGroupConfig.totalTermAmount + totalProfit) / membersCount;
+      const netMemberAmount =
+        club.accountBalance + totalBalance + club.tallyProfit;
+      const netAmount = netMemberAmount + club.profit;
 
       return {
         club: {
@@ -134,6 +137,8 @@ export const getClubGroupPassbook = async () => {
           netMemberAmount$: formatMoney(netMemberAmount),
           netAmount,
           netAmount$: formatMoney(netAmount),
+          totalProfit: totalProfit,
+          totalProfit$: formatMoney(totalProfit),
         },
         groups: groups
           .map((e) => commuteGroup(e, membersCount))
@@ -141,7 +146,7 @@ export const getClubGroupPassbook = async () => {
       };
     })
     .then(({ club, groups }) => {
-      let clubTermDeposit = Number(club.accountBalance);
+      let clubTermDeposit = Number(club.termDeposit - club.withdraw);
       return {
         club,
         groups: groups.map((group) => {

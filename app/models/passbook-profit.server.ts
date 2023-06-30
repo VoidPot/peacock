@@ -33,7 +33,7 @@ export const profitCalculator = async () => {
   const clubId = club?.id || undefined;
 
   if (club && !data.has(clubId)) {
-    data.set(clubId, { tallyProfit: 0, totalProfit: 0 });
+    data.set(clubId, { tallyProfit: 0 });
   }
 
   for (let member of members) {
@@ -55,16 +55,14 @@ export const profitCalculator = async () => {
 
     const perPersonProfit = shareSubProfit / linkMembers.length;
 
-    // const tallyProfit = perPersonProfit * unlinkMembers.length;
-    // const totalProfit = vendor.passbook.profit + tallyProfit;
+    const tallyProfit = perPersonProfit * unlinkMembers.length;
 
-    // const clubMap = data.get(clubId);
+    const clubMap = data.get(clubId);
 
-    // data.set(clubId, {
-    //   ...clubMap,
-    //   tallyProfit: clubMap.tallyProfit + tallyProfit,
-    //   totalProfit: clubMap.totalProfit + totalProfit,
-    // });
+    data.set(clubId, {
+      ...clubMap,
+      tallyProfit: clubMap.tallyProfit + tallyProfit,
+    });
 
     for (const member of unlinkMembers) {
       const memberId = member.passbook.id;
