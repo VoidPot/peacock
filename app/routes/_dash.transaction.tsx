@@ -1,6 +1,7 @@
 import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Outlet, useLoaderData, useSearchParams } from "@remix-run/react";
+import { useMemo, useState } from "react";
 import TransactionTable from "~/components/organisms/transactionTable";
 import { pickValidInObject } from "~/helpers/utils";
 import { findTransaction } from "~/models/transaction.server";
@@ -45,16 +46,23 @@ export const loader = async ({ request }: LoaderArgs) => {
   });
   return json({
     items,
-    users,
+    allUsers: users,
+    activeUsers: users.filter((e) => !e.deleted),
     isLoggedIn,
   });
 };
 
 export default function TransactionPage() {
-  const { items, users, isLoggedIn } = useLoaderData<typeof loader>();
+  const [fetchDeleted, setFetchDeleted] = useState(false);
+  const { items, allUsers, activeUsers, isLoggedIn } =
+    useLoaderData<typeof loader>();
   const [searchParams, setSearchParams] = useSearchParams({});
   const queryParams = getSearchParams(searchParams);
   const params = setParams(searchParams);
+
+  const users = useMemo(() => {
+    return fetchDeleted ? allUsers : activeUsers;
+  }, [activeUsers, allUsers, fetchDeleted]);
 
   const handleSetSearchParams = (key: string, value: string | number) => {
     setSearchParams(
@@ -90,6 +98,7 @@ export default function TransactionPage() {
         items={items as unknown as Awaited<ReturnType<typeof findTransaction>>}
         isLoggedIn={isLoggedIn}
         params={searchParams.toString() || ""}
+        onWithDeletedChange={(e: any) => setFetchDeleted(e.target.checked)}
       />
     </div>
   );

@@ -15,6 +15,7 @@ function TransactionTable({
   items,
   isLoggedIn,
   params,
+  onWithDeletedChange,
 }: {
   handleSetSearchParams: any;
   handleSelectOnChange: any;
@@ -23,6 +24,7 @@ function TransactionTable({
   items: Awaited<ReturnType<typeof findTransaction>>;
   isLoggedIn: Boolean;
   params: string;
+  onWithDeletedChange: React.ChangeEventHandler<HTMLInputElement>;
 }) {
   return (
     <div className="flex flex-wrap">
@@ -32,15 +34,27 @@ function TransactionTable({
             <div className="mb-2 flex items-center justify-between align-middle">
               <h6 className="m-0 text-neutral">Transaction Table</h6>
               {isLoggedIn && (
-                <Link
-                  className="btn-ghost btn-square btn stroke-slate-500 hover:bg-white hover:stroke-secondary"
-                  to={{
-                    pathname: `/transaction/add`,
-                    search: params || "",
-                  }}
-                >
-                  <Icon name="add-box" className="h-6 w-6" />
-                </Link>
+                <div className="flex items-center justify-center">
+                  <div className="form-control w-52">
+                    <label className="label cursor-pointer justify-center gap-2">
+                      <span className="label-text">With Deleted</span>
+                      <input
+                        type="checkbox"
+                        className="toggle-primary toggle"
+                        onChange={onWithDeletedChange}
+                      />
+                    </label>
+                  </div>
+                  <Link
+                    className="btn-ghost btn-square btn stroke-slate-500 hover:bg-white hover:stroke-secondary"
+                    to={{
+                      pathname: `/transaction/add`,
+                      search: params || "",
+                    }}
+                  >
+                    <Icon name="add-box" className="h-6 w-6" />
+                  </Link>
+                </div>
               )}
             </div>
             <div className="block w-full overflow-x-auto">

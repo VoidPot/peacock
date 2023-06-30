@@ -74,6 +74,7 @@ export async function getUserSelect() {
       lastName: true,
       nickName: true,
       type: true,
+      deleted: true,
     },
   });
   const members = (await users)
