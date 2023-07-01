@@ -234,7 +234,7 @@ export default function MemberPage() {
                                 </Link>
                                 <Link
                                   to={{
-                                    pathname: `/member/exit/${member.id}`,
+                                    pathname: `/member/delete/${member.id}`,
                                   }}
                                   className="btn-ghost btn-square btn w-auto stroke-slate-500 px-2 hover:bg-white hover:stroke-secondary"
                                 >
