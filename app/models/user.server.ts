@@ -1,8 +1,10 @@
 import configContext from "~/config/configContext";
 import type { User } from "@prisma/client";
 import { prisma } from "~/db.server";
-import { formatMoney, getMonthYear } from "~/helpers/utils";
+import { formatMoney, getMonthYear, responseData } from "~/helpers/utils";
 import { formatPassbook } from "./passbook.server";
+import fs from "fs-extra";
+import sharp from "sharp";
 
 export async function getMembersPassbook() {
   const members = await prisma.user.findMany({
@@ -109,4 +111,50 @@ export async function findUserWithPassbook(id: User["id"], type: User["type"]) {
       passbook: true,
     },
   });
+}
+
+export async function uploadAvatar(id: number, file: File, directory: string) {
+  try {
+    const user = await prisma.user.findFirst({
+      where: { id },
+      select: {
+        avatar: true,
+      },
+    });
+    const existingAvatar = user?.avatar || "";
+
+    const tempURL = `${directory}/${file.name}`;
+    const fileName = `avatar_${id}_${new Date().getTime()}.webp`;
+    const filePath = `${directory}/${fileName}`;
+    const existingAvatarPath = `${directory}/${existingAvatar}`;
+
+    await sharp(tempURL).resize(200, 200).webp().toFile(filePath); //webp
+
+    await fs.remove(tempURL);
+
+    if (existingAvatar && existingAvatar !== "no_image_available.jpeg") {
+      await fs.remove(existingAvatarPath);
+    }
+
+    await prisma.user.update({
+      where: {
+        id: Number(id),
+      },
+      data: {
+        avatar: fileName,
+      },
+    });
+
+    return responseData({
+      success: true,
+      message: "avatarUpdate",
+      data: { id: Number(id), filePath, fileName },
+    });
+  } catch (err) {
+    console.error(err);
+    return responseData({
+      success: false,
+      message: "avatarUpdateError",
+    });
+  }
 }

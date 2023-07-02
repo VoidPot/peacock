@@ -77,12 +77,23 @@ export default function VendorPage() {
                           )}
                         >
                           <div className="flex px-2 py-1">
+                            {" "}
                             <div>
-                              <img
-                                src={`/image/${vendor.avatar}`}
-                                className="mr-4 inline-flex h-9 w-9 items-center justify-center rounded-xl text-sm text-white transition-all duration-200 ease-soft-in-out"
-                                alt="user1"
-                              />
+                              {isLoggedIn && !vendor.deleted ? (
+                                <Link to={`/vendor/avatar/${vendor.id}`}>
+                                  <img
+                                    src={`/image/${vendor.avatar}`}
+                                    className="mr-4 inline-flex h-9 w-9 items-center justify-center rounded-xl text-sm text-white transition-all duration-200 ease-in-out hover:scale-110"
+                                    alt="user1"
+                                  />
+                                </Link>
+                              ) : (
+                                <img
+                                  src={`/image/${vendor.avatar}`}
+                                  className="mr-4 inline-flex h-9 w-9 items-center justify-center rounded-xl text-sm text-white transition-all duration-200 ease-soft-in-out"
+                                  alt="user1"
+                                />
+                              )}
                             </div>
                             <div className="flex flex-col justify-center">
                               <h6 className="mb-0 text-sm leading-normal">

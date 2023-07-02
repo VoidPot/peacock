@@ -14,14 +14,13 @@ import { useEffect } from "react";
 export const loader = async ({ request, params }: LoaderArgs) => {
   const isLoggedIn = await getIsLoggedIn(request);
   if (!isLoggedIn) {
-    return redirect("/member");
+    return redirect("/vendor");
   }
   const id = Number(params.id || 0);
 
-  const user = await getUserFindFirst(id, "MEMBER");
-
+  const user = await getUserFindFirst(id, "VENDOR");
   if (!user) {
-    return redirect("/member");
+    return redirect("/vendor");
   }
 
   return json({
@@ -91,9 +90,10 @@ export default function TransactionAddPage() {
           </div>
           <Form method="post" encType="multipart/form-data">
             <input
+              type="text"
               className="hidden"
               name="existingAvatar"
-              defaultValue={user.avatar || ""}
+              value={user.avatar || ""}
             />
             <input
               type="file"
@@ -102,7 +102,7 @@ export default function TransactionAddPage() {
               className="file-input-bordered file-input-accent file-input w-full max-w-xs"
             />
             <div className="col-span-full mt-6 flex justify-between gap-2 align-middle ">
-              <Link to={`/member`} className="btn-outline btn-sm btn px-6">
+              <Link to={`/vendor`} className="btn-outline btn-sm btn px-6">
                 Close
               </Link>
               <button type="submit" className="btn-success btn-sm btn px-6">
