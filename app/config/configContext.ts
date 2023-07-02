@@ -69,6 +69,8 @@ const message = {
   vendorEditError: "Error on editing the vendor",
   vendorDeleted: "Member deleted successfully",
   vendorDeleteError: "Error on deleting the member",
+  avatarUpdate: "Avatar updated successfully",
+  avatarUpdateError: "Error on updating the avatar",
 };
 
 const configContext = {

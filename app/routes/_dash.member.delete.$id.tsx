@@ -12,7 +12,7 @@ import { prisma } from "~/db.server";
 import { responseData } from "~/helpers/utils";
 import { useEffect } from "react";
 import { getIsLoggedIn } from "~/session.server";
-import { findUserWithPassbook } from "~/models/user.server";
+import { getUserFindFirst } from "~/models/user.server";
 
 export const loader = async ({ request, params }: LoaderArgs) => {
   const isLoggedIn = await getIsLoggedIn(request);
@@ -21,7 +21,7 @@ export const loader = async ({ request, params }: LoaderArgs) => {
   }
   const id = Number(params.id || 0);
 
-  const user = await findUserWithPassbook(id, "MEMBER");
+  const user = await getUserFindFirst(id, "MEMBER");
   if (!user) {
     return redirect("/member");
   }

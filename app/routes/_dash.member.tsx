@@ -104,11 +104,21 @@ export default function MemberPage() {
                         >
                           <div className="flex px-2 py-1">
                             <div>
-                              <img
-                                src={`/image/${member.avatar}`}
-                                className="mr-4 inline-flex h-9 w-9 items-center justify-center rounded-xl text-sm text-white transition-all duration-200 ease-soft-in-out"
-                                alt="user1"
-                              />
+                              {isLoggedIn && !member.deleted ? (
+                                <Link to={`/member/avatar/${member.id}`}>
+                                  <img
+                                    src={`/image/${member.avatar}`}
+                                    className="mr-4 inline-flex h-9 w-9 items-center justify-center rounded-xl text-sm text-white transition-all duration-200 ease-in-out hover:scale-110"
+                                    alt="user1"
+                                  />
+                                </Link>
+                              ) : (
+                                <img
+                                  src={`/image/${member.avatar}`}
+                                  className="mr-4 inline-flex h-9 w-9 items-center justify-center rounded-xl text-sm text-white transition-all duration-200 ease-soft-in-out"
+                                  alt="user1"
+                                />
+                              )}
                             </div>
                             <div className="flex flex-col justify-center">
                               <h6 className="mb-0 text-sm leading-normal">
