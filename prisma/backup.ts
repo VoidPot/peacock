@@ -60,7 +60,7 @@ async function backup() {
         deletedAt: true,
       },
     }),
-    prisma.vendorUnlink.findMany({
+    prisma.interLink.findMany({
       select: {
         id: true,
         vendor: {
@@ -79,11 +79,11 @@ async function backup() {
       },
     }),
   ])
-    .then(([user, group, transaction, vendorUnlink]) => ({
+    .then(([user, group, transaction, interLink]) => ({
       user,
       group,
       transaction,
-      vendorUnlink,
+      interLink,
     }))
     .then((data) => fs.writeJson("./public/seed.json", data))
     .catch((error) => {

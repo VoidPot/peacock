@@ -8,7 +8,7 @@ export const profitCalculator = async () => {
         deleted: false,
       },
       include: {
-        unlinkedOfVendor: true,
+        vendorInterLinks: true,
         passbook: true,
       },
     }),
@@ -44,7 +44,7 @@ export const profitCalculator = async () => {
   }
 
   for (let vendor of vendors) {
-    const unlinkMemberIds = vendor.unlinkedOfVendor.map((e) => e.memberId);
+    const unlinkMemberIds = vendor.vendorInterLinks.map((e) => e.memberId);
     const unlinkMembers = members.filter((e) => unlinkMemberIds.includes(e.id));
     const linkMembers = members.filter((e) => !unlinkMemberIds.includes(e.id));
 

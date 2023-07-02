@@ -160,7 +160,7 @@ export const usePassbookMiddleware: Prisma.Middleware = async (param, next) => {
     await profitCalculator();
   }
 
-  if (model === "VendorUnlink") {
+  if (model === "InterLink") {
     await profitCalculator();
   }
 

@@ -69,7 +69,7 @@ export async function getMembers() {
 }
 
 export async function getUserSelect() {
-  const users = prisma.user.findMany({
+  const users = await prisma.user.findMany({
     select: {
       id: true,
       firstName: true,
@@ -79,13 +79,32 @@ export async function getUserSelect() {
       deleted: true,
     },
   });
-  const members = (await users)
+  const members = users
     .filter((e) => e.type === "MEMBER")
     .sort((a, b) => (a.nickName > b.nickName ? 1 : -1));
-  const vendor = (await users)
+  const vendor = users
     .filter((e) => e.type === "VENDOR")
     .sort((a, b) => (a.nickName > b.nickName ? 1 : -1));
   return [...members, ...vendor];
+}
+
+export async function getUserSelectMembers() {
+  const users = await prisma.user.findMany({
+    select: {
+      id: true,
+      firstName: true,
+      lastName: true,
+      nickName: true,
+      type: true,
+      deleted: true,
+      avatar: true,
+    },
+    where: {
+      type: "MEMBER",
+      deleted: false,
+    },
+  });
+  return users.sort((a, b) => (a.nickName > b.nickName ? 1 : -1));
 }
 
 export async function getVendors() {

@@ -184,6 +184,14 @@ export default function VendorPage() {
                           >
                             <Link
                               to={{
+                                pathname: `/vendor/interlink/${vendor.id}`,
+                              }}
+                              className="btn-ghost btn-square btn w-auto fill-slate-500 px-2 hover:bg-white hover:stroke-secondary"
+                            >
+                              <Icon name="archive" className="h-4 w-4" />
+                            </Link>
+                            <Link
+                              to={{
                                 pathname: `/vendor/edit/${vendor.id}`,
                               }}
                               className="btn-ghost btn-square btn w-auto stroke-slate-500 px-2 hover:bg-white hover:stroke-secondary"

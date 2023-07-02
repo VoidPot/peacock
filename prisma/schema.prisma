@@ -8,25 +8,25 @@ generator client {
 }
 
 model User {
-  id               Int            @id @default(autoincrement())
-  mobileNumber     String         @unique
+  id               Int           @id @default(autoincrement())
+  mobileNumber     String        @unique
   email            String?
   firstName        String?
   lastName         String?
-  nickName         String         @unique
+  nickName         String        @unique
   avatar           String?
-  type             USER_TYPE      @default(MEMBER)
-  joinedAt         DateTime       @default(now())
-  transactionFrom  Transaction[]  @relation("from")
-  transactionTo    Transaction[]  @relation("to")
-  passbook         Passbook       @relation(fields: [passbookId], references: [id])
-  passbookId       Int            @unique
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @updatedAt
-  deleted          Boolean        @default(false)
+  type             USER_TYPE     @default(MEMBER)
+  joinedAt         DateTime      @default(now())
+  transactionFrom  Transaction[] @relation("from")
+  transactionTo    Transaction[] @relation("to")
+  passbook         Passbook      @relation(fields: [passbookId], references: [id])
+  passbookId       Int           @unique
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  deleted          Boolean       @default(false)
   deletedAt        DateTime?
-  unlinkedOfVendor VendorUnlink[] @relation("vendor")
-  unlinkedOfMember VendorUnlink[] @relation("member")
+  vendorInterLinks InterLink[]   @relation("vendor")
+  memberInterLinks InterLink[]   @relation("member")
 }
 
 enum USER_TYPE {
@@ -34,7 +34,7 @@ enum USER_TYPE {
   VENDOR
 }
 
-model VendorUnlink {
+model InterLink {
   id        Int       @id @default(autoincrement())
   vendor    User      @relation(name: "vendor", fields: [vendorId], references: [id])
   vendorId  Int

@@ -4,7 +4,7 @@ import { usePassbookMiddleware } from "~/models/passbook-entry.server";
 
 const prisma = new PrismaClient();
 
-const tables = ["Transaction", "VendorUnlink", "Group", "User", "Passbook"];
+const tables = ["Transaction", "InterLink", "Group", "User", "Passbook"];
 
 prisma.$use(usePassbookMiddleware);
 async function seed() {
@@ -37,11 +37,11 @@ async function seed() {
     );
   }
 
-  for (const { id, vendor, member, ...vendorUnlink } of seedData.vendorUnlink) {
+  for (const { id, vendor, member, ...interLink } of seedData.interLink) {
     sqlTransaction.push(
-      prisma.vendorUnlink.create({
+      prisma.interLink.create({
         data: {
-          ...(vendorUnlink as any),
+          ...(interLink as any),
           vendor: {
             connect: {
               nickName: vendor.nickName,
