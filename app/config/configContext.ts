@@ -142,14 +142,24 @@ const configContext = {
   },
   club: {
     clubAge: function () {
-      const diff = moment.duration(
-        moment(new Date()).diff(new Date("09/01/2020"))
-      );
-      let output = `${diff.years()} yrs`;
+      const current = moment(new Date());
+      const clubStart = moment(new Date("09/01/2020"));
+
+      const diff = moment.duration(current.diff(clubStart));
+      let inYear = `${diff.years()} yrs`;
       if (diff.months()) {
-        output = `${output} ${diff.months()} mth`;
+        inYear = `${inYear} ${diff.months()} mth`;
       }
-      return output;
+      if (diff.days()) {
+        inYear = `${inYear} ${diff.days()} day`;
+      }
+
+      const inMonth = current.diff(clubStart, "months", true);
+      return {
+        inYear,
+        inMonth: Math.ceil(inMonth),
+        since: clubStart.format("DD MMM YYYY"),
+      };
     },
   },
   passbook: passbookConfig,

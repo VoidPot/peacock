@@ -24,10 +24,10 @@ export default function IndexPage() {
 
   const statsData: StatProps[] = [
     {
-      hed: "Members / Club Age",
-      dek: `${getValidNumber(
-        club.membersCount
-      )} /  ${configContext.club.clubAge()}`,
+      hed: "Members / Months",
+      dek: `${getValidNumber(club.membersCount)} /  ${
+        configContext.club.clubAge().inMonth
+      } Mth`,
       iconName: "home",
     },
     {

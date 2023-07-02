@@ -2,8 +2,10 @@ import classNames from "classnames";
 // import StackedBrand from "../atoms/svg/stacked-brand";
 import { Form, Link } from "@remix-run/react";
 import MenuItem from "../molecules/menu-item";
+import configContext from "~/config/configContext";
 
 function SideBar({ isOpen, setOpen, isLoggedIn }: any) {
+  const clubAge = configContext.club.clubAge();
   return (
     <>
       <div
@@ -34,6 +36,16 @@ function SideBar({ isOpen, setOpen, isLoggedIn }: any) {
               <h1 className="m-0 p-0 font-brand text-2xl uppercase tracking-normal text-primary">
                 Peacock Club
               </h1>
+              <p className="m-0 p-0 font-sans text-sm text-slate-500">
+                {clubAge.since}
+              </p>
+              <p className="m-0 p-0 font-sans text-sm text-slate-500">
+                {clubAge.inYear}
+              </p>
+              {/* <div className="mt-3 flex flex-col justify-center ">
+                <span className="text-sm text-slate-500">{clubAge.since}</span>
+                <span className="text-sm text-slate-500">{clubAge.inYear}</span>
+              </div> */}
             </Link>
           </div>
 
