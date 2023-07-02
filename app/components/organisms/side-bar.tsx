@@ -36,21 +36,12 @@ function SideBar({ isOpen, setOpen, isLoggedIn }: any) {
               <h1 className="m-0 p-0 font-brand text-2xl uppercase tracking-normal text-primary">
                 Peacock Club
               </h1>
-              <p className="m-0 p-0 font-sans text-sm text-slate-500">
-                {clubAge.since}
-              </p>
-              <p className="m-0 p-0 font-sans text-sm text-slate-500">
-                {clubAge.inYear}
-              </p>
-              {/* <div className="mt-3 flex flex-col justify-center ">
-                <span className="text-sm text-slate-500">{clubAge.since}</span>
-                <span className="text-sm text-slate-500">{clubAge.inYear}</span>
-              </div> */}
+              <p className="m-0 p-0 text-sm text-slate-500">{clubAge.inYear}</p>
             </Link>
           </div>
 
           <hr className="mt-0 h-px bg-transparent bg-gradient-to-r from-transparent via-black/90 to-transparent" />
-          <div className="block h-auto w-full basis-full overflow-y-auto">
+          <div className="flex h-auto w-full grow flex-col justify-start overflow-y-auto align-middle">
             <ul className="mb-0 flex h-min w-full flex-col pl-0">
               <li className="w-full">
                 <MenuItem
@@ -71,7 +62,7 @@ function SideBar({ isOpen, setOpen, isLoggedIn }: any) {
 
               <li className="mt-4 w-full">
                 <h6 className="ml-2 pl-6 text-xs font-bold uppercase leading-tight opacity-80">
-                  Account pages
+                  User pages
                 </h6>
               </li>
 
@@ -93,7 +84,7 @@ function SideBar({ isOpen, setOpen, isLoggedIn }: any) {
                 />
               </li>
 
-              <li className="mt-4 w-full">
+              <li className="mt-8 w-full">
                 <h6 className="ml-2 pl-6 text-xs font-bold uppercase leading-tight opacity-80">
                   Admin Access
                 </h6>
@@ -120,6 +111,12 @@ function SideBar({ isOpen, setOpen, isLoggedIn }: any) {
                 )}
               </li>
             </ul>
+            <hr className="mt-4 h-px bg-transparent bg-gradient-to-r from-transparent via-black/90 to-transparent" />
+            <div className="bt-2 flex flex-col justify-center gap-2 text-center">
+              <p className="m-0 p-0 text-sm text-slate-500">
+                Since {clubAge.since}
+              </p>
+            </div>
           </div>
 
           {/* <div className="block h-auto w-auto items-center overflow-y-auto">
