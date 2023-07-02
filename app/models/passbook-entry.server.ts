@@ -156,5 +156,13 @@ export const usePassbookMiddleware: Prisma.Middleware = async (param, next) => {
     }
   }
 
+  if (model === "User" && ["create", "delete"].includes(action)) {
+    await profitCalculator();
+  }
+
+  if (model === "VendorUnlink") {
+    await profitCalculator();
+  }
+
   return response;
 };
