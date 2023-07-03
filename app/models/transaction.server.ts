@@ -10,7 +10,7 @@ type TransactionProps = {
     type?: string;
     mode?: string;
     sort?: string;
-    order?: string;
+    order?: "asc" | "desc";
   };
 };
 
@@ -66,12 +66,14 @@ export const findTransaction = async ({ options }: TransactionProps) => {
         },
       },
     },
-    orderBy:
-      // sort === "dot"
-      //   ? { [sort]: order, createdAt: "desc" }
+    orderBy: [
       {
         [sort]: order,
       },
+      {
+        id: order,
+      },
+    ],
     skip,
     take,
   });

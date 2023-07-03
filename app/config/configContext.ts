@@ -103,14 +103,14 @@ const configContext = {
     },
     mode: {
       MEMBERS_PERIODIC_DEPOSIT: "Periodic Member Deposit",
-      MEMBERS_WITHDRAW: "Member Withdrawal",
-      NEW_MEMBER_PAST_TALLY: "New Joiner's Profit Tally",
       INTER_CASH_TRANSFER: "Transfer Between Members",
-      VENDOR_PERIODIC_INVEST: "Periodic Vendor Invest",
-      VENDOR_PERIODIC_RETURN: "Periodic Vendor Returns",
+      NEW_MEMBER_PAST_TALLY: "New Joiner's Profit Tally",
       VENDOR_INVEST: "Vendor Investment",
+      VENDOR_PERIODIC_INVEST: "Periodic Vendor Invest",
       VENDOR_RETURN: "Vendor Returns",
+      VENDOR_PERIODIC_RETURN: "Periodic Vendor Returns",
       OTHER_EXPENDITURE: "Other Expenditures",
+      MEMBERS_WITHDRAW: "Member Withdrawal",
       MEMBERS_WITHDRAW_PROFIT: "Member Profit Withdrawal",
     },
     sortBy: {

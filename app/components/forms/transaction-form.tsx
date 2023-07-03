@@ -131,9 +131,7 @@ function TransactionForm({
         <SelectInput
           title="Transaction Mode"
           className="col-span-1 lg:col-span-4"
-          options={Object.entries(transactionConfig.mode).sort((a, b) =>
-            a[1] > b[1] ? 1 : -1
-          )}
+          options={Object.entries(transactionConfig.mode)}
           register={register}
           name="mode"
           errors={errors}
