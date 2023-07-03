@@ -1,23 +1,47 @@
 import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NavBar from "~/components/organisms/nav-bar";
 import SideBar from "~/components/organisms/side-bar";
-import { getIsLoggedIn, getSessionData } from "~/session.server";
+import { commitSession, getIsLoggedIn, getSession } from "~/session.server";
 
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export const loader = async ({ request }: LoaderArgs) => {
-  const sessionAlert = await getSessionData(request, "ALERT");
+  const session = await getSession(request);
+  const toastMessage = session.get("toastMessage") || null;
+  const toastType = session.get("toastType") || null;
   const isLoggedIn = await getIsLoggedIn(request);
-  return json({ isLoggedIn, sessionAlert });
+
+  return json(
+    {
+      isLoggedIn,
+      toastMessage,
+      toastType,
+    },
+    {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    }
+  );
 };
 
 export default function DashTemplate() {
-  const { isLoggedIn } = useLoaderData<typeof loader>();
+  const {
+    isLoggedIn,
+    toastMessage,
+    toastType = "default",
+  } = useLoaderData<typeof loader>();
   const [isOpen, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (toastMessage) {
+      toast(toastMessage, { type: toastType });
+    }
+  }, [toastMessage, toastType]);
 
   return (
     <>

@@ -71,6 +71,9 @@ const message = {
   vendorDeleteError: "Error on deleting the member",
   avatarUpdate: "Avatar updated successfully",
   avatarUpdateError: "Error on updating the avatar",
+  backupSuccess: "DB data backup successfully",
+  backupError: "Error on DB data backup",
+  backupDone: "DB data backup already created",
 };
 
 const configContext = {
