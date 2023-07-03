@@ -73,6 +73,7 @@ async function backup(prisma: PrismaClient, filePath: string) {
             nickName: true,
           },
         },
+        excludeProfit: true,
         createdAt: true,
         deleted: true,
         deletedAt: true,

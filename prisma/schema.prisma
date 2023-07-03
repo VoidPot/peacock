@@ -35,15 +35,16 @@ enum USER_TYPE {
 }
 
 model InterLink {
-  id        Int       @id @default(autoincrement())
-  vendor    User      @relation(name: "vendor", fields: [vendorId], references: [id])
-  vendorId  Int
-  member    User      @relation(name: "member", fields: [memberId], references: [id])
-  memberId  Int
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deleted   Boolean   @default(false)
-  deletedAt DateTime?
+  id            Int       @id @default(autoincrement())
+  vendor        User      @relation(name: "vendor", fields: [vendorId], references: [id])
+  vendorId      Int
+  member        User      @relation(name: "member", fields: [memberId], references: [id])
+  memberId      Int
+  excludeProfit Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  deleted       Boolean   @default(false)
+  deletedAt     DateTime?
 
   @@unique([vendorId, memberId])
 }

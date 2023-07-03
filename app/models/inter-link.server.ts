@@ -1,4 +1,5 @@
 import { prisma } from "~/db.server";
+import { profitCalculator } from "./passbook-profit.server";
 
 type InterLinkObject = {
   [key in string]: Boolean;
@@ -8,25 +9,35 @@ export const setInterLinkObject = async (
   vendorId: number,
   interLinkObject: InterLinkObject
 ) => {
-  const ids: number[] = [];
-  const creates: any[] = [];
+  const upsets: any[] = [];
 
-  Object.entries(interLinkObject).map(([key, value]) => {
-    ids.push(Number(key));
+  Object.entries(interLinkObject).forEach(([key, value]) => {
+    let memberId = Number(key);
+    let excludeProfit = Boolean(value);
 
-    if (value) {
-      creates.push({
-        vendorId: Number(vendorId),
-        memberId: Number(key),
-      });
-    }
+    upsets.push({
+      where: {
+        vendorId_memberId: {
+          vendorId,
+          memberId,
+        },
+      },
+      create: {
+        excludeProfit,
+        vendorId,
+        memberId,
+      },
+      update: {
+        excludeProfit,
+      },
+    });
   });
-  await prisma.interLink.deleteMany({
-    where: { vendorId },
-  });
-  await prisma.interLink.createMany({
-    data: creates,
-  });
+
+  for (let each of upsets) {
+    await prisma.interLink.upsert(each);
+  }
+
+  profitCalculator();
 
   return true;
 };
@@ -48,6 +59,7 @@ export const getInterLinkObject = async (vendorId: Number) => {
       where: {
         vendorId: vendorId as any,
         deleted: false,
+        excludeProfit: true,
       },
       select: {
         id: true,

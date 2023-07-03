@@ -8,7 +8,11 @@ export const profitCalculator = async () => {
         deleted: false,
       },
       include: {
-        vendorInterLinks: true,
+        vendorInterLinks: {
+          where: {
+            excludeProfit: true,
+          },
+        },
         passbook: true,
       },
     }),

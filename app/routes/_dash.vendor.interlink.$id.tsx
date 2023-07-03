@@ -47,12 +47,6 @@ export const action = async ({ request, params }: ActionArgs) => {
 
     const parsedData = JSON.parse(data as any);
 
-    console.log({
-      formData,
-      data,
-      form: formData.get("formData"),
-      parsedData,
-    });
     await setInterLinkObject(id, parsedData as any);
 
     return responseData({
