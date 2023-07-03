@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import seedData from "../public/seed.json";
+import seedData from "../public/peacock_backup.json";
 import { usePassbookMiddleware } from "~/models/passbook-entry.server";
 
 const prisma = new PrismaClient();

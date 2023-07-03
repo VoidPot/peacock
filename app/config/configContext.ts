@@ -74,6 +74,11 @@ const message = {
 };
 
 const configContext = {
+  backup: {
+    path: `${process.cwd()}/public/`,
+    fileName: "peacock_backup.json",
+    filePath: `${process.cwd()}/public/peacock_backup.json`,
+  },
   user: {
     payExtra: {
       payProfitOf: ["initial_bank_interest", "chit_20l_2021"],
