@@ -3,6 +3,11 @@ import _ from "lodash";
 import { json } from "@remix-run/node";
 import configContext from "~/config/configContext";
 
+export const getValidateUniqueKey = (input: string) =>
+  `${input.replace(/[^a-zA-Z ]/g, "").replace(" ", "")}_${Math.floor(
+    Math.random() * 10 + 1
+  )}`;
+
 export const getValidDate = (date: any) => (date ? new Date(date) : new Date());
 
 export const getSecondDiff = (input: any = new Date()) =>

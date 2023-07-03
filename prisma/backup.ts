@@ -65,11 +65,13 @@ async function backup() {
         id: true,
         vendor: {
           select: {
+            id: true,
             nickName: true,
           },
         },
         member: {
           select: {
+            id: true,
             nickName: true,
           },
         },

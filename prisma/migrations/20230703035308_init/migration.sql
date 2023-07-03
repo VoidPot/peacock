@@ -21,7 +21,7 @@ CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
     "mobileNumber" TEXT NOT NULL,
     "email" TEXT,
-    "firstName" TEXT,
+    "firstName" TEXT NOT NULL,
     "lastName" TEXT,
     "nickName" TEXT NOT NULL,
     "avatar" TEXT,
@@ -37,7 +37,7 @@ CREATE TABLE "User" (
 );
 
 -- CreateTable
-CREATE TABLE "VendorUnlink" (
+CREATE TABLE "InterLink" (
     "id" SERIAL NOT NULL,
     "vendorId" INTEGER NOT NULL,
     "memberId" INTEGER NOT NULL,
@@ -46,7 +46,7 @@ CREATE TABLE "VendorUnlink" (
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     "deletedAt" TIMESTAMP(3),
 
-    CONSTRAINT "VendorUnlink_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "InterLink_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -118,16 +118,13 @@ CREATE TABLE "Passbook" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "User_mobileNumber_key" ON "User"("mobileNumber");
-
--- CreateIndex
 CREATE UNIQUE INDEX "User_nickName_key" ON "User"("nickName");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_passbookId_key" ON "User"("passbookId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "VendorUnlink_vendorId_memberId_key" ON "VendorUnlink"("vendorId", "memberId");
+CREATE UNIQUE INDEX "InterLink_vendorId_memberId_key" ON "InterLink"("vendorId", "memberId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Group_slug_key" ON "Group"("slug");
@@ -136,10 +133,10 @@ CREATE UNIQUE INDEX "Group_slug_key" ON "Group"("slug");
 ALTER TABLE "User" ADD CONSTRAINT "User_passbookId_fkey" FOREIGN KEY ("passbookId") REFERENCES "Passbook"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "VendorUnlink" ADD CONSTRAINT "VendorUnlink_vendorId_fkey" FOREIGN KEY ("vendorId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "InterLink" ADD CONSTRAINT "InterLink_vendorId_fkey" FOREIGN KEY ("vendorId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "VendorUnlink" ADD CONSTRAINT "VendorUnlink_memberId_fkey" FOREIGN KEY ("memberId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "InterLink" ADD CONSTRAINT "InterLink_memberId_fkey" FOREIGN KEY ("memberId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Transaction" ADD CONSTRAINT "Transaction_fromId_fkey" FOREIGN KEY ("fromId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

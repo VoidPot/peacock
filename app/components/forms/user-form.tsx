@@ -103,15 +103,6 @@ function UserForm({
         />
 
         <TextInput
-          title="Slug"
-          className="col-span-1 lg:col-span-3"
-          placeholder="Enter slug"
-          register={register}
-          name="nickName"
-          errors={errors}
-        />
-
-        <TextInput
           title="Date of Join"
           className="col-span-1 lg:col-span-3"
           placeholder="20/12/2023"

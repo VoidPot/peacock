@@ -95,12 +95,12 @@ async function seed() {
         ...(transaction as any),
         from: {
           connect: {
-            nickName: from.nickName,
+            id: from.id,
           },
         },
         to: {
           connect: {
-            nickName: to.nickName,
+            id: to.id,
           },
         },
       },

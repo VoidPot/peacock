@@ -6,7 +6,11 @@ import { toast } from "react-toastify";
 import { useActionData, useNavigate } from "@remix-run/react";
 import { getValidatedFormData } from "remix-hook-form";
 import { prisma } from "~/db.server";
-import { responseData, validateLocalDate } from "~/helpers/utils";
+import {
+  getValidateUniqueKey,
+  responseData,
+  validateLocalDate,
+} from "~/helpers/utils";
 import configContext from "~/config/configContext";
 import { useEffect } from "react";
 import { getIsLoggedIn } from "~/session.server";
@@ -40,7 +44,7 @@ export async function action({ request }: any) {
       lastName: data.lastName || "",
       email: data.email || "",
       mobileNumber: data.mobileNumber || "",
-      nickName: data.nickName || "",
+      nickName: getValidateUniqueKey(`${data.firstName}_${data.lastName}`),
       avatar: "no_image_available.jpeg",
       type: "MEMBER",
       joinedAt: validateLocalDate(data.joinedAt),

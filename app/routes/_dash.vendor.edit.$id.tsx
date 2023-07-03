@@ -37,7 +37,6 @@ export const loader = async ({ request, params }: LoaderArgs) => {
       lastName: user.lastName || "",
       email: user.email || "",
       mobileNumber: user.mobileNumber || "",
-      nickName: user.nickName || "",
       joinedAt: formatLocalDate(user.joinedAt),
     },
   });
@@ -60,7 +59,6 @@ export async function action({ request }: any) {
       lastName: data.lastName || "",
       email: data.email || "",
       mobileNumber: data.mobileNumber || "",
-      nickName: data.nickName || "",
       joinedAt: validateLocalDate(data.joinedAt),
     } as unknown as any;
 
@@ -110,7 +108,7 @@ export default function TransactionAddPage() {
     <>
       <dialog id="my_modal_1" className="modal" open>
         <div className="modal-box bg-white">
-          <UserForm className="z-990 p-0" user={user as any}  type="VENDOR" />
+          <UserForm className="z-990 p-0" user={user as any} type="VENDOR" />
         </div>
       </dialog>
     </>

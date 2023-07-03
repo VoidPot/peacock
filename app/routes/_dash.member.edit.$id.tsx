@@ -37,7 +37,6 @@ export const loader = async ({ request, params }: LoaderArgs) => {
       lastName: user.lastName || "",
       email: user.email || "",
       mobileNumber: user.mobileNumber || "",
-      nickName: user.nickName || "",
       joinedAt: formatLocalDate(user.joinedAt),
     },
   });
@@ -60,7 +59,6 @@ export async function action({ request }: any) {
       lastName: data.lastName || "",
       email: data.email || "",
       mobileNumber: data.mobileNumber || "",
-      nickName: data.nickName || "",
       joinedAt: validateLocalDate(data.joinedAt),
     } as unknown as any;
 

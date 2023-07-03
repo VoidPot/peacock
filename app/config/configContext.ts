@@ -198,15 +198,18 @@ const configContext = {
     user: yup
       .object({
         id: yup.number(),
-        firstName: yup.string().required(message.required),
+        firstName: yup
+          .string()
+          .min(2, message.minTwo)
+          .required(message.required),
         lastName: yup.string().optional(),
         email: yup.string().email().optional(),
         mobileNumber: yup.string().required(message.required),
-        nickName: yup
-          .string()
-          .min(2, message.minTwo)
-          .required(message.required)
-          .matches(/^[a-z0-9_-]+$/, message.invalidSlug),
+        // nickName: yup
+        //   .string()
+        //   .min(2, message.minTwo)
+        //   .required(message.required)
+        //   .matches(/^[a-z0-9_-]+$/, message.invalidSlug),
         joinedAt: yup
           .string()
           .required(message.required)
