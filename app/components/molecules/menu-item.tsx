@@ -11,7 +11,14 @@ interface MenuItemProps {
   type?: string;
 }
 
-function MenuItem({ hed, pathName, iconName, onClick, type }: MenuItemProps) {
+function MenuItem({
+  hed,
+  pathName,
+  iconName,
+  onClick,
+  type,
+  ...props
+}: MenuItemProps) {
   const matches = useMatches();
 
   const isActive = matches.length > 2 && matches[2].pathname === pathName;
@@ -22,6 +29,7 @@ function MenuItem({ hed, pathName, iconName, onClick, type }: MenuItemProps) {
         type="submit"
         className="ease-nav-brand mx-4 my-0 flex items-center whitespace-nowrap rounded-lg px-4 py-2.7 text-sm font-medium text-slate-700 transition-colors"
         onClick={() => onClick()}
+        {...props}
       >
         <div className="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-white stroke-0 p-1.5 text-center shadow-soft-2xl xl:p-2">
           <Icon name={iconName} color={isActive ? "primary" : "slate"} />
@@ -48,8 +56,11 @@ function MenuItem({ hed, pathName, iconName, onClick, type }: MenuItemProps) {
         },
         { "font-medium": !isActive }
       )}
-      to={pathName}
+      to={{
+        pathname: pathName,
+      }}
       onClick={() => onClick()}
+      {...props}
     >
       <div
         className={classNames(
