@@ -40,7 +40,7 @@ export async function getMembersPassbook() {
         netAmount$: formatMoney(netAmount),
       };
     })
-    .sort((a, b) => (a.nickName > b.nickName ? 1 : -1));
+    .sort((a, b) => (a.firstName > b.firstName ? 1 : -1));
 }
 
 export async function getVendorsWithSummary() {
@@ -61,7 +61,7 @@ export async function getVendorsWithSummary() {
         joinedAt$: getMonthYear(vendor.joinedAt),
       };
     })
-    .sort((a, b) => (a.nickName > b.nickName ? 1 : -1));
+    .sort((a, b) => (a.firstName > b.firstName ? 1 : -1));
 }
 
 export async function getMembers() {
@@ -81,10 +81,10 @@ export async function getUserSelect() {
   });
   const members = users
     .filter((e) => e.type === "MEMBER")
-    .sort((a, b) => (a.nickName > b.nickName ? 1 : -1));
+    .sort((a, b) => (a.firstName > b.firstName ? 1 : -1));
   const vendor = users
     .filter((e) => e.type === "VENDOR")
-    .sort((a, b) => (a.nickName > b.nickName ? 1 : -1));
+    .sort((a, b) => (a.firstName > b.firstName ? 1 : -1));
   return [...members, ...vendor];
 }
 
@@ -104,7 +104,7 @@ export async function getUserSelectMembers() {
       deleted: false,
     },
   });
-  return users.sort((a, b) => (a.nickName > b.nickName ? 1 : -1));
+  return users.sort((a, b) => (a.firstName > b.firstName ? 1 : -1));
 }
 
 export async function getVendors() {

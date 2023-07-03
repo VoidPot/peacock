@@ -212,7 +212,7 @@ const configContext = {
           .required(message.required),
         lastName: yup.string().optional(),
         email: yup.string().email().optional(),
-        mobileNumber: yup.string().required(message.required),
+        mobileNumber: yup.string().optional(),
         // nickName: yup
         //   .string()
         //   .min(2, message.minTwo)

@@ -59,13 +59,15 @@ export const getInterLinkObject = async (vendorId: Number) => {
 
   const membersValue: InterLinkObject = {};
 
-  const members = data[0].map((each) => {
-    const unlink = data[1].find((e) => e.memberId === each.id);
-    membersValue[each.id] = Boolean(unlink);
-    return {
-      ...each,
-    };
-  });
+  const members = data[0]
+    .sort((a, b) => (a.firstName > b.firstName ? 1 : -1))
+    .map((each) => {
+      const unlink = data[1].find((e) => e.memberId === each.id);
+      membersValue[each.id] = Boolean(unlink);
+      return {
+        ...each,
+      };
+    });
 
   return {
     membersValue,
