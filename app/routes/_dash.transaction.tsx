@@ -17,7 +17,7 @@ const getSearchParams = (searchParams: URLSearchParams) => {
     type: searchParams.get("type") || "",
     mode: searchParams.get("mode") || "",
     sort: searchParams.get("sort") || "dot",
-    order: searchParams.get("order") || "desc",
+    order: searchParams.get("order") || ("desc" as any),
   };
 };
 
