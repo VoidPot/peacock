@@ -84,34 +84,6 @@ function SideBar({ isOpen, setOpen, isLoggedIn }: any) {
                 />
               </li>
 
-              <li className="mt-8 w-full">
-                <h6 className="ml-2 pl-6 text-xs font-bold uppercase leading-tight opacity-80">
-                  Admin Access
-                </h6>
-              </li>
-
-              <li className="w-full">
-                {isLoggedIn ? (
-                  <>
-                    <Form action="/logout" method="post">
-                      <MenuItem
-                        type="submit"
-                        onClick={() => setOpen(false)}
-                        pathName="/logout"
-                        hed="Logout"
-                        iconName="close"
-                      />
-                    </Form>
-                  </>
-                ) : (
-                  <MenuItem
-                    onClick={() => setOpen(false)}
-                    pathName="/login"
-                    hed="Login"
-                    iconName="setting"
-                  />
-                )}
-              </li>
               {isLoggedIn && (
                 <li className="w-full">
                   <>
@@ -146,6 +118,35 @@ function SideBar({ isOpen, setOpen, isLoggedIn }: any) {
                   </>
                 </li>
               )}
+
+              <li className="mt-4 w-full">
+                <h6 className="ml-2 pl-6 text-xs font-bold uppercase leading-tight opacity-80">
+                  Admin Access
+                </h6>
+              </li>
+
+              <li className="w-full">
+                {isLoggedIn ? (
+                  <>
+                    <Form action="/logout" method="post">
+                      <MenuItem
+                        type="submit"
+                        onClick={() => setOpen(false)}
+                        pathName="/logout"
+                        hed="Logout"
+                        iconName="close"
+                      />
+                    </Form>
+                  </>
+                ) : (
+                  <MenuItem
+                    onClick={() => setOpen(false)}
+                    pathName="/login"
+                    hed="Login"
+                    iconName="setting"
+                  />
+                )}
+              </li>
             </ul>
             <hr className="mt-4 h-px bg-transparent bg-gradient-to-r from-transparent via-black/90 to-transparent" />
             <div className="bt-2 flex flex-col justify-center gap-2 text-center">
