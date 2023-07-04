@@ -114,10 +114,7 @@ export const passbookConfig: PassbookConfig = {
           termInvest: "amount",
           totalInvest: "amount",
           investMonths: "onePlus",
-        },
-        SUB: {
           holdingAmount: "amount",
-          profit: "profit",
         },
       },
       CLUB: {
@@ -128,7 +125,6 @@ export const passbookConfig: PassbookConfig = {
         },
         SUB: {
           holdingAmount: "amount",
-          profit: "profit",
         },
       },
     },
@@ -142,10 +138,7 @@ export const passbookConfig: PassbookConfig = {
         ADD: {
           invest: "amount",
           totalInvest: "amount",
-        },
-        SUB: {
           holdingAmount: "amount",
-          profit: "profit",
         },
       },
       CLUB: {
@@ -155,7 +148,6 @@ export const passbookConfig: PassbookConfig = {
         },
         SUB: {
           holdingAmount: "amount",
-          profit: "profit",
         },
       },
     },

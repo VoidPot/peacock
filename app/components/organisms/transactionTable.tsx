@@ -158,10 +158,13 @@ function TransactionTable({
                 <thead className="px-4 align-bottom">
                   <tr>
                     <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-5 py-3 text-left align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
-                      From / To
+                      From
                     </th>
                     <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
                       Amount
+                    </th>
+                    <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-5 py-3 text-left align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
+                      To
                     </th>
                     <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
                       Type / Mode
@@ -180,127 +183,151 @@ function TransactionTable({
                   </tr>
                 </thead>
                 <tbody>
-                  {items.map(
-                    ({ primary, secondary, ...transaction }, index) => (
-                      <tr key={index}>
-                        <td
-                          className={classNames(
-                            "whitespace-nowrap bg-transparent p-2 align-middle shadow-transparent",
-                            {
-                              "border-b": index !== items.length - 1,
-                            }
-                          )}
-                        >
-                          <div className="flex px-2 py-1">
-                            <div>
-                              <img
-                                src={`/image/${primary.avatar}`}
-                                className="mr-4 inline-flex h-9 w-9 items-center justify-center rounded-xl text-sm text-white transition-all duration-200 ease-soft-in-out"
-                                alt="user1"
-                              />
-                            </div>
-                            <div className="flex flex-col justify-center">
-                              <h6 className="mb-0 text-sm leading-normal">
-                                {primary.firstName} {primary.lastName}
-                              </h6>
-                              <p className="mb-0 text-xs leading-tight text-slate-500">
-                                {secondary.firstName} {secondary.lastName}
-                              </p>
-                            </div>
-                          </div>
-                        </td>
-                        <td
-                          className={classNames(
-                            "whitespace-nowrap bg-transparent p-2 text-center align-middle text-sm leading-normal shadow-transparent",
-                            {
-                              "border-b": index !== items.length - 1,
-                              "text-error": transaction.type === "WITHDRAWAL",
-                              "text-success": transaction.type === "DEPOSIT",
-                              "text-info": transaction.type === "TRANSFER",
-                            }
-                          )}
-                        >
-                          <span className="text-xs font-semibold leading-tight ">
-                            {transaction.amount$}
-                          </span>
-                        </td>
-                        <td
-                          className={classNames(
-                            "whitespace-nowrap bg-transparent p-2 text-center align-middle text-sm leading-normal shadow-transparent",
-                            {
-                              "border-b": index !== items.length - 1,
-                            }
-                          )}
-                        >
-                          <span className="text-xs font-semibold capitalize leading-tight text-slate-500">
-                            {transactionConfig.type[transaction.type]}
-                          </span>
-
-                          <p className="mb-0 text-xs leading-tight text-slate-500">
-                            {transactionConfig.mode[transaction.mode]}
-                          </p>
-                        </td>
-
-                        <td
-                          className={classNames(
-                            "whitespace-nowrap bg-transparent p-2 text-center align-middle text-sm uppercase leading-normal shadow-transparent",
-                            {
-                              "border-b": index !== items.length - 1,
-                            }
-                          )}
-                        >
-                          <span className="text-xs font-semibold leading-tight text-secondary">
-                            {transaction.dot$}
-                          </span>
-                        </td>
-
-                        <td
-                          className={classNames(
-                            "whitespace-nowrap bg-transparent p-2 text-center align-middle text-sm uppercase leading-normal shadow-transparent",
-                            {
-                              "border-b": index !== items.length - 1,
-                            }
-                          )}
-                        >
-                          <span className="text-xs font-semibold leading-tight text-slate-500">
-                            {transaction.id}
-                          </span>
-                          <p className="mb-0 text-xs leading-tight text-slate-500">
-                            {transaction.createdAt$}
-                          </p>
-                        </td>
-                        {isLoggedIn && (
-                          <td
-                            className={classNames(
-                              "whitespace-nowrap bg-transparent p-2 text-center align-middle text-sm uppercase leading-normal shadow-transparent",
-                              {
-                                "border-b": index !== items.length - 1,
-                              }
-                            )}
-                          >
-                            <Link
-                              to={{
-                                pathname: `/transaction/edit/${transaction.id}`,
-                                search: params || "",
-                              }}
-                              className="btn-ghost btn-square btn w-auto stroke-slate-500 px-2 hover:bg-white hover:stroke-secondary"
-                            >
-                              <Icon name="edit" className="h-4 w-4" />
-                            </Link>
-                            <Link
-                              to={{
-                                pathname: `/transaction/delete/${transaction.id}`,
-                                search: params || "",
-                              }}
-                              className="btn-ghost btn-square btn w-auto stroke-slate-500 px-2 hover:bg-white hover:stroke-secondary"
-                            >
-                              <Icon name="delete" className="h-4 w-4" />
-                            </Link>
-                          </td>
+                  {items.map(({ from, to, ...transaction }, index) => (
+                    <tr key={index}>
+                      <td
+                        className={classNames(
+                          "whitespace-nowrap bg-transparent p-2 align-middle shadow-transparent",
+                          {
+                            "border-b": index !== items.length - 1,
+                          }
                         )}
-                      </tr>
-                    )
-                  )}
+                      >
+                        <div className="flex px-2 py-1">
+                          <div>
+                            <img
+                              src={`/image/${from.avatar}`}
+                              className="mr-4 inline-flex h-9 w-9 items-center justify-center rounded-xl text-sm text-white transition-all duration-200 ease-soft-in-out"
+                              alt="user1"
+                            />
+                          </div>
+                          <div className="flex flex-col justify-center">
+                            <h6 className="mb-0 text-sm leading-normal">
+                              {from.firstName} {from.lastName}
+                            </h6>
+                            <p className="mb-0 text-xs leading-tight text-slate-500">
+                              Sender
+                            </p>
+                          </div>
+                        </div>
+                      </td>
+                      <td
+                        className={classNames(
+                          "whitespace-nowrap bg-transparent p-2 text-center align-middle text-sm leading-normal shadow-transparent",
+                          {
+                            "border-b": index !== items.length - 1,
+                            "text-error": transaction.type === "WITHDRAWAL",
+                            "text-success": transaction.type === "DEPOSIT",
+                            "text-info": transaction.type === "TRANSFER",
+                          }
+                        )}
+                      >
+                        <span className="text-xs font-semibold leading-tight ">
+                          {transaction.amount$}
+                        </span>
+                      </td>
+                      <td
+                        className={classNames(
+                          "whitespace-nowrap bg-transparent p-2 align-middle shadow-transparent",
+                          {
+                            "border-b": index !== items.length - 1,
+                          }
+                        )}
+                      >
+                        <div className="flex px-2 py-1">
+                          <div>
+                            <img
+                              src={`/image/${to.avatar}`}
+                              className="mr-4 inline-flex h-9 w-9 items-center justify-center rounded-xl text-sm text-white transition-all duration-200 ease-soft-in-out"
+                              alt="user1"
+                            />
+                          </div>
+                          <div className="flex flex-col justify-center">
+                            <h6 className="mb-0 text-sm leading-normal">
+                              {to.firstName} {to.lastName}
+                            </h6>
+                            <p className="mb-0 text-xs leading-tight text-slate-500">
+                              Receiver
+                            </p>
+                          </div>
+                        </div>
+                      </td>
+                      <td
+                        className={classNames(
+                          "whitespace-nowrap bg-transparent p-2 text-center align-middle text-sm leading-normal shadow-transparent",
+                          {
+                            "border-b": index !== items.length - 1,
+                          }
+                        )}
+                      >
+                        <span className="text-xs font-semibold capitalize leading-tight text-slate-500">
+                          {transactionConfig.type[transaction.type]}
+                        </span>
+
+                        <p className="mb-0 text-xs leading-tight text-slate-500">
+                          {transactionConfig.mode[transaction.mode]}
+                        </p>
+                      </td>
+
+                      <td
+                        className={classNames(
+                          "whitespace-nowrap bg-transparent p-2 text-center align-middle text-sm uppercase leading-normal shadow-transparent",
+                          {
+                            "border-b": index !== items.length - 1,
+                          }
+                        )}
+                      >
+                        <span className="text-xs font-semibold leading-tight text-secondary">
+                          {transaction.dot$}
+                        </span>
+                      </td>
+
+                      <td
+                        className={classNames(
+                          "whitespace-nowrap bg-transparent p-2 text-center align-middle text-sm uppercase leading-normal shadow-transparent",
+                          {
+                            "border-b": index !== items.length - 1,
+                          }
+                        )}
+                      >
+                        <span className="text-xs font-semibold leading-tight text-slate-500">
+                          {transaction.id}
+                        </span>
+                        <p className="mb-0 text-xs leading-tight text-slate-500">
+                          {transaction.createdAt$}
+                        </p>
+                      </td>
+                      {isLoggedIn && (
+                        <td
+                          className={classNames(
+                            "whitespace-nowrap bg-transparent p-2 text-center align-middle text-sm uppercase leading-normal shadow-transparent",
+                            {
+                              "border-b": index !== items.length - 1,
+                            }
+                          )}
+                        >
+                          <Link
+                            to={{
+                              pathname: `/transaction/edit/${transaction.id}`,
+                              search: params || "",
+                            }}
+                            className="btn-ghost btn-square btn w-auto stroke-slate-500 px-2 hover:bg-white hover:stroke-secondary"
+                          >
+                            <Icon name="edit" className="h-4 w-4" />
+                          </Link>
+                          <Link
+                            to={{
+                              pathname: `/transaction/delete/${transaction.id}`,
+                              search: params || "",
+                            }}
+                            className="btn-ghost btn-square btn w-auto stroke-slate-500 px-2 hover:bg-white hover:stroke-secondary"
+                          >
+                            <Icon name="delete" className="h-4 w-4" />
+                          </Link>
+                        </td>
+                      )}
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>

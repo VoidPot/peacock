@@ -77,9 +77,9 @@ export const findTransaction = async ({ options }: TransactionProps) => {
     skip,
     take,
   });
-  return transactions.map(({ from, to, ...transaction }) => {
-    let primary = { ...from };
-    let secondary = { ...to };
+  return transactions.map((transaction) => {
+    let primary = { ...transaction.from };
+    let secondary = { ...transaction.to };
 
     if (
       [
@@ -89,8 +89,8 @@ export const findTransaction = async ({ options }: TransactionProps) => {
         "MEMBERS_WITHDRAW_PROFIT",
       ].includes(transaction.mode)
     ) {
-      primary = { ...to };
-      secondary = { ...from };
+      primary = { ...transaction.to };
+      secondary = { ...transaction.from };
     }
     return {
       ...transaction,
