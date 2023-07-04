@@ -22,15 +22,16 @@ const getSearchParams = (searchParams: URLSearchParams) => {
 };
 
 const setParams = (searchParams: URLSearchParams) => {
-  return {
+  return pickValidInObject({
     from: searchParams.get("from") || "",
     to: searchParams.get("to") || "",
     page: searchParams.get("page") || "1",
+    take: searchParams.get("take") || "10",
     type: searchParams.get("type") || "",
     mode: searchParams.get("mode") || "",
     sort: searchParams.get("sort") || "dot",
     order: searchParams.get("order") || "desc",
-  };
+  });
 };
 
 export const loader = async ({ request }: LoaderArgs) => {
