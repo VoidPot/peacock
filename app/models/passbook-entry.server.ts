@@ -7,17 +7,19 @@ import { profitCalculator } from "./passbook-profit.server";
 
 const getUserPassbooks = async (from: number, to: number) => {
   return await Promise.all([
-    prisma.passbook.findFirst({
+    prisma.passbook.findMany({
       where: {
         user: {
-          id: from,
+          id: {
+            in: [from, to],
+          },
         },
       },
-    }),
-    prisma.passbook.findFirst({
-      where: {
+      include: {
         user: {
-          id: to,
+          select: {
+            id: true,
+          },
         },
       },
     }),
@@ -26,9 +28,9 @@ const getUserPassbooks = async (from: number, to: number) => {
         entryOf: "CLUB",
       },
     }),
-  ]).then(([FROM, TO, CLUB]) => ({
-    FROM,
-    TO,
+  ]).then(([fromTo, CLUB]) => ({
+    FROM: fromTo.find((e) => e.user?.id === from),
+    TO: fromTo.find((e) => e.user?.id === to),
     CLUB,
   }));
 };
@@ -92,7 +94,6 @@ const passbookEntry = async (
         },
       });
     }
-    return;
   };
 
   const settings = configContext.passbook.settings;
@@ -109,16 +110,16 @@ const passbookEntry = async (
     }
   });
 
-  const mapper = passbooksForUpdate.map(({ where, data }) =>
-    prisma.passbook
+  for (let updateData of passbooksForUpdate) {
+    await prisma.passbook
       .update({
-        where,
-        data,
+        where: updateData.where,
+        data: updateData.data,
       })
-      .catch(console.error)
-  );
+      .catch(console.error);
+  }
 
-  return await Promise.all(mapper).catch((e) => console.error(e));
+  return;
 };
 
 export const usePassbookMiddleware: Prisma.Middleware = async (param, next) => {

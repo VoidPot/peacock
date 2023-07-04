@@ -15,7 +15,6 @@ import configContext from "~/config/configContext";
 import { useEffect } from "react";
 import { getIsLoggedIn } from "~/session.server";
 import UserForm from "~/components/forms/user-form";
-import { getGroupsLinks } from "~/models/group.server";
 
 const { schema } = configContext;
 type FormData = yup.InferType<typeof schema.user>;
@@ -50,17 +49,9 @@ export async function action({ request }: any) {
       joinedAt: validateLocalDate(data.joinedAt),
     } as unknown as any;
 
-    const groupLinks = await getGroupsLinks();
-
     const created = await prisma.user.create({
       data: {
         ...user,
-        links: {
-          createMany: {
-            data: groupLinks,
-            skipDuplicates: true,
-          },
-        },
         passbook: {
           create: {
             entryOf: "USER",
