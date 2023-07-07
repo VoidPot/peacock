@@ -162,7 +162,7 @@ export default function VendorPage() {
                           )}
                         >
                           <span className="text-xs font-semibold leading-tight text-success">
-                            {vendor.holdingAmount$}
+                            {vendor.profit$}
                           </span>
 
                           {vendor.calcProfit ? (

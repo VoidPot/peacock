@@ -37,26 +37,6 @@ async function seed() {
     );
   }
 
-  for (const { id, vendor, member, ...interLink } of seedData.interLink) {
-    sqlTransaction.push(
-      prisma.interLink.create({
-        data: {
-          ...(interLink as any),
-          vendor: {
-            connect: {
-              nickName: vendor.nickName,
-            },
-          },
-          member: {
-            connect: {
-              nickName: member.nickName,
-            },
-          },
-        },
-      })
-    );
-  }
-
   for (const { id, ...group } of seedData.group) {
     sqlTransaction.push(
       prisma.group.create({
@@ -89,18 +69,51 @@ async function seed() {
 
   await prisma.$transaction(sqlTransaction);
 
+  const userMap = new Map();
+
+  const dbUsers = await prisma.user.findMany({
+    select: {
+      id: true,
+      nickName: true,
+    },
+  });
+  dbUsers.forEach((user) => {
+    const localUser = seedData.user.find((le) => le.nickName === user.nickName);
+    if (localUser) {
+      userMap.set(localUser.id, user.id);
+    }
+  });
+
   for (const { id, from, to, ...transaction } of seedData.transaction) {
     await prisma.transaction.create({
       data: {
         ...(transaction as any),
         from: {
           connect: {
-            id: from.id,
+            id: userMap.get(from.id),
           },
         },
         to: {
           connect: {
-            id: to.id,
+            id: userMap.get(to.id),
+          },
+        },
+      },
+    });
+  }
+
+  for (const { id, vendor, member, ...interLink } of seedData.interLink) {
+    await prisma.interLink.create({
+      data: {
+        ...(interLink as any),
+        vendor: {
+          connect: {
+            id: userMap.get(vendor.id),
+          },
+        },
+        member: {
+          connect: {
+            id: userMap.get(member.id),
           },
         },
       },

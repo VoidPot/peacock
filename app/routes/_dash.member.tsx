@@ -121,7 +121,15 @@ export default function MemberPage() {
                               )}
                             </div>
                             <div className="flex flex-col justify-center">
-                              <h6 className="mb-0 text-sm leading-normal">
+                              <h6
+                                className={classNames(
+                                  "mb-0 text-sm leading-normal",
+                                  {
+                                    "text-error": member.deleted,
+                                    "text-neutral": !member.deleted,
+                                  }
+                                )}
+                              >
                                 {member.firstName} {member.lastName}
                               </h6>
 

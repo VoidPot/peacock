@@ -4,9 +4,10 @@ import { json } from "@remix-run/node";
 import configContext from "~/config/configContext";
 
 export const getValidateUniqueKey = (input: string) =>
-  `${input.replace(/[^a-zA-Z ]/g, "").replace(" ", "")}_${Math.floor(
-    Math.random() * 10 + 1
-  )}`;
+  `${input
+    .toLowerCase()
+    .replaceAll(/[^a-zA-Z]/g, "_")
+    .replaceAll(" ", "_")}_${Math.floor(Math.random() * 10 + 1)}`;
 
 export const getValidDate = (date: any) => (date ? new Date(date) : new Date());
 
