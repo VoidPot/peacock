@@ -64,10 +64,6 @@ export async function getVendorsWithSummary() {
     .sort((a, b) => (a.firstName > b.firstName ? 1 : -1));
 }
 
-export async function getMembers() {
-  return prisma.user.findMany({ where: { type: "MEMBER" } });
-}
-
 export async function getUserSelect() {
   const users = await prisma.user.findMany({
     select: {
@@ -105,6 +101,10 @@ export async function getUserSelectMembers() {
     },
   });
   return users.sort((a, b) => (a.firstName > b.firstName ? 1 : -1));
+}
+
+export async function getMembers() {
+  return prisma.user.findMany({ where: { type: "MEMBER" } });
 }
 
 export async function getVendors() {

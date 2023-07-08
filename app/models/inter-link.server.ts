@@ -13,7 +13,7 @@ export const setInterLinkObject = async (
 
   Object.entries(interLinkObject).forEach(([key, value]) => {
     let memberId = Number(key);
-    let excludeProfit = Boolean(value);
+    let includeProfit = Boolean(value);
 
     upsets.push({
       where: {
@@ -23,12 +23,12 @@ export const setInterLinkObject = async (
         },
       },
       create: {
-        excludeProfit,
+        includeProfit,
         vendorId,
         memberId,
       },
       update: {
-        excludeProfit,
+        includeProfit,
       },
     });
   });
@@ -43,39 +43,33 @@ export const setInterLinkObject = async (
 };
 
 export const getInterLinkObject = async (vendorId: Number) => {
-  const data = await Promise.all([
-    prisma.user.findMany({
-      where: {
-        type: "MEMBER",
-        deleted: false,
+  const links = await prisma.interLink.findMany({
+    where: {
+      vendorId: vendorId as any,
+      deleted: false,
+    },
+    select: {
+      id: true,
+      vendorId: true,
+      memberId: true,
+      includeProfit: true,
+      member: {
+        select: {
+          firstName: true,
+          lastName: true,
+          id: true,
+          deleted: true,
+        },
       },
-      select: {
-        id: true,
-        firstName: true,
-        lastName: true,
-      },
-    }),
-    prisma.interLink.findMany({
-      where: {
-        vendorId: vendorId as any,
-        deleted: false,
-        excludeProfit: true,
-      },
-      select: {
-        id: true,
-        vendorId: true,
-        memberId: true,
-      },
-    }),
-  ]);
+    },
+  });
 
   const membersValue: InterLinkObject = {};
 
-  const members = data[0]
-    .sort((a, b) => (a.firstName > b.firstName ? 1 : -1))
+  const members = links
+    .sort((a, b) => (a.member.firstName > b.member.firstName ? 1 : -1))
     .map((each) => {
-      const unlink = data[1].find((e) => e.memberId === each.id);
-      membersValue[each.id] = Boolean(unlink);
+      membersValue[each.member.id] = Boolean(each.includeProfit);
       return {
         ...each,
       };

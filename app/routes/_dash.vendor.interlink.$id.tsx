@@ -15,8 +15,9 @@ import {
   getInterLinkObject,
   setInterLinkObject,
 } from "~/models/inter-link.server";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import classNames from "classnames";
 
 export const loader = async ({ request, params }: LoaderArgs) => {
   const isLoggedIn = await getIsLoggedIn(request);
@@ -64,7 +65,9 @@ export const action = async ({ request, params }: ActionArgs) => {
 };
 
 export default function TransactionAddPage() {
+  const [fetchDeleted, setFetchDeleted] = useState(false);
   const { members, vendor, membersValue } = useLoaderData<typeof loader>();
+
   const data = useActionData<typeof action>();
   const navigate = useNavigate();
 
@@ -92,12 +95,23 @@ export default function TransactionAddPage() {
     <>
       <dialog id="my_modal_1" className="modal" open>
         <div className="modal-box bg-white">
-          <h6 className="text-center font-normal text-neutral">
-            Select the users you want to exclude them from this vendor profit
+          <h6 className="text-center font-normal text-slate-500">
+            Select users are included to the vendor profit
           </h6>
-          <h5 className="text-center">
-            {vendor.id} - {vendor.firstName} {vendor.lastName}
-          </h5>
+          <div className="mx-3 mb-5 flex justify-between border-b-2 border-primary">
+            <h5 className="text-center text-primary">
+              {vendor.firstName} {vendor.lastName}{" "}
+              <span className="text-slate-600">({vendor.id})</span>
+            </h5>
+            <label className="label cursor-pointer justify-center gap-2">
+              <span className="label-text">With Deleted</span>
+              <input
+                type="checkbox"
+                className="toggle-secondary toggle"
+                onChange={(e: any) => setFetchDeleted(e.target.checked)}
+              />
+            </label>
+          </div>
 
           <Form
             method="post"
@@ -106,16 +120,21 @@ export default function TransactionAddPage() {
           >
             <div className="grid w-full grow grid-cols-1 gap-x-4 gap-y-2 lg:grid-cols-2">
               {members.map((e, i) => (
-                <div className="form-control col-span-1 border-b-2" key={i}>
+                <div
+                  className={classNames("form-control col-span-1 border-b-2", {
+                    hidden: !fetchDeleted && Boolean(e.member.deleted),
+                  })}
+                  key={i}
+                >
                   <label className="label flex cursor-pointer gap-3">
                     <span className="label-text">
-                      {e.id} - {e.firstName} {e.lastName}
+                      {e.member.id} - {e.member.firstName} {e.member.lastName}
                     </span>
                     <input
                       type="checkbox"
                       // name={e.id.toString()}
                       className="toggle-error toggle"
-                      {...register(e.id.toString())}
+                      {...register(e.member.id.toString())}
                     />
                   </label>
                 </div>

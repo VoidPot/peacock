@@ -15,6 +15,7 @@ import configContext from "~/config/configContext";
 import { useEffect } from "react";
 import { getIsLoggedIn } from "~/session.server";
 import UserForm from "~/components/forms/user-form";
+import { getMembers } from "~/models/user.server";
 
 const { schema } = configContext;
 type FormData = yup.InferType<typeof schema.user>;
@@ -49,12 +50,22 @@ export async function action({ request }: any) {
       joinedAt: validateLocalDate(data.joinedAt),
     } as unknown as any;
 
+    const members = await getMembers();
+
     const created = await prisma.user.create({
       data: {
         ...user,
         passbook: {
           create: {
             entryOf: "USER",
+          },
+        },
+        vendorInterLinks: {
+          createMany: {
+            data: members.map((e) => ({
+              memberId: e.id,
+              includeProfit: !e.deleted,
+            })),
           },
         },
       },

@@ -75,6 +75,8 @@ async function seed() {
     select: {
       id: true,
       nickName: true,
+      type: true,
+      deleted: true,
     },
   });
   dbUsers.forEach((user) => {
@@ -102,23 +104,33 @@ async function seed() {
     });
   }
 
-  for (const { id, vendor, member, ...interLink } of seedData.interLink) {
-    await prisma.interLink.create({
-      data: {
-        ...(interLink as any),
-        vendor: {
-          connect: {
-            id: userMap.get(vendor.id),
-          },
-        },
-        member: {
-          connect: {
-            id: userMap.get(member.id),
-          },
-        },
-      },
+  const linterLinks: any[] = [];
+
+  for (const { vendor, member, includeProfit } of seedData.interLink) {
+    linterLinks.push({
+      vendorId: vendor.id,
+      memberId: member.id,
+      includeProfit,
     });
   }
+
+  // const vendors = dbUsers.filter((e) => e.type === "VENDOR");
+  // const members = dbUsers.filter((e) => e.type === "MEMBER");
+
+  // for (const member of members) {
+  //   for (const vendor of vendors) {
+  //     linterLinks.push({
+  //       vendorId: vendor.id,
+  //       memberId: member.id,
+  //       includeProfit: !(member.deleted || vendor.deleted),
+  //     });
+  //   }
+  // }
+
+  await prisma.interLink.createMany({
+    data: linterLinks,
+    skipDuplicates: true,
+  });
 
   return;
 }

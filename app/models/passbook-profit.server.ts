@@ -1,7 +1,7 @@
 import { prisma } from "~/db.server";
 
-export const profitCalculator = async () => {
-  const [vendors, members, club] = await Promise.all([
+export const profitCalculator = () => {
+  return Promise.all([
     prisma.user.findMany({
       where: {
         type: "VENDOR",
@@ -10,7 +10,7 @@ export const profitCalculator = async () => {
       include: {
         vendorInterLinks: {
           where: {
-            excludeProfit: true,
+            includeProfit: true,
           },
         },
         passbook: true,
@@ -21,7 +21,9 @@ export const profitCalculator = async () => {
         type: "MEMBER",
         deleted: false,
       },
-      include: {
+      select: {
+        id: true,
+        nickName: true,
         passbook: true,
       },
     }),
@@ -30,75 +32,142 @@ export const profitCalculator = async () => {
         entryOf: "CLUB",
       },
     }),
-  ]);
-  let profitWithdraw = club?.profitWithdraw || 0;
+  ])
+    .then(([vendors, members, club]) => {
+      const passbooks: Map<
+        number,
+        {
+          tallyBalance: number;
+          profit: number;
+        }
+      > = new Map(
+        members.map((e) => [e.passbook.id, { tallyBalance: 0, profit: 0 }])
+      );
 
-  const data = new Map();
-  const clubId = club?.id || undefined;
+      return {
+        passbooks,
+        vendors,
+        members: members.map((e) => ({ ...e.passbook, memberId: e.id })),
+        club,
+        clubTallyProfit: 0,
+      };
+    })
+    .then(({ passbooks, vendors, members, club, clubTallyProfit }) => {
+      for (let { vendorInterLinks, passbook, ...vendor } of vendors) {
+        const excludeProfitIds = vendorInterLinks.map((e) => e.memberId);
+        const unlinkMembers = members.filter((e) =>
+          excludeProfitIds.includes(e.memberId)
+        );
+        const linkMembers = members.filter(
+          (e) => !excludeProfitIds.includes(e.memberId)
+        );
 
-  if (club && !data.has(clubId)) {
-    data.set(clubId, { tallyProfit: 0 });
-  }
+        const { profit } = passbook;
 
-  for (let member of members) {
-    const memberId = member.passbook.id;
-    if (!data.has(memberId)) {
-      data.set(memberId, { tallyBalance: 0, profit: 0 });
-    }
-  }
+        const eachMemberProfit = Math.round(profit / linkMembers.length);
 
-  for (let vendor of vendors) {
-    const unlinkMemberIds = vendor.vendorInterLinks.map((e) => e.memberId);
-    const unlinkMembers = members.filter((e) => unlinkMemberIds.includes(e.id));
-    const linkMembers = members.filter((e) => !unlinkMemberIds.includes(e.id));
+        const totalTallyProfit = Math.round(
+          eachMemberProfit * unlinkMembers.length
+        );
 
-    const vendorProfit = vendor.passbook.profit;
+        clubTallyProfit = clubTallyProfit + totalTallyProfit;
 
-    const shareSubProfit = vendorProfit - profitWithdraw;
-    profitWithdraw = 0;
+        for (const { id } of unlinkMembers) {
+          const memberMap = passbooks.get(id);
+          passbooks.set(id, {
+            profit: memberMap?.profit || 0,
+            tallyBalance: (memberMap?.tallyBalance || 0) + eachMemberProfit,
+          });
+        }
 
-    const perPersonProfit = Math.round(shareSubProfit / linkMembers.length);
+        for (const { id } of linkMembers) {
+          const memberMap = passbooks.get(id);
+          passbooks.set(id, {
+            tallyBalance: memberMap?.tallyBalance || 0,
+            profit: (memberMap?.profit || 0) + eachMemberProfit,
+          });
+        }
+      }
+      return { passbooks, club, clubTallyProfit };
+    })
+    .then(({ passbooks, club, clubTallyProfit }) => ({
+      club,
+      clubTallyProfit,
+      passbooks: Array.from(passbooks, ([id, data]) => ({ id, data })),
+    }))
+    .then(({ club, passbooks, clubTallyProfit }) => {
+      const takenProfit = club?.profitWithdraw || 0;
+      const reduceEachMember = takenProfit / passbooks.length;
+      return {
+        clubTallyProfit,
+        club,
+        passbooks: passbooks.map((each) => {
+          let balance = reduceEachMember;
+          let tallyBalance = each.data.tallyBalance;
+          let profit = each.data.profit;
 
-    const tallyProfit = Math.round(perPersonProfit * unlinkMembers.length);
+          if (tallyBalance > 0) {
+            const remain = tallyBalance - balance;
+            tallyBalance = remain >= 0 ? remain : 0;
 
-    const clubMap = data.get(clubId);
+            if (remain < 0) {
+              balance = balance - tallyBalance;
+            }
 
-    data.set(clubId, {
-      ...clubMap,
-      tallyProfit: clubMap.tallyProfit + tallyProfit,
+            if (each.data.tallyBalance < 0) {
+              each.data.tallyBalance = 0;
+            }
+          }
+
+          if (balance > 0) {
+            profit = profit - balance;
+          }
+          console.log({
+            tallyBalance,
+            balance,
+            profit,
+            reduceEachMember,
+            takenProfit,
+            data: each.data,
+            clubTallyProfit,
+            clubProfit: club?.profit,
+          });
+          return {
+            ...each,
+            data: {
+              ...each.data,
+              tallyBalance,
+              profit,
+            },
+          };
+        }),
+      };
+    })
+    .then(({ club, passbooks, clubTallyProfit }) => ({
+      club,
+      clubTallyProfit,
+      passbooks: passbooks.map((each) => ({
+        where: { id: each.id },
+        data: each.data,
+      })),
+    }))
+    .then(async ({ club, passbooks, clubTallyProfit }) => {
+      for (let item of passbooks) {
+        await prisma.passbook.update(item);
+      }
+      if (club?.id) {
+        await prisma.passbook.update({
+          where: {
+            id: club?.id,
+          },
+          data: {
+            tallyProfit: clubTallyProfit,
+          },
+        });
+      }
+      return;
+    })
+    .catch((error) => {
+      console.error(`error: ${error}`);
     });
-
-    for (const member of unlinkMembers) {
-      const memberId = member.passbook.id;
-      const memberMap = data.get(memberId);
-
-      data.set(memberId, {
-        ...memberMap,
-        tallyBalance: memberMap.tallyBalance + perPersonProfit,
-      });
-    }
-
-    for (const member of linkMembers) {
-      const memberId = member.passbook.id;
-      const memberMap = data.get(memberId);
-
-      data.set(memberId, {
-        ...memberMap,
-        profit: memberMap.profit + perPersonProfit,
-      });
-    }
-  }
-
-  const array = Array.from(data, ([id, data]) => ({
-    where: {
-      id,
-    },
-    data,
-  }));
-
-  for (let item of array) {
-    await prisma.passbook.update(item);
-  }
-
-  return;
 };
