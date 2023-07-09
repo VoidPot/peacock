@@ -107,7 +107,7 @@ export default function TransactionAddPage() {
               <span className="label-text">With Deleted</span>
               <input
                 type="checkbox"
-                className="toggle-secondary toggle"
+                className="toggle-primary toggle"
                 onChange={(e: any) => setFetchDeleted(e.target.checked)}
               />
             </label>
@@ -127,13 +127,17 @@ export default function TransactionAddPage() {
                   key={i}
                 >
                   <label className="label flex cursor-pointer gap-3">
-                    <span className="label-text">
+                    <span
+                      className={classNames("label-text", {
+                        "text-error": e.member.deleted,
+                      })}
+                    >
                       {e.member.id} - {e.member.firstName} {e.member.lastName}
                     </span>
                     <input
                       type="checkbox"
                       // name={e.id.toString()}
-                      className="toggle-error toggle"
+                      className="toggle-secondary toggle"
                       {...register(e.member.id.toString())}
                     />
                   </label>
