@@ -2,14 +2,12 @@ import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Link, Outlet, useLoaderData } from "@remix-run/react";
 import classNames from "classnames";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import Icon from "~/components/svg/icon";
-import { profitCalculator } from "~/models/passbook-profit.server";
 import { getMembersPassbook } from "~/models/user.server";
 import { getIsLoggedIn } from "~/session.server";
 
 export const loader = async ({ request }: LoaderArgs) => {
-  profitCalculator();
   const isLoggedIn = await getIsLoggedIn(request);
   const items = await getMembersPassbook();
   return json({
