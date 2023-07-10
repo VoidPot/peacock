@@ -2,6 +2,7 @@ import { cssBundleHref } from "@remix-run/css-bundle";
 import type { V2_MetaFunction } from "@remix-run/node";
 import type { LinksFunction } from "@remix-run/node";
 import { Links, LiveReload, Meta, Outlet, Scripts } from "@remix-run/react";
+import "react-datepicker/dist/react-datepicker.css";
 
 import stylesheet from "~/tailwind.css";
 

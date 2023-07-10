@@ -9,7 +9,7 @@ import { prisma } from "~/db.server";
 import {
   getValidateUniqueKey,
   responseData,
-  validateLocalDate,
+  getValidDate,
 } from "~/helpers/utils";
 import configContext from "~/config/configContext";
 import { useEffect } from "react";
@@ -47,7 +47,7 @@ export async function action({ request }: any) {
       nickName: getValidateUniqueKey(`${data.firstName}_${data.lastName}`),
       avatar: "no_image_available.jpeg",
       type: "MEMBER",
-      joinedAt: validateLocalDate(data.joinedAt),
+      joinedAt: getValidDate(data.joinedAt),
     } as unknown as any;
 
     const vendors = await getVendors();

@@ -6,11 +6,7 @@ import { toast } from "react-toastify";
 import { useActionData, useLoaderData, useNavigate } from "@remix-run/react";
 import { getValidatedFormData } from "remix-hook-form";
 import { prisma } from "~/db.server";
-import {
-  formatLocalDate,
-  responseData,
-  validateLocalDate,
-} from "~/helpers/utils";
+import { getValidDate, responseData } from "~/helpers/utils";
 import configContext from "~/config/configContext";
 import { useEffect } from "react";
 import { getIsLoggedIn } from "~/session.server";
@@ -37,7 +33,7 @@ export const loader = async ({ request, params }: LoaderArgs) => {
       lastName: user.lastName || "",
       email: user.email || "",
       mobileNumber: user.mobileNumber || "",
-      joinedAt: formatLocalDate(user.joinedAt),
+      joinedAt: user.joinedAt,
     },
   });
 };
@@ -59,7 +55,7 @@ export async function action({ request }: any) {
       lastName: data.lastName || "",
       email: data.email || "",
       mobileNumber: data.mobileNumber || "",
-      joinedAt: validateLocalDate(data.joinedAt),
+      joinedAt: getValidDate(data.joinedAt),
     } as unknown as any;
 
     await prisma.user.update({

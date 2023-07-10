@@ -6,10 +6,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import type * as yup from "yup";
 import { Form } from "@remix-run/react";
 
-import { TextInput } from "../inputs";
-import moment from "moment";
+import { DatePickerInput, TextInput } from "../inputs";
 import type { getUserById } from "~/models/user.server";
-import { User } from "@prisma/client";
+import type { User } from "@prisma/client";
 
 const { schema } = configContext;
 
@@ -29,16 +28,12 @@ function UserForm({
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useRemixForm<FormData | any>({
     resolver: yupResolver(schema.user),
     mode: "onSubmit",
-    defaultValues:
-      user && Object.values(user).length
-        ? user
-        : {
-            joinedAt: moment().format("DD/MM/YYYY"),
-          },
+    defaultValues: user && Object.values(user).length ? user : {},
   });
   const isMember = Boolean(type === "MEMBER");
 
@@ -102,13 +97,13 @@ function UserForm({
           errors={errors}
         />
 
-        <TextInput
+        <DatePickerInput
           title="Date of Join"
           className="col-span-1 lg:col-span-3"
-          placeholder="20/12/2023"
-          register={register}
           name="joinedAt"
           errors={errors}
+          control={control}
+          register={undefined}
         />
 
         <div className="col-span-full mt-4 flex justify-between gap-2 align-middle">

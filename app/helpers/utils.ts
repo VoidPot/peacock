@@ -9,7 +9,8 @@ export const getValidateUniqueKey = (input: string) =>
     .replaceAll(/[^a-zA-Z]/g, "_")
     .replaceAll(" ", "_")}_${Math.floor(Math.random() * 10 + 1)}`;
 
-export const getValidDate = (date: any) => (date ? new Date(date) : new Date());
+export const getValidDate = (date: any) =>
+  date && moment(date).isValid() ? new Date(date) : new Date();
 
 export const getSecondDiff = (input: any = new Date()) =>
   moment(new Date(), "DD/MM/YYYY HH:mm:ss").diff(

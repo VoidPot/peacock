@@ -12,7 +12,7 @@ import {
 import { getValidatedFormData } from "remix-hook-form";
 import TransactionForm from "~/components/forms/transaction-form";
 import { prisma } from "~/db.server";
-import { responseData, validateLocalDate } from "~/helpers/utils";
+import { formatLocalDate, getValidDate, responseData } from "~/helpers/utils";
 import { getUserSelect } from "~/models/user.server";
 import configContext from "~/config/configContext";
 import type { Transaction } from ".prisma/client";
@@ -64,7 +64,7 @@ export async function action({ request }: any) {
 
     const transaction = {
       mode: data.mode,
-      dot: validateLocalDate(data.dot),
+      dot: getValidDate(data.dot),
       fromId: Number(data.from),
       toId: Number(data.to),
       amount: Number(data.amount) || 0,

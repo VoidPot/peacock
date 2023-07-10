@@ -6,8 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import type * as yup from "yup";
 import { Form } from "@remix-run/react";
 
-import { TextInput, SelectInput } from "../inputs";
-import moment from "moment";
+import { TextInput, SelectInput, DatePickerInput } from "../inputs";
 import { useEffect, useState } from "react";
 import type { getUserSelect } from "~/models/user.server";
 import type { findOneTransaction } from "~/models/transaction.server";
@@ -53,16 +52,13 @@ function TransactionForm({
     register,
     handleSubmit,
     watch,
+    control,
     formState: { errors },
   } = useRemixForm<FormData | any>({
     resolver: yupResolver(schema.transaction),
     mode: "onSubmit",
     defaultValues:
-      transaction && Object.values(transaction).length
-        ? transaction
-        : {
-            dot: moment().format("DD/MM/YYYY"),
-          },
+      transaction && Object.values(transaction).length ? transaction : {},
   });
 
   const selectedMode = watch("mode");
@@ -137,13 +133,13 @@ function TransactionForm({
           errors={errors}
         />
 
-        <TextInput
+        <DatePickerInput
           title="Date of Transaction"
           className="col-span-1 lg:col-span-2"
-          placeholder="20/12/2023"
-          register={register}
           name="dot"
           errors={errors}
+          control={control}
+          register={undefined}
         />
 
         <SelectInput
