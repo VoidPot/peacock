@@ -2,6 +2,7 @@ import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Link, Outlet, useLoaderData } from "@remix-run/react";
 import classNames from "classnames";
+import { useMemo, useState } from "react";
 import Icon from "~/components/svg/icon";
 import { getVendorsWithSummary } from "~/models/user.server";
 import { getIsLoggedIn } from "~/session.server";
@@ -9,11 +10,21 @@ import { getIsLoggedIn } from "~/session.server";
 export const loader = async ({ request }: LoaderArgs) => {
   const isLoggedIn = await getIsLoggedIn(request);
   const items = await getVendorsWithSummary();
-  return json({ items, isLoggedIn });
+  return json({
+    all: items,
+    active: items.filter((e) => !e.deleted),
+    isLoggedIn,
+  });
 };
 
 export default function VendorPage() {
-  const { items, isLoggedIn } = useLoaderData<typeof loader>();
+  const [fetchDeleted, setFetchDeleted] = useState(false);
+  const { all, active, isLoggedIn } = useLoaderData<typeof loader>();
+
+  const items = useMemo(() => {
+    return fetchDeleted ? all : active;
+  }, [all, active, fetchDeleted]);
+
   return (
     <div className="flex h-full w-full flex-col gap-3">
       <Outlet />
@@ -24,14 +35,28 @@ export default function VendorPage() {
               <div className="mb-2 flex items-center justify-between align-middle">
                 <h6 className="m-0 text-neutral">Vendor Table</h6>
                 {isLoggedIn && (
-                  <Link
-                    className="btn-ghost btn-square btn stroke-slate-500 hover:bg-white hover:stroke-secondary"
-                    to={{
-                      pathname: `/vendor/add`,
-                    }}
-                  >
-                    <Icon name="add-box" className="h-6 w-6" />
-                  </Link>
+                  <div className="flex items-center justify-center">
+                    <div className="form-control w-52">
+                      <label className="label cursor-pointer justify-center gap-2">
+                        <span className="label-text">With Deleted</span>
+                        <input
+                          type="checkbox"
+                          className="toggle-primary toggle"
+                          onChange={(e: any) =>
+                            setFetchDeleted(e.target.checked)
+                          }
+                        />
+                      </label>
+                    </div>
+                    <Link
+                      className="btn-ghost btn-square btn stroke-slate-500 hover:bg-white hover:stroke-secondary"
+                      to={{
+                        pathname: `/vendor/add`,
+                      }}
+                    >
+                      <Icon name="add-box" className="h-6 w-6" />
+                    </Link>
+                  </div>
                 )}
               </div>
             </div>
@@ -77,7 +102,6 @@ export default function VendorPage() {
                           )}
                         >
                           <div className="flex px-2 py-1">
-                            {" "}
                             <div>
                               {isLoggedIn && !vendor.deleted ? (
                                 <Link to={`/vendor/avatar/${vendor.id}`}>
@@ -96,7 +120,15 @@ export default function VendorPage() {
                               )}
                             </div>
                             <div className="flex flex-col justify-center">
-                              <h6 className="mb-0 text-sm leading-normal">
+                              <h6
+                                className={classNames(
+                                  "mb-0 text-sm leading-normal",
+                                  {
+                                    "text-error": vendor.deleted,
+                                    "text-neutral": !vendor.deleted,
+                                  }
+                                )}
+                              >
                                 {vendor.firstName} {vendor.lastName}
                               </h6>
                               <p className="mb-0 text-xs leading-tight text-slate-500">
@@ -182,30 +214,38 @@ export default function VendorPage() {
                               }
                             )}
                           >
-                            <Link
-                              to={{
-                                pathname: `/vendor/interlink/${vendor.id}`,
-                              }}
-                              className="btn-ghost btn-square btn w-auto fill-slate-500 px-2 hover:bg-white hover:stroke-secondary"
-                            >
-                              <Icon name="archive" className="h-4 w-4" />
-                            </Link>
-                            <Link
-                              to={{
-                                pathname: `/vendor/edit/${vendor.id}`,
-                              }}
-                              className="btn-ghost btn-square btn w-auto stroke-slate-500 px-2 hover:bg-white hover:stroke-secondary"
-                            >
-                              <Icon name="edit" className="h-4 w-4" />
-                            </Link>
-                            <Link
-                              to={{
-                                pathname: `/vendor/delete/${vendor.id}`,
-                              }}
-                              className="btn-ghost btn-square btn w-auto stroke-slate-500 px-2 hover:bg-white hover:stroke-secondary"
-                            >
-                              <Icon name="delete" className="h-4 w-4" />
-                            </Link>
+                            {!vendor.deleted ? (
+                              <>
+                                <Link
+                                  to={{
+                                    pathname: `/vendor/interlink/${vendor.id}`,
+                                  }}
+                                  className="btn-ghost btn-square btn w-auto fill-slate-500 px-2 hover:bg-white hover:stroke-secondary"
+                                >
+                                  <Icon name="archive" className="h-4 w-4" />
+                                </Link>
+                                <Link
+                                  to={{
+                                    pathname: `/vendor/edit/${vendor.id}`,
+                                  }}
+                                  className="btn-ghost btn-square btn w-auto stroke-slate-500 px-2 hover:bg-white hover:stroke-secondary"
+                                >
+                                  <Icon name="edit" className="h-4 w-4" />
+                                </Link>
+                                <Link
+                                  to={{
+                                    pathname: `/vendor/delete/${vendor.id}`,
+                                  }}
+                                  className="btn-ghost btn-square btn w-auto stroke-slate-500 px-2 hover:bg-white hover:stroke-secondary"
+                                >
+                                  <Icon name="delete" className="h-4 w-4" />
+                                </Link>
+                              </>
+                            ) : (
+                              <span className="text-xs font-semibold leading-tight text-error">
+                                Inactive
+                              </span>
+                            )}
                           </td>
                         )}
                       </tr>

@@ -45,7 +45,7 @@ export async function getMembersPassbook() {
 
 export async function getVendorsWithSummary() {
   const vendors = await prisma.user.findMany({
-    where: { type: "VENDOR", deleted: false },
+    where: { type: "VENDOR" },
     include: {
       passbook: true,
     },
