@@ -8,7 +8,7 @@ import sharp from "sharp";
 
 export async function getMembersPassbook() {
   const members = await prisma.user.findMany({
-    where: { type: "MEMBER", deleted: false },
+    where: { type: "MEMBER" },
     include: {
       passbook: true,
     },
@@ -73,9 +73,6 @@ export async function getUserSelect(withDeleted = true) {
       nickName: true,
       type: true,
       deleted: true,
-    },
-    where: {
-      ...(withDeleted ? {} : { deleted: false }),
     },
   });
   const members = users
