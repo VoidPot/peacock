@@ -23,7 +23,9 @@ const computeGroupData = ({
   const startEndMonths = end.diff(start, "months", true);
   const startCurrentMonths = current.diff(start, "months", true);
   const currentMonthDiff = startCurrentMonths >= 0 ? startCurrentMonths : 0;
-  const termAmountPerPerson = Math.ceil(currentMonthDiff) * amount;
+  const endMonthsDif = Math.ceil(startEndMonths);
+  const monthDiff = end.isAfter(current) ? currentMonthDiff : endMonthsDif;
+  const termAmountPerPerson = Math.ceil(monthDiff) * amount;
   const totalTermAmount = termAmountPerPerson * membersCount;
   return {
     stateDate,
@@ -33,7 +35,7 @@ const computeGroupData = ({
     startMonth: start.format("MMM YYYY"),
     endMonth: end.format("MMM YYYY"),
     currentMonth: current.format("MMM YYYY"),
-    endMonthsDif: Math.ceil(startEndMonths),
+    endMonthsDif,
     currentMonthsDiff: Math.ceil(currentMonthDiff),
     termAmountPerPerson,
     termAmountPerPerson$: formatMoney(termAmountPerPerson),

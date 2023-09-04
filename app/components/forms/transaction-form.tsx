@@ -33,11 +33,9 @@ function TransactionForm({
   cancelPath?: string;
 }) {
   const id = transaction?.id || 0;
-  const usersOptions = userSelect.map((e) => [
-    e.id,
-    `${e.firstName} ${e.lastName}`,
-    e.type,
-  ]);
+  const usersOptions = userSelect
+    .filter((e) => !e.deleted)
+    .map((e) => [e.id, `${e.firstName} ${e.lastName}`, e.type]);
 
   const memberOptions = usersOptions.filter((e) => e[2] === "MEMBER");
   const vendorOptions = usersOptions.filter((e) => e[2] === "VENDOR");

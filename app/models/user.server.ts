@@ -8,7 +8,7 @@ import sharp from "sharp";
 
 export async function getMembersPassbook() {
   const members = await prisma.user.findMany({
-    where: { type: "MEMBER" },
+    where: { type: "MEMBER", deleted: false },
     include: {
       passbook: true,
     },
@@ -64,7 +64,7 @@ export async function getVendorsWithSummary() {
     .sort((a, b) => (a.firstName > b.firstName ? 1 : -1));
 }
 
-export async function getUserSelect() {
+export async function getUserSelect(withDeleted = true) {
   const users = await prisma.user.findMany({
     select: {
       id: true,
@@ -73,6 +73,9 @@ export async function getUserSelect() {
       nickName: true,
       type: true,
       deleted: true,
+    },
+    where: {
+      ...(withDeleted ? {} : { deleted: false }),
     },
   });
   const members = users
