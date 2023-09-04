@@ -52,14 +52,23 @@ function TransactionForm({
     watch,
     control,
     formState: { errors },
+    setValue,
   } = useRemixForm<FormData | any>({
     resolver: yupResolver(schema.transaction),
     mode: "onSubmit",
     defaultValues:
-      transaction && Object.values(transaction).length ? transaction : {},
+      transaction && Object.values(transaction).length
+        ? transaction
+        : { dot: new Date() },
   });
+  console.log({ transaction });
 
   const selectedMode = watch("mode");
+
+  useEffect(() => {
+    setValue("from", fromToOptions[0][0][0]);
+    setValue("to", fromToOptions[1][0][0]);
+  }, [fromToOptions, setValue]);
 
   useEffect(() => {
     if (
