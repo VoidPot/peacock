@@ -3,88 +3,18 @@ import type { PrismaClient } from "@prisma/client";
 
 async function backup(prisma: PrismaClient, filePath: string) {
   return await Promise.all([
-    prisma.user.findMany({
-      select: {
-        id: true,
-        mobileNumber: true,
-        email: true,
-        firstName: true,
-        lastName: true,
-        nickName: true,
-        avatar: true,
-        type: true,
-        joinedAt: true,
-        createdAt: true,
-        deleted: true,
-        deletedAt: true,
-      },
-    }),
-    prisma.group.findMany({
-      select: {
-        id: true,
-        name: true,
-        slug: true,
-        amount: true,
-        period: true,
-        startAt: true,
-        createdAt: true,
-        deleted: true,
-        deletedAt: true,
-      },
-    }),
-    prisma.transaction.findMany({
-      select: {
-        id: true,
-        type: true,
-        method: true,
-        mode: true,
-        dot: true,
-        amount: true,
-        note: true,
-        from: {
-          select: {
-            id: true,
-            nickName: true,
-          },
-        },
-        to: {
-          select: {
-            id: true,
-            nickName: true,
-          },
-        },
-        createdAt: true,
-        deleted: true,
-        deletedAt: true,
-      },
-    }),
-    prisma.interLink.findMany({
-      select: {
-        id: true,
-        vendor: {
-          select: {
-            id: true,
-            nickName: true,
-          },
-        },
-        member: {
-          select: {
-            id: true,
-            nickName: true,
-          },
-        },
-        includeProfit: true,
-        createdAt: true,
-        deleted: true,
-        deletedAt: true,
-      },
-    }),
+    prisma.group.findMany(),
+    prisma.interLink.findMany(),
+    prisma.passbook.findMany(),
+    prisma.transaction.findMany(),
+    prisma.user.findMany(),
   ])
-    .then(([user, group, transaction, interLink]) => ({
-      user,
+    .then(([group, interLink, passbook, transaction, user]) => ({
       group,
-      transaction,
       interLink,
+      passbook,
+      transaction,
+      user,
     }))
     .then((data) => fs.writeJson(filePath, data))
     .then(() => ({ success: true }))

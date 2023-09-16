@@ -6,14 +6,19 @@ import { prisma } from "~/db.server";
 import { profitCalculator } from "./passbook-profit.server";
 
 const getUserPassbooks = async (from: number, to: number) => {
-  return await Promise.all([
-    prisma.passbook.findMany({
+  return await prisma.passbook
+    .findMany({
       where: {
-        user: {
-          id: {
-            in: [from, to],
+        OR: [
+          {
+            user: {
+              id: {
+                in: [from, to],
+              },
+            },
           },
-        },
+          { entryOf: "CLUB" },
+        ],
       },
       include: {
         user: {
@@ -22,18 +27,40 @@ const getUserPassbooks = async (from: number, to: number) => {
           },
         },
       },
-    }),
-    prisma.passbook.findFirst({
-      where: {
-        entryOf: "CLUB",
-      },
-    }),
-  ]).then(([fromTo, CLUB]) => ({
-    FROM: fromTo.find((e) => e.user?.id === from),
-    TO: fromTo.find((e) => e.user?.id === to),
-    CLUB,
-  }));
+    })
+    .then((data) => ({
+      FROM: data.find((e) => e.user?.id === from),
+      TO: data.find((e) => e.user?.id === to),
+      CLUB: data.find((e) => e.entryOf === "CLUB"),
+    }));
 };
+
+function getPassbookUpdateQuery(
+  passbook: any,
+  values: any,
+  add: { [key in Passbook_Settings_Keys]?: number } = {},
+  sub: { [key in Passbook_Settings_Keys]?: number } = {}
+) {
+  return {
+    where: {
+      id: passbook.id,
+    },
+    data: {
+      ...Object.fromEntries(
+        Object.entries(add).map(([key, value]) => [
+          key,
+          Number(passbook[key]) + values[value],
+        ])
+      ),
+      ...Object.fromEntries(
+        Object.entries(sub).map(([key, value]) => [
+          key,
+          Number(passbook[key]) - values[value],
+        ])
+      ),
+    },
+  };
+}
 
 const passbookEntry = async (
   transaction: Transaction,
@@ -49,9 +76,9 @@ const passbookEntry = async (
     onePlus: 1,
   };
 
-  if (["VENDOR_RETURN", "VENDOR_PERIODIC_RETURN"].includes(transaction.mode)) {
+  if (transaction.mode === "VENDOR_RETURN") {
     const from = passbooks.FROM;
-    if (from && from.calcProfit) {
+    if (from) {
       const returns = from.totalReturns + transaction.amount;
       values.profit = returns - from.totalInvest - from.profit;
 
@@ -65,95 +92,96 @@ const passbookEntry = async (
     }
   }
 
+  if (transaction.mode === "VENDOR_PERIODIC_RETURN") {
+    values.profit = transaction.amount;
+  }
+
   const passbooksForUpdate: {
     where: Partial<Passbook>;
     data: Partial<Passbook>;
   }[] = [];
-
-  const addEntry = (
-    passbook: any | null | undefined | unknown,
-    add: { [key in Passbook_Settings_Keys]?: number } = {},
-    sub: { [key in Passbook_Settings_Keys]?: number } = {}
-  ) => {
-    if (passbook) {
-      passbooksForUpdate.push({
-        where: {
-          id: passbook.id,
-        },
-        data: {
-          ...Object.fromEntries(
-            Object.entries(add).map(([key, value]) => [
-              key,
-              Number(passbook[key]) + values[value],
-            ])
-          ),
-          ...Object.fromEntries(
-            Object.entries(sub).map(([key, value]) => [
-              key,
-              Number(passbook[key]) - values[value],
-            ])
-          ),
-        },
-      });
-    }
-  };
 
   const settings = configContext.passbook.settings;
 
   Object.entries(settings).forEach(([key, value]) => {
     if (mode === key) {
       Object.entries(value).forEach(([pbKey, pbValue]: any[]) => {
-        if (shouldReverse) {
-          addEntry(passbooks[pbKey], pbValue?.SUB, pbValue?.ADD);
-        } else {
-          addEntry(passbooks[pbKey], pbValue?.ADD, pbValue?.SUB);
+        const currentPassbook = passbooks[pbKey];
+        if (currentPassbook) {
+          if (shouldReverse) {
+            passbooksForUpdate.push(
+              getPassbookUpdateQuery(
+                passbooks[pbKey],
+                values,
+                pbValue?.SUB,
+                pbValue?.ADD
+              )
+            );
+          } else {
+            passbooksForUpdate.push(
+              getPassbookUpdateQuery(
+                passbooks[pbKey],
+                values,
+                pbValue?.ADD,
+                pbValue?.SUB
+              )
+            );
+          }
         }
       });
     }
   });
 
-  for (let updateData of passbooksForUpdate) {
-    await prisma.passbook
-      .update({
-        where: updateData.where,
-        data: updateData.data,
-      })
-      .catch(console.error);
-  }
+  const passbookUpdates = passbooksForUpdate.map((each) => {
+    return prisma.passbook.update({
+      where: each.where,
+      data: each.data,
+    });
+  });
+
+  await prisma.$transaction(passbookUpdates);
 
   return;
 };
 
 export const usePassbookMiddleware: Prisma.Middleware = async (param, next) => {
   const { action, model } = param;
-  let transaction;
-  if (model === "Transaction" && ["update", "delete"].includes(action)) {
-    const where = param?.args?.where;
-    transaction = where
-      ? await prisma.transaction.findFirst({ where })
-      : undefined;
-  }
-  const response = await next(param);
+  const isTransaction = model === "Transaction";
 
-  if (model === "Transaction") {
-    if (action === "create") {
-      await passbookEntry(response, false);
+  let previousData;
+
+  if (isTransaction && action === "update") {
+    if (param?.args?.where) {
+      previousData = await prisma.transaction.findFirst({
+        where: param?.args?.where,
+      });
+    }
+  }
+
+  // Run the DB process
+  const newData = await next(param);
+
+  if (isTransaction) {
+    if (action === "create" && !newData?.deleted) {
+      await passbookEntry(newData, false);
     }
 
-    if (["update", "delete"].includes(action)) {
-      if (transaction && action === "update") {
-        await passbookEntry(transaction, true);
-        await passbookEntry(response, false);
-      } else if (transaction && action === "delete") {
-        await passbookEntry(transaction, true);
-      }
+    if (action === "update" && previousData) {
+      await passbookEntry(previousData, true);
+      await passbookEntry(newData, false);
+    }
+
+    if (action === "delete") {
+      await passbookEntry(newData, true);
     }
 
     if (
-      (response &&
-        ["VENDOR_RETURN", "VENDOR_PERIODIC_RETURN"].includes(response?.mode)) ||
-      (transaction &&
-        ["VENDOR_RETURN", "VENDOR_PERIODIC_RETURN"].includes(transaction?.mode))
+      (newData &&
+        ["VENDOR_RETURN", "VENDOR_PERIODIC_RETURN"].includes(newData?.mode)) ||
+      (previousData &&
+        ["VENDOR_RETURN", "VENDOR_PERIODIC_RETURN"].includes(
+          previousData?.mode
+        ))
     ) {
       await profitCalculator();
     }
@@ -163,9 +191,9 @@ export const usePassbookMiddleware: Prisma.Middleware = async (param, next) => {
     await profitCalculator();
   }
 
-  // if (model === "InterLink") {
-  //   await profitCalculator();
-  // }
+  if (model === "InterLink") {
+    await profitCalculator();
+  }
 
-  return response;
+  return newData;
 };
