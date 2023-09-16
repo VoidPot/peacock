@@ -74,6 +74,17 @@ export async function getUserSelect(withDeleted = true) {
       type: true,
       deleted: true,
     },
+    where: {
+      OR: [
+        {
+          type: "MEMBER",
+        },
+        {
+          type: "VENDOR",
+          deleted: false,
+        },
+      ],
+    },
   });
   const members = users
     .filter((e) => e.type === "MEMBER")
