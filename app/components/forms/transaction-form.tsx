@@ -61,7 +61,6 @@ function TransactionForm({
         ? transaction
         : { dot: new Date() },
   });
-  console.log({ transaction });
 
   const selectedMode = watch("mode");
 
