@@ -2,43 +2,123 @@ import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Link, Outlet, useLoaderData } from "@remix-run/react";
 import classNames from "classnames";
-import { useMemo, useState } from "react";
+import html2canvas from "html2canvas";
+import { useEffect, useMemo, useRef, useState } from "react";
+import Stats from "~/components/molecules/stats";
 import Icon from "~/components/svg/icon";
+import { formatDateFile, formatDateTime } from "~/helpers/utils";
+import { getClubStatsPassbook } from "~/models/passbook.server";
 import { getMembersPassbook } from "~/models/user.server";
 import { getIsLoggedIn } from "~/session.server";
 
 export const loader = async ({ request }: LoaderArgs) => {
   const isLoggedIn = await getIsLoggedIn(request);
   const items = await getMembersPassbook();
+  const activeMembers = items.filter((e) => !e.deleted);
+  const club = await getClubStatsPassbook(activeMembers.length);
   return json({
+    club,
     allMembers: items,
-    activeMembers: items.filter((e) => !e.deleted),
+    activeMembers,
     isLoggedIn,
   });
 };
 
 export default function MemberPage() {
+  const tableRef = useRef<HTMLDivElement>(null);
+  const [captureMode, setCaptureMode] = useState(false);
+
   const [fetchDeleted, setFetchDeleted] = useState(false);
-  const { allMembers, activeMembers, isLoggedIn } =
+  const { allMembers, activeMembers, isLoggedIn, club } =
     useLoaderData<typeof loader>();
 
   const items = useMemo(() => {
     return fetchDeleted ? allMembers : activeMembers;
   }, [activeMembers, allMembers, fetchDeleted]);
 
+  const captureTable = () => {
+    if (document && tableRef && tableRef !== null) {
+      setCaptureMode(true);
+    }
+  };
+
+  useEffect(() => {
+    if (captureMode && document && tableRef && tableRef !== null) {
+      html2canvas(tableRef.current as HTMLDivElement, {
+        scrollX: window.screenX,
+        scrollY: window.screenY,
+      }).then((canvas) => {
+        setCaptureMode(false);
+        const capturedLink = canvas.toDataURL("image/png");
+        let downloadable = document.createElement("a");
+        downloadable.download = `peacock-members-${formatDateFile()}.png`;
+        downloadable.href = capturedLink;
+        downloadable.click();
+      });
+    }
+  }, [captureMode]);
+
   return (
     <div className="flex h-full w-full flex-col gap-3">
       <Outlet />
-      <div className="flex flex-wrap">
-        <div className="w-full max-w-full flex-none">
-          <div className="relative mb-6 flex min-w-0 flex-col break-words rounded-md border-0 border-solid border-transparent bg-white bg-clip-border shadow-soft-xl">
+      <div className="flex flex-wrap" id="members-table">
+        <div
+          className={classNames("flex-none", {
+            "w-full max-w-full": !captureMode,
+            "border-8 border-stone-100": captureMode,
+          })}
+          ref={tableRef}
+        >
+          <div
+            className={classNames(
+              "relative flex min-w-0 flex-col break-words border-0 border-solid border-transparent bg-white bg-clip-border shadow-soft-xl",
+              { "mb-0 rounded-0": captureMode, "mb-6 rounded-md": !captureMode }
+            )}
+          >
             <div className="border-b-solid mb-0 rounded-t-2xl border-b-0 border-b-transparent bg-white p-6 pb-0">
-              <div className="mb-2 flex items-center justify-between align-middle">
-                <h6 className="m-0 text-neutral">Members Table</h6>
+              <div
+                className={classNames("mb-2 flex items-center align-middle", {
+                  "justify-between": !captureMode,
+                  "justify-center": captureMode,
+                })}
+              >
+                {!captureMode && (
+                  <h6 className="m-0 text-neutral">Members Table</h6>
+                )}
+                {captureMode && (
+                  <div className="h-fit w-full pb-3 pt-2 text-center">
+                    <div className="m-auto flex select-none flex-col items-center justify-center gap-4 whitespace-nowrap align-middle text-sm text-slate-700">
+                      <span>
+                        <h1 className="m-0 p-0 font-brand text-2xl uppercase tracking-normal text-primary">
+                          Peacock Club
+                        </h1>
+                        <p className="m-0 p-0 text-sm text-slate-500">
+                          {formatDateTime()}
+                        </p>
+                      </span>
+                      <Stats
+                        club={club}
+                        captureMode={captureMode}
+                        theme={"ghost"}
+                        childClass={
+                          "border-2 border-zinc-100 shadow-none px-4 py-3"
+                        }
+                      />
+                      <h6 className="m-0 pt-4 text-neutral">Members Table</h6>
+                    </div>
+                  </div>
+                )}
                 {isLoggedIn && (
-                  <div className="flex items-center justify-center">
-                    <div className="form-control w-52">
-                      <label className="label cursor-pointer justify-center gap-2">
+                  <div
+                    className={classNames(
+                      "flex flex-col items-end justify-center md:flex-row md:items-center",
+                      {
+                        hidden: captureMode,
+                      }
+                    )}
+                  >
+                    <div className="form-control">
+                      <label className="label w-fit cursor-pointer justify-center gap-2">
                         <span className="label-text">With Deleted</span>
                         <input
                           type="checkbox"
@@ -49,20 +129,37 @@ export default function MemberPage() {
                         />
                       </label>
                     </div>
-                    <Link
-                      className="btn-ghost btn-square btn stroke-slate-500 hover:bg-white hover:stroke-secondary"
-                      to={{
-                        pathname: `/member/add`,
-                      }}
-                    >
-                      <Icon name="add-box" className="h-6 w-6" />
-                    </Link>
+                    <div className="flex">
+                      <button
+                        className={classNames(
+                          "btn-ghost btn-square btn stroke-slate-500 hover:bg-white hover:stroke-secondary",
+                          {
+                            hidden: captureMode,
+                          }
+                        )}
+                        onClick={() => captureTable()}
+                      >
+                        <Icon name="screenshot" className="h-6 w-6" />
+                      </button>
+                      <Link
+                        className="btn-ghost btn-square btn stroke-slate-500 hover:bg-white hover:stroke-secondary"
+                        to={{
+                          pathname: `/member/add`,
+                        }}
+                      >
+                        <Icon name="add-box" className="h-6 w-6" />
+                      </Link>
+                    </div>
                   </div>
                 )}
               </div>
             </div>
             <div className="flex-auto px-0 pb-2 pt-0">
-              <div className="overflow-x-auto p-0">
+              <div
+                className={classNames("p-0", {
+                  "overflow-x-auto": !captureMode,
+                })}
+              >
                 <table className="mb-0 table w-full items-center border-gray-200 align-top text-slate-500">
                   <thead className="px-4 align-bottom">
                     <tr>
@@ -84,7 +181,7 @@ export default function MemberPage() {
                       <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
                         Net Value
                       </th>
-                      {isLoggedIn && (
+                      {isLoggedIn && !captureMode && (
                         <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
                           Actions
                         </th>
@@ -120,7 +217,7 @@ export default function MemberPage() {
                                 />
                               )}
                             </div>
-                            <div className="flex flex-col justify-center">
+                            <div className="justify-center">
                               <h6
                                 className={classNames(
                                   "mb-0 text-sm leading-normal",
@@ -145,7 +242,7 @@ export default function MemberPage() {
                         </td>
                         <td
                           className={classNames(
-                            "whitespace-nowrap bg-transparent p-2 text-center align-middle text-sm leading-normal shadow-transparent",
+                            "items-center justify-center whitespace-nowrap bg-transparent p-2 text-center align-middle text-sm leading-normal shadow-transparent",
                             {
                               "border-b": index !== items.length - 1,
                             }
@@ -160,7 +257,7 @@ export default function MemberPage() {
                         </td>
                         <td
                           className={classNames(
-                            "whitespace-nowrap bg-transparent p-2 text-center align-middle text-sm leading-normal shadow-transparent",
+                            "items-center justify-center whitespace-nowrap bg-transparent p-2 text-center align-middle text-sm leading-normal shadow-transparent",
                             {
                               "border-b": index !== items.length - 1,
                             }
@@ -180,7 +277,7 @@ export default function MemberPage() {
                         </td>
                         <td
                           className={classNames(
-                            "whitespace-nowrap bg-transparent p-2 text-center align-middle text-sm leading-normal shadow-transparent",
+                            "items-center justify-center whitespace-nowrap bg-transparent p-2 text-center align-middle text-sm leading-normal shadow-transparent",
                             {
                               "border-b": index !== items.length - 1,
                             }
@@ -207,7 +304,7 @@ export default function MemberPage() {
                         </td>
                         <td
                           className={classNames(
-                            "whitespace-nowrap bg-transparent p-2 text-center align-middle text-sm leading-normal shadow-transparent",
+                            "items-center justify-center whitespace-nowrap bg-transparent p-2 text-center align-middle text-sm leading-normal shadow-transparent",
                             {
                               "border-b": index !== items.length - 1,
                               "text-error": member.profit < 0,
@@ -221,7 +318,7 @@ export default function MemberPage() {
                         </td>
                         <td
                           className={classNames(
-                            "whitespace-nowrap bg-transparent p-2 text-center align-middle text-sm leading-normal shadow-transparent",
+                            "items-center justify-center whitespace-nowrap bg-transparent p-2 text-center align-middle text-sm leading-normal shadow-transparent",
                             {
                               "border-b": index !== items.length - 1,
                             }
@@ -231,7 +328,7 @@ export default function MemberPage() {
                             {member.netAmount$}
                           </span>
                         </td>
-                        {isLoggedIn && (
+                        {isLoggedIn && !captureMode && (
                           <td
                             className={classNames(
                               "whitespace-nowrap bg-transparent p-2 text-center align-middle text-sm uppercase leading-normal shadow-transparent",

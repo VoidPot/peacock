@@ -37,7 +37,7 @@ function TransactionTable({
                 <div className="flex items-center justify-center">
                   <div className="form-control w-52">
                     <label className="label cursor-pointer justify-center gap-2">
-                      <span className="label-text">With Deleted</span>
+                      <span className="label-text">Deleted</span>
                       <input
                         type="checkbox"
                         className="toggle-primary toggle"

@@ -14,6 +14,7 @@ import Member from "./icon/member";
 import Trans from "./icon/trans";
 import Edit from "./icon/edit";
 import Delete from "./icon/delete";
+import Screenshot from "./icon/screenshot";
 
 export const Icons = {
   "add-box": AddBox,
@@ -30,6 +31,7 @@ export const Icons = {
   trans: Trans,
   edit: Edit,
   delete: Delete,
+  screenshot: Screenshot,
 };
 
 interface IconProps {

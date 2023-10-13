@@ -35,6 +35,16 @@ export const formatDate = (input: any = new Date()) => {
   return date.format("DD MMM YYYY");
 };
 
+export const formatDateFile = (input: any = new Date()) => {
+  const date = moment(getValidDate(input));
+  return date.format("DD-MM-YYYY");
+};
+
+export const formatDateTime = (input: any = new Date()) => {
+  const date = moment(getValidDate(input));
+  return date.format("MMMM Do YYYY, h:mm:ss a");
+};
+
 export const getValidNumber = (input: any | undefined = 0) => {
   return isNaN(Number(input)) ? 0 : Number(input);
 };

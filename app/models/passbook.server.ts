@@ -170,3 +170,45 @@ export const getClubGroupPassbook = async () => {
       };
     });
 };
+
+export const getClubStatsPassbook = async (membersCount: number) => {
+  return prisma.passbook
+    .findFirst({
+      where: {
+        entryOf: "CLUB",
+      },
+    })
+    .then((club) => club as unknown as Passbook)
+    .then((club) => {
+      const clubGroupConfig = configContext.group(membersCount).club;
+
+      const totalBalance =
+        clubGroupConfig.totalTermAmount +
+        club.tallyProfit -
+        club.accountBalance;
+
+      const totalProfit = club.profit + club.tallyProfit - club.profitWithdraw;
+
+      const netMemberAmount = club.accountBalance + totalBalance;
+      const netAmount = netMemberAmount + club.profit;
+
+      const perMemberNetValue = Math.round(netAmount / membersCount);
+
+      return {
+        ...club,
+        ...clubGroupConfig,
+        ...formatPassbook(club),
+        membersCount,
+        totalBalance,
+        totalBalance$: formatMoney(totalBalance),
+        perMemberNetValue,
+        perMemberNetValue$: formatMoney(perMemberNetValue),
+        netMemberAmount,
+        netMemberAmount$: formatMoney(netMemberAmount),
+        netAmount,
+        netAmount$: formatMoney(netAmount),
+        totalProfit: totalProfit,
+        totalProfit$: formatMoney(totalProfit),
+      };
+    });
+};

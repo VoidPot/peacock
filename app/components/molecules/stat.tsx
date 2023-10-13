@@ -20,6 +20,7 @@ export interface StatProps {
     | "success"
     | "info"
     | "error";
+  className?: string;
 }
 
 const Stat = ({
@@ -31,6 +32,7 @@ const Stat = ({
   iconPlacement = "end",
   align = "between",
   hedColor = "secondary",
+  className = "",
 }: StatProps) => {
   return (
     <div className="w-full max-w-full">
@@ -39,7 +41,8 @@ const Stat = ({
           "relative flex min-w-0 flex-col break-words rounded-md bg-white",
           {
             "shadow-soft-md": theme === "default",
-          }
+          },
+          className
         )}
       >
         <div
