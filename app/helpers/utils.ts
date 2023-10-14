@@ -1,4 +1,4 @@
-import moment from "moment";
+import moment from "moment-timezone";
 import _ from "lodash";
 import { json } from "@remix-run/node";
 import configContext from "~/config/configContext";
@@ -64,13 +64,10 @@ export const getNextDue = (input: any = new Date()) => {
     };
   }
 
-  console.log({
-    nextDate: nextDate.format("DD MMM YYYY"),
-    moment: moment().format("DD MMM YYYY"),
-    prevDate: prevDate.format("DD MMM YYYY"),
-  });
-
-  if (nextDate.format("DD MMM YYYY") === moment().format("DD MMM YYYY")) {
+  if (
+    nextDate.format("DD MMM YYYY") ===
+    moment().tz("Asia/Kolkata").format("DD MMM YYYY")
+  ) {
     return {
       lastDue: "Today",
       lastDueHighlight: true,
