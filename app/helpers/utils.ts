@@ -48,7 +48,7 @@ export const getNextDue = (input: any = new Date()) => {
   const monthDiff = getMonthsDiff(getValidDate(input));
 
   const nextDate = moment(getValidDate(input)).add(monthDiff, "months");
-  const prevDate = moment(getValidDate(input)).add(monthDiff, "months");
+  const prevDate = moment(getValidDate(input)).add(monthDiff - 1, "months");
   const calenderNext = nextDate.calendar().split("at");
   const calenderPrev = prevDate.calendar().split("at");
 
