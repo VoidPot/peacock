@@ -1,10 +1,19 @@
 import configContext from "~/config/configContext";
-import type { User } from "@prisma/client";
+import type { Passbook, User } from "@prisma/client";
 import { prisma } from "~/db.server";
-import { formatMoney, getMonthYear, responseData } from "~/helpers/utils";
+import {
+  formatDate,
+  formatMoney,
+  getMonthYear,
+  getDueAmount,
+  getNextDue,
+  responseData,
+  getMonthsDiff,
+} from "~/helpers/utils";
 import { formatPassbook } from "./passbook.server";
 import fs from "fs-extra";
 import sharp from "sharp";
+import moment from "moment";
 
 export async function getMembersPassbook() {
   const members = await prisma.user.findMany({
@@ -43,6 +52,52 @@ export async function getMembersPassbook() {
     .sort((a, b) => (a.firstName > b.firstName ? 1 : -1));
 }
 
+export function getVendorTypeData(
+  vendor: User & {
+    passbook: Passbook;
+  }
+) {
+  const { isActive, vendorType, joinedAt } = vendor;
+  const data = {
+    nextDue: getNextDue(vendor.passbook.termInvest),
+    dueAmount: 0,
+    totalDueAmount: 0,
+    isActive,
+    monthDiff: getMonthsDiff(joinedAt),
+  };
+
+  const { monthDiff } = data;
+
+  if (isActive && vendorType === "LOAD_BORROWER") {
+    const everyMonthAmount = getDueAmount(vendor.passbook.totalInvest);
+    const returns = everyMonthAmount * monthDiff;
+    const expectedMoney = returns + vendor.passbook.totalInvest;
+    const isActiveByCalc =
+      vendor.passbook.totalInvest > vendor.passbook.returns;
+
+    if (isActiveByCalc) {
+      data.dueAmount = everyMonthAmount;
+      data.totalDueAmount =
+        expectedMoney -
+        (vendor.passbook.totalInvest - vendor.passbook.totalReturns);
+    } else {
+      data.isActive = false;
+    }
+  }
+
+  if (isActive && vendorType === "CHIT_FUND_COMPANY") {
+    if (monthDiff > 20) {
+      data.isActive = false;
+    }
+  }
+
+  return {
+    ...data,
+    dueAmount$: formatMoney(data.dueAmount),
+    totalDueAmount$: formatMoney(data.totalDueAmount),
+  };
+}
+
 export async function getVendorsWithSummary() {
   const vendors = await prisma.user.findMany({
     where: { type: "VENDOR" },
@@ -54,9 +109,11 @@ export async function getVendorsWithSummary() {
   return vendors
     .map((vendor) => {
       const passbook = formatPassbook(vendor.passbook);
+      const vendorType = getVendorTypeData(vendor);
       return {
         ...vendor,
         ...passbook,
+        ...vendorType,
         id: vendor.id,
         joinedAt$: getMonthYear(vendor.joinedAt),
       };

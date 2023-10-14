@@ -17,9 +17,28 @@ export const getSecondDiff = (input: any = new Date()) =>
     moment(getValidDate(input), "DD/MM/YYYY HH:mm:ss")
   );
 
+export const getDiffMoment = (input: any = new Date()) => {
+  return moment.duration(moment(new Date()).diff(moment(getValidDate(input))));
+};
+
+export const getMonthsDiff = (input: any = new Date()) => {
+  const diff = getDiffMoment(input);
+  const yearMon = diff.asYears() * 12;
+  return yearMon + diff.asMonths();
+};
+
 export const getMonthYear = (input: any = new Date()) => {
   const date = moment(input);
   return date.format("MMM YYYY");
+};
+
+export const getDueAmount = (input: number) => {
+  return input / 100;
+};
+
+export const getNextDue = (input: any = new Date()) => {
+  const monthDiff = getMonthsDiff(getValidDate(input));
+  return moment(getValidDate(input)).add(monthDiff, "months").calendar();
 };
 
 export const formatMoney = (input: any | undefined = 0) => {

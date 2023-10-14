@@ -101,8 +101,6 @@ export async function profitCalculator() {
     }
   }
 
-  console.table(passbooks);
-
   const passbookQueries = Array.from(passbooks, ([id, data]) => ({
     where: { id },
     data,

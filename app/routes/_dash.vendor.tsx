@@ -69,6 +69,9 @@ export default function VendorPage() {
                         Name / ID
                       </th>
                       <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
+                        Started At / Next Due
+                      </th>
+                      <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
                         Started At
                       </th>
                       <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
@@ -145,9 +148,31 @@ export default function VendorPage() {
                             }
                           )}
                         >
-                          <span className="text-xs font-semibold leading-tight text-slate-500">
-                            {vendor.joinedAt$}
-                          </span>
+                          <div className="flex flex-col justify-center">
+                            <span className="text-xs font-semibold leading-tight text-slate-500">
+                              {vendor.joinedAt$}
+                            </span>
+                            <span className="text-xs font-semibold leading-tight text-slate-500">
+                              {vendor.totalDueAmount$}
+                            </span>
+                          </div>
+                        </td>
+                        <td
+                          className={classNames(
+                            "whitespace-nowrap bg-transparent p-2 text-center align-middle text-sm leading-normal shadow-transparent",
+                            {
+                              "border-b": index !== items.length - 1,
+                            }
+                          )}
+                        >
+                          <div className="flex flex-col justify-center">
+                            <span className="text-xs font-semibold leading-tight text-slate-500">
+                              {vendor.dueAmount$}
+                            </span>
+                            <span className="text-xs font-semibold leading-tight text-slate-500">
+                              {vendor.nextDue}
+                            </span>
+                          </div>
                         </td>
                         <td
                           className={classNames(

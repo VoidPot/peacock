@@ -167,7 +167,10 @@ const configContext = {
       }
 
       const inMonth = current.diff(clubStart, "months", true);
+      const periodString = moment("20200109", "YYYYMMDD").fromNow();
       return {
+        calender: clubStart.calendar(),
+        periodString,
         inYear,
         inMonth: Math.ceil(inMonth),
         since: clubStart.format("DD MMM YYYY"),

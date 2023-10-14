@@ -17,6 +17,8 @@ model User {
   avatar           String?
   type             USER_TYPE     @default(MEMBER)
   joinedAt         DateTime      @default(now())
+  isActive         Boolean       @default(true)
+  vendorType       VENDOR_TYPE   @default(DEFAULT)
   transactionFrom  Transaction[] @relation("from")
   transactionTo    Transaction[] @relation("to")
   passbook         Passbook      @relation(fields: [passbookId], references: [id])
@@ -32,6 +34,12 @@ model User {
 enum USER_TYPE {
   MEMBER
   VENDOR
+}
+
+enum VENDOR_TYPE {
+  DEFAULT
+  CHIT_FUND_COMPANY
+  LOAD_BORROWER
 }
 
 model InterLink {
