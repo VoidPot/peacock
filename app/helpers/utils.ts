@@ -64,7 +64,8 @@ export const getNextDue = (input: any = new Date()) => {
   if (calenderNext.length > 1) {
     return {
       ...lastDate,
-      nextDue: `${nextDate.format("DD MMM YYYY")} - ${calenderNext[0]}`,
+      nextDue: nextDate.format("DD MMM YYYY"),
+      calenderNext: calenderNext[0],
       nextDueHighlight: true,
     };
   }
@@ -72,6 +73,7 @@ export const getNextDue = (input: any = new Date()) => {
   return {
     ...lastDate,
     nextDue: nextDate.format("DD MMM YYYY"),
+    calenderNext: "",
     nextDueHighlight: false,
   };
 };

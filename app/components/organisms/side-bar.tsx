@@ -37,12 +37,6 @@ function SideBar({ isOpen, setOpen, isLoggedIn }: any) {
                 Peacock Club
               </h1>
               <p className="m-0 p-0 text-sm text-slate-500">{clubAge.inYear}</p>
-              <p className="m-0 p-0 text-sm text-slate-500">
-                {clubAge.periodString}
-              </p>
-              <p className="m-0 p-0 text-sm text-slate-500">
-                {clubAge.calender}
-              </p>
             </Link>
           </div>
 

@@ -179,17 +179,26 @@ export default function VendorPage() {
                                 </span>
                               )}
 
-                              <span
-                                className={classNames(
-                                  "text-xs font-semibold leading-tight",
-                                  {
-                                    "text-slate-600": !vendor.nextDueHighlight,
-                                    "text-blue-500": vendor.nextDueHighlight,
-                                  }
+                              <div className="flex flex-col justify-center gap-1">
+                                <span className="text-xs font-semibold leading-tight text-slate-500">
+                                  {vendor.nextDue}
+                                </span>
+                                {vendor.calenderNext && (
+                                  <span
+                                    className={classNames(
+                                      "text-xs font-semibold leading-tight",
+                                      {
+                                        "text-slate-600":
+                                          !vendor.nextDueHighlight,
+                                        "text-blue-500":
+                                          vendor.nextDueHighlight,
+                                      }
+                                    )}
+                                  >
+                                    {vendor.calenderNext}
+                                  </span>
                                 )}
-                              >
-                                {vendor.nextDue}
-                              </span>
+                              </div>
                             </div>
                           ) : (
                             <>--</>
