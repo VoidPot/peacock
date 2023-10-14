@@ -64,6 +64,16 @@ export const getNextDue = (input: any = new Date()) => {
     };
   }
 
+  if (nextDate.format("DD MMM YYYY") === moment().format("DD MMM YYYY")) {
+    return {
+      ...lastDate,
+      lastDue: "Today",
+      nextDue: nextDate.format("DD MMM YYYY"),
+      calenderNext: "Today",
+      nextDueHighlight: true,
+    };
+  }
+
   if (calenderNext.length > 1) {
     return {
       ...lastDate,
