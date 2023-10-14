@@ -64,10 +64,16 @@ export const getNextDue = (input: any = new Date()) => {
     };
   }
 
+  console.log({
+    nextDate: nextDate.format("DD MMM YYYY"),
+    moment: moment().format("DD MMM YYYY"),
+    prevDate: prevDate.format("DD MMM YYYY"),
+  });
+
   if (nextDate.format("DD MMM YYYY") === moment().format("DD MMM YYYY")) {
     return {
-      ...lastDate,
       lastDue: "Today",
+      lastDueHighlight: true,
       nextDue: nextDate.format("DD MMM YYYY"),
       calenderNext: "Today",
       nextDueHighlight: true,
