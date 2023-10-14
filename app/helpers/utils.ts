@@ -18,7 +18,11 @@ export const getSecondDiff = (input: any = new Date()) =>
   );
 
 export const getDiffMoment = (input: any = new Date()) => {
-  return moment.duration(moment(new Date()).diff(moment(getValidDate(input))));
+  return moment.duration(
+    moment(new Date())
+      .startOf("day")
+      .diff(moment(getValidDate(input)).startOf("day"))
+  );
 };
 
 export const getMonthsDiff = (input: any = new Date()) => {
@@ -44,8 +48,12 @@ export const getDueAmount = (input: number) => {
 export const getNextDue = (input: any = new Date()) => {
   const monthDiff = getMonthsDiff(getValidDate(input));
 
-  const nextDate = moment(getValidDate(input)).add(monthDiff, "months");
-  const prevDate = moment(getValidDate(input)).add(monthDiff - 1, "months");
+  const nextDate = moment(getValidDate(input))
+    .startOf("day")
+    .add(monthDiff, "months");
+  const prevDate = moment(getValidDate(input))
+    .startOf("day")
+    .add(monthDiff - 1, "months");
   const calenderNext = nextDate.calendar().split("at");
   const calenderPrev = prevDate.calendar().split("at");
 
