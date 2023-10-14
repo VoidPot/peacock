@@ -198,6 +198,21 @@ export default function VendorPage() {
                                     {vendor.calenderNext}
                                   </span>
                                 )}
+                                {vendor.lastDueHighlight && (
+                                  <span
+                                    className={classNames(
+                                      "text-xs font-semibold leading-tight",
+                                      {
+                                        "text-slate-500":
+                                          !vendor.lastDueHighlight,
+                                        "text-blue-500":
+                                          vendor.lastDueHighlight,
+                                      }
+                                    )}
+                                  >
+                                    {vendor.lastDue}
+                                  </span>
+                                )}
                               </div>
                             </div>
                           ) : (
@@ -218,21 +233,6 @@ export default function VendorPage() {
                                 <span className="text-xs font-semibold leading-tight text-slate-500">
                                   {vendor.monthDiff}
                                 </span>
-                                {vendor.lastDueHighlight && (
-                                  <span
-                                    className={classNames(
-                                      "text-xs font-semibold leading-tight",
-                                      {
-                                        "text-slate-500":
-                                          !vendor.lastDueHighlight,
-                                        "text-blue-500":
-                                          vendor.lastDueHighlight,
-                                      }
-                                    )}
-                                  >
-                                    {vendor.lastDue}
-                                  </span>
-                                )}
                               </div>
                             ) : (
                               <>--</>
