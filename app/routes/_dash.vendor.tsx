@@ -183,21 +183,22 @@ export default function VendorPage() {
                                 <span className="text-xs font-semibold leading-tight text-slate-500">
                                   {vendor.nextDue}
                                 </span>
-                                {vendor.calenderNext && (
-                                  <span
-                                    className={classNames(
-                                      "text-xs font-semibold leading-tight",
-                                      {
-                                        "text-slate-600":
-                                          !vendor.nextDueHighlight,
-                                        "text-blue-500":
-                                          vendor.nextDueHighlight,
-                                      }
-                                    )}
-                                  >
-                                    {vendor.calenderNext}
-                                  </span>
-                                )}
+                                {vendor.calenderNext &&
+                                  vendor.calenderNext !== vendor.lastDue && (
+                                    <span
+                                      className={classNames(
+                                        "text-xs font-semibold leading-tight",
+                                        {
+                                          "text-slate-600":
+                                            !vendor.nextDueHighlight,
+                                          "text-blue-500":
+                                            vendor.nextDueHighlight,
+                                        }
+                                      )}
+                                    >
+                                      {vendor.calenderNext}
+                                    </span>
+                                  )}
                                 {vendor.lastDueHighlight && (
                                   <span
                                     className={classNames(

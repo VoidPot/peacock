@@ -29,7 +29,6 @@ export const getMonthsDiff = (input: any = new Date()) => {
   const diff = getDiffMoment(input);
   const monthDiff = Number(diff.asMonths().toString().split(".")[0]);
   const isPastDate = moment(getValidDate(input))
-    .add(1, "d")
     .add(monthDiff, "months")
     .isBefore(new Date());
 
@@ -48,12 +47,8 @@ export const getDueAmount = (input: number) => {
 export const getNextDue = (input: any = new Date()) => {
   const monthDiff = getMonthsDiff(getValidDate(input));
 
-  const nextDate = moment(getValidDate(input))
-    .startOf("day")
-    .add(monthDiff, "months");
-  const prevDate = moment(getValidDate(input))
-    .startOf("day")
-    .add(monthDiff - 1, "months");
+  const nextDate = moment(getValidDate(input)).add(monthDiff, "months");
+  const prevDate = moment(getValidDate(input)).add(monthDiff, "months");
   const calenderNext = nextDate.calendar().split("at");
   const calenderPrev = prevDate.calendar().split("at");
 

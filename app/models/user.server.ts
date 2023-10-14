@@ -13,7 +13,6 @@ import {
 import { formatPassbook } from "./passbook.server";
 import fs from "fs-extra";
 import sharp from "sharp";
-import moment from "moment";
 
 export async function getMembersPassbook() {
   const members = await prisma.user.findMany({
