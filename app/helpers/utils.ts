@@ -23,8 +23,12 @@ export const getDiffMoment = (input: any = new Date()) => {
 
 export const getMonthsDiff = (input: any = new Date()) => {
   const diff = getDiffMoment(input);
-  const yearMon = diff.asYears() * 12;
-  return yearMon + diff.asMonths();
+  const monthDiff = Number(diff.asMonths().toFixed());
+  const outputDate = moment(getValidDate(input))
+    .add(monthDiff, "months")
+    .isSameOrBefore(new Date());
+
+  return outputDate ? monthDiff + 1 : monthDiff;
 };
 
 export const getMonthYear = (input: any = new Date()) => {
@@ -38,7 +42,37 @@ export const getDueAmount = (input: number) => {
 
 export const getNextDue = (input: any = new Date()) => {
   const monthDiff = getMonthsDiff(getValidDate(input));
-  return moment(getValidDate(input)).add(monthDiff, "months").calendar();
+
+  const nextDate = moment(getValidDate(input)).add(monthDiff, "months");
+  const prevDate = moment(getValidDate(input)).add(monthDiff - 1, "months");
+  const calenderNext = nextDate.calendar().split("at");
+  const calenderPrev = prevDate.calendar().split("at");
+
+  let lastDate = {
+    lastDue: prevDate.format("DD MMM YYYY"),
+    lastDueHighlight: false,
+  };
+
+  if (calenderPrev.length > 1) {
+    lastDate = {
+      lastDue: calenderPrev[0],
+      lastDueHighlight: true,
+    };
+  }
+
+  if (calenderNext.length > 1) {
+    return {
+      ...lastDate,
+      nextDue: calenderNext[0],
+      nextDueHighlight: true,
+    };
+  }
+
+  return {
+    ...lastDate,
+    nextDue: nextDate.format("DD MMM YYYY"),
+    nextDueHighlight: false,
+  };
 };
 
 export const formatMoney = (input: any | undefined = 0) => {

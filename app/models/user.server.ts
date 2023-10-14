@@ -57,35 +57,32 @@ export function getVendorTypeData(
     passbook: Passbook;
   }
 ) {
-  const { isActive, vendorType, joinedAt } = vendor;
+  const { vendorType, joinedAt } = vendor;
   const data = {
-    nextDue: getNextDue(vendor.passbook.termInvest),
+    ...getNextDue(vendor.joinedAt),
     dueAmount: 0,
     totalDueAmount: 0,
-    isActive,
-    monthDiff: getMonthsDiff(joinedAt),
+    isActive: vendor.isActive,
+    monthDiff: Math.ceil(getMonthsDiff(joinedAt)),
   };
 
   const { monthDiff } = data;
 
-  if (isActive && vendorType === "LOAD_BORROWER") {
+  if (vendorType === "LOAD_BORROWER") {
     const everyMonthAmount = getDueAmount(vendor.passbook.totalInvest);
     const returns = everyMonthAmount * monthDiff;
     const expectedMoney = returns + vendor.passbook.totalInvest;
-    const isActiveByCalc =
-      vendor.passbook.totalInvest > vendor.passbook.returns;
+    data.isActive = vendor.passbook.totalInvest > vendor.passbook.totalReturns;
 
-    if (isActiveByCalc) {
+    if (data.isActive) {
       data.dueAmount = everyMonthAmount;
       data.totalDueAmount =
         expectedMoney -
         (vendor.passbook.totalInvest - vendor.passbook.totalReturns);
-    } else {
-      data.isActive = false;
     }
   }
 
-  if (isActive && vendorType === "CHIT_FUND_COMPANY") {
+  if (vendorType === "CHIT_FUND_COMPANY") {
     if (monthDiff > 20) {
       data.isActive = false;
     }
@@ -93,6 +90,9 @@ export function getVendorTypeData(
 
   return {
     ...data,
+    isVariant:
+      ["CHIT_FUND_COMPANY", "LOAD_BORROWER"].includes(vendorType) &&
+      data.isActive,
     dueAmount$: formatMoney(data.dueAmount),
     totalDueAmount$: formatMoney(data.totalDueAmount),
   };
@@ -115,7 +115,7 @@ export async function getVendorsWithSummary() {
         ...passbook,
         ...vendorType,
         id: vendor.id,
-        joinedAt$: getMonthYear(vendor.joinedAt),
+        joinedAt$: formatDate(vendor.joinedAt),
       };
     })
     .sort((a, b) => (a.firstName > b.firstName ? 1 : -1));

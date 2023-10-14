@@ -45,6 +45,7 @@ export async function action({ request }: any) {
       email: data.email || "",
       mobileNumber: data.mobileNumber || "",
       nickName: getValidateUniqueKey(`${data.firstName}_${data.lastName}`),
+      vendorType: data.vendorType || "DEFAULT",
       avatar: "no_image_available.jpeg",
       type: "VENDOR",
       joinedAt: getValidDate(data.joinedAt),

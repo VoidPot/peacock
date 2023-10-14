@@ -85,10 +85,10 @@ const configContext = {
     filePath: `${process.cwd()}/public/peacock_backup.json`,
   },
   user: {
-    payExtra: {
-      payProfitOf: ["initial_bank_interest", "chit_20l_2021"],
-      joinedBefore: new Date("07/31/2023"),
-      joinedAfter: new Date("09/01/2020"),
+    vendorType: {
+      DEFAULT: "Default",
+      CHIT_FUND_COMPANY: "Chit fund company",
+      LOAD_BORROWER: "Load Borrower",
     },
   },
   transaction: {
@@ -218,6 +218,7 @@ const configContext = {
         lastName: yup.string().optional(),
         email: yup.string().email().optional(),
         mobileNumber: yup.string().optional(),
+        vendorType: yup.string().optional(),
         // nickName: yup
         //   .string()
         //   .min(2, message.minTwo)

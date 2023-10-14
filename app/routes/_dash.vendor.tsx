@@ -69,10 +69,10 @@ export default function VendorPage() {
                         Name / ID
                       </th>
                       <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
-                        Started At / Next Due
+                        Started At
                       </th>
                       <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
-                        Started At
+                        Due Amount / Date
                       </th>
                       <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-6 py-3 text-center align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
                         Term Months
@@ -148,13 +148,15 @@ export default function VendorPage() {
                             }
                           )}
                         >
-                          <div className="flex flex-col justify-center">
-                            <span className="text-xs font-semibold leading-tight text-slate-500">
+                          <div className="flex flex-col justify-center gap-1">
+                            <span className="text-xs font-semibold leading-tight text-slate-600">
                               {vendor.joinedAt$}
                             </span>
-                            <span className="text-xs font-semibold leading-tight text-slate-500">
-                              {vendor.totalDueAmount$}
-                            </span>
+                            {vendor.isVariant && (
+                              <span className="text-xs font-semibold leading-tight text-slate-500">
+                                {vendor.monthDiff} months
+                              </span>
+                            )}
                           </div>
                         </td>
                         <td
@@ -165,14 +167,53 @@ export default function VendorPage() {
                             }
                           )}
                         >
-                          <div className="flex flex-col justify-center">
-                            <span className="text-xs font-semibold leading-tight text-slate-500">
-                              {vendor.dueAmount$}
-                            </span>
-                            <span className="text-xs font-semibold leading-tight text-slate-500">
-                              {vendor.nextDue}
-                            </span>
-                          </div>
+                          {vendor.isVariant ? (
+                            <div className="flex flex-col justify-center gap-1">
+                              {vendor.vendorType === "LOAD_BORROWER" && (
+                                <span
+                                  className={classNames(
+                                    "text-xs font-semibold leading-tight",
+                                    {
+                                      "text-slate-500":
+                                        !vendor.nextDueHighlight,
+                                      "text-red-500": vendor.nextDueHighlight,
+                                    }
+                                  )}
+                                >
+                                  {vendor.dueAmount$}
+                                </span>
+                              )}
+
+                              <span
+                                className={classNames(
+                                  "text-xs font-semibold leading-tight",
+                                  {
+                                    "text-slate-600": !vendor.nextDueHighlight,
+                                    "text-blue-500": vendor.nextDueHighlight,
+                                  }
+                                )}
+                              >
+                                {vendor.nextDue}
+                              </span>
+                              {vendor.lastDueHighlight && (
+                                <span
+                                  className={classNames(
+                                    "text-2 font-semibold leading-tight text-slate-500",
+                                    {
+                                      "text-slate-500":
+                                        !vendor.lastDueHighlight,
+                                      "text-yellow-500":
+                                        vendor.lastDueHighlight,
+                                    }
+                                  )}
+                                >
+                                  Recent / {vendor.lastDue}
+                                </span>
+                              )}
+                            </div>
+                          ) : (
+                            <>--</>
+                          )}
                         </td>
                         <td
                           className={classNames(

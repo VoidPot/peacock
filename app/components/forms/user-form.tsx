@@ -6,11 +6,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import type * as yup from "yup";
 import { Form } from "@remix-run/react";
 
-import { DatePickerInput, TextInput } from "../inputs";
+import { DatePickerInput, SelectInput, TextInput } from "../inputs";
 import type { getUserById } from "~/models/user.server";
 import type { User } from "@prisma/client";
 
-const { schema } = configContext;
+const { schema, user: userConfig } = configContext;
 
 type FormData = yup.InferType<typeof schema.user>;
 
@@ -105,6 +105,17 @@ function UserForm({
           control={control}
           register={undefined}
         />
+
+        {!isMember && (
+          <SelectInput
+            title="Vendor Type"
+            className="col-span-1 lg:col-span-3"
+            options={Object.entries(userConfig.vendorType)}
+            register={register}
+            name="vendorType"
+            errors={errors}
+          />
+        )}
 
         <div className="col-span-full mt-4 flex justify-between gap-2 align-middle">
           <Link
