@@ -3,6 +3,8 @@ import _ from "lodash";
 import { json } from "@remix-run/node";
 import configContext from "~/config/configContext";
 
+moment.tz.setDefault("Asia/Kolkata");
+
 export const getValidateUniqueKey = (input: string) =>
   `${input
     .toLowerCase()
@@ -64,10 +66,7 @@ export const getNextDue = (input: any = new Date()) => {
     };
   }
 
-  if (
-    nextDate.format("DD MMM YYYY") ===
-    moment().tz("Asia/Kolkata").format("DD MMM YYYY")
-  ) {
+  if (nextDate.format("DD MMM YYYY") === moment().format("DD MMM YYYY")) {
     return {
       lastDue: "Today",
       lastDueHighlight: true,
