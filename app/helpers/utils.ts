@@ -23,12 +23,13 @@ export const getDiffMoment = (input: any = new Date()) => {
 
 export const getMonthsDiff = (input: any = new Date()) => {
   const diff = getDiffMoment(input);
-  const monthDiff = Number(diff.asMonths().toFixed());
-  const outputDate = moment(getValidDate(input))
+  const monthDiff = Number(diff.asMonths().toString().split(".")[0]);
+  const isPastDate = moment(getValidDate(input))
+    .add(1, "d")
     .add(monthDiff, "months")
-    .isSameOrBefore(new Date());
+    .isBefore(new Date());
 
-  return outputDate ? monthDiff + 1 : monthDiff;
+  return isPastDate ? monthDiff + 1 : monthDiff;
 };
 
 export const getMonthYear = (input: any = new Date()) => {
@@ -63,7 +64,7 @@ export const getNextDue = (input: any = new Date()) => {
   if (calenderNext.length > 1) {
     return {
       ...lastDate,
-      nextDue: calenderNext[0],
+      nextDue: `${nextDate.format("DD MMM YYYY")} - ${calenderNext[0]}`,
       nextDueHighlight: true,
     };
   }
