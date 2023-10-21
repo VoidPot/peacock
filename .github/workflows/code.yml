@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: executing remote ssh commands using password
+      - name: Connect SSH and Run Scripts
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.HOST }}
