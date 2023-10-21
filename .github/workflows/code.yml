@@ -31,6 +31,7 @@ jobs:
           script: |
             cd /root/projects/peacock
             git pull
+            nvm use 20
             npm ci
             npm run build
             pm2 restart peacock
