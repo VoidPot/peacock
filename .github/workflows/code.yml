@@ -34,5 +34,7 @@ jobs:
             nvm use 20
             cd /root/projects/peacock
             git pull
+            npm i
+            npm run setup
             npm run build
             pm2 restart peacock
