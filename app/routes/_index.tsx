@@ -19,7 +19,7 @@ export default function Index() {
             Creating the environment for business
           </p>
 
-          <Link to={"/home"} className="btn-primary btn-block btn mt-4">
+          <a href="/home" className="btn-primary btn-block btn mt-4">
             View Dashboard
             <svg
               aria-hidden="true"
@@ -34,7 +34,7 @@ export default function Index() {
                 clipRule="evenodd"
               ></path>
             </svg>
-          </Link>
+          </a>
         </div>
       </div>
     </div>

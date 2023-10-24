@@ -12,9 +12,9 @@ function Delete({ className }) {
     >
       <g
         fill="none"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="3.175"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="3.175"
       >
         <path d="M19.844 7.938H7.938v11.905m0 11.113v11.906h11.905m23.019-11.906v11.906H30.956m11.906-23.018V7.938H30.956" />
 
