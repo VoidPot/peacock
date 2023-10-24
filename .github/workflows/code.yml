@@ -33,6 +33,7 @@ jobs:
             source ~/.nvm/nvm.sh
             nvm use 18
             cd /root/projects/peacock
+            git checkout .
             git pull
             pnpm i
             pnpm run setup
