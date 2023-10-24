@@ -1,4 +1,5 @@
 import * as yup from "yup";
+import { z } from "zod";
 import moment from "moment";
 import { formatMoney } from "../helpers/utils";
 import { passbookConfig } from "./passbookConfig";
@@ -179,6 +180,28 @@ const configContext = {
   },
   passbook: passbookConfig,
   message,
+  validator: {
+    transaction: z
+      .object({
+        id: z.number(),
+        note: z.string(),
+        mode: z.string(),
+        dot: z.string().datetime(),
+        from: z.number(),
+        method: z.string(),
+        to: z.number(),
+        amount: z.number().gte(1).lte(10000000),
+      })
+      .required({
+        id: true,
+        mode: true,
+        dot: true,
+        from: true,
+        method: true,
+        to: true,
+        amount: true,
+      }),
+  },
   schema: {
     transaction: yup
       .object({

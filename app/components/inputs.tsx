@@ -12,6 +12,7 @@ interface InputProps {
   register: any;
   required?: boolean;
   disabled?: boolean;
+  defaultValue?: string;
 }
 
 export interface TextInputProps extends InputProps {
@@ -29,6 +30,7 @@ export function TextInput({
   register,
   required = true,
   disabled = false,
+  defaultValue = "",
 }: TextInputProps) {
   return (
     <div
@@ -51,6 +53,7 @@ export function TextInput({
         className={classNames("input-bordered input w-full", {
           "input-error": Boolean(errors[name]?.message),
         })}
+        defaultValue={defaultValue}
         {...register(name, { required })}
       />
       {errors[name]?.message && (
@@ -76,6 +79,7 @@ export function SelectInput({
   errors = {},
   register,
   required = true,
+  defaultValue,
 }: SelectInputProps) {
   return (
     <div
@@ -95,6 +99,7 @@ export function SelectInput({
         className={classNames("select-bordered select", {
           "select-error": Boolean(errors[name]?.message),
         })}
+        defaultValue={defaultValue || options.length ? options[0][0] : ""}
         {...register(name, { required })}
       >
         {options.map(([key, value]) => (
@@ -126,6 +131,7 @@ export function DatePickerInput({
   register,
   required = true,
   control,
+  defaultValue,
 }: DatePickerInputProps) {
   return (
     <div
@@ -144,6 +150,7 @@ export function DatePickerInput({
       <Controller
         control={control}
         name={name}
+        defaultValue={defaultValue || new Date()}
         render={({ field }: any) => (
           <DatePicker
             className={classNames("input-bordered input w-full", {
