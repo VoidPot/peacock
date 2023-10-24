@@ -1,10 +1,9 @@
-import { Link } from "@remix-run/react";
+import { Link, Form } from "@remix-run/react";
 import { useRemixForm } from "remix-hook-form";
 import classNames from "classnames";
 import configContext from "~/config/configContext";
 import { yupResolver } from "@hookform/resolvers/yup";
 import type * as yup from "yup";
-import { Form } from "@remix-run/react";
 
 import { TextInput, SelectInput, DatePickerInput } from "../inputs";
 import { useEffect, useState } from "react";
