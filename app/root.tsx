@@ -1,24 +1,21 @@
 import { cssBundleHref } from "@remix-run/css-bundle";
-import type { V2_MetaFunction } from "@remix-run/node";
-import type { LinksFunction } from "@remix-run/node";
+import type { MetaFunction,LinksFunction } from "@remix-run/node";
 import { Links, LiveReload, Meta, Outlet, Scripts } from "@remix-run/react";
 import "react-datepicker/dist/react-datepicker.css";
 
 import stylesheet from "~/tailwind.css";
 
-export const meta: V2_MetaFunction = () => {
-  return [
-    { title: "Peacock Club" },
-    {
-      property: "og:title",
-      content: "Peacock Club",
-    },
-    {
-      name: "description",
-      content: "Creating the environment for business",
-    },
-  ];
+
+export const meta: MetaFunction = () => {
+  return {
+    title: "Peacock Club",
+    description: "Creating the environment for business",
+    "og:title": "Peacock Club",
+    "og:description":"Creating the environment for business",
+    "og:image": "https://peacock.iam-hussain.site/peacock.png",
+  };
 };
+
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
