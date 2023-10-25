@@ -57,12 +57,14 @@ export const getNextDue = (input: any = new Date()) => {
   let lastDate = {
     lastDue: prevDate.format("DD MMM YYYY"),
     lastDueHighlight: false,
+    prevDate: new Date(prevDate.toISOString()),
   };
 
   if (calenderPrev.length > 1) {
     lastDate = {
       lastDue: calenderPrev[0],
       lastDueHighlight: true,
+      prevDate: new Date(prevDate.toISOString()),
     };
   }
 
@@ -73,6 +75,8 @@ export const getNextDue = (input: any = new Date()) => {
       nextDue: nextDate.format("DD MMM YYYY"),
       calenderNext: "Today",
       nextDueHighlight: true,
+      nextDate: new Date(nextDate.toISOString()),
+      prevDate: new Date(prevDate.toISOString()),
     };
   }
 
@@ -82,6 +86,7 @@ export const getNextDue = (input: any = new Date()) => {
       nextDue: nextDate.format("DD MMM YYYY"),
       calenderNext: calenderNext[0],
       nextDueHighlight: true,
+      nextDate: new Date(nextDate.toISOString()),
     };
   }
 
@@ -90,6 +95,7 @@ export const getNextDue = (input: any = new Date()) => {
     nextDue: nextDate.format("DD MMM YYYY"),
     calenderNext: "",
     nextDueHighlight: false,
+    nextDate: new Date(nextDate.toISOString()),
   };
 };
 

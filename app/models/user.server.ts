@@ -123,6 +123,31 @@ export async function getVendorsWithSummary() {
     .sort((a, b) => (a.isActive === b.isActive ? 0 : a.isActive ? -1 : 1));
 }
 
+export async function getActiveVendorsWithSummary() {
+  const vendors = await prisma.user.findMany({
+    where: { type: "VENDOR", isActive: true, deleted: false },
+    include: {
+      passbook: true,
+    },
+  });
+
+  return vendors
+    .map((vendor) => {
+      const passbook = formatPassbook(vendor.passbook);
+      const vendorType = getVendorTypeData(vendor);
+      return {
+        ...vendor,
+        ...passbook,
+        ...vendorType,
+        id: vendor.id,
+        joinedAt$: formatDate(vendor.joinedAt),
+        isActive: vendor.isActive,
+      };
+    })
+    .sort((a, b) => (a.firstName > b.firstName ? 1 : -1))
+    .sort((a, b) => (a.nextDate > b.nextDate ? 1 : -1));
+}
+
 export async function getUserSelect(withDeleted = true) {
   const users = await prisma.user.findMany({
     select: {
