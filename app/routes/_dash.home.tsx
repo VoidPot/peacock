@@ -24,16 +24,16 @@ export default function IndexPage() {
   return (
     <>
       <Stats club={club} />
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
-        <div className="col-span-1 flex flex-col gap-6 lg:col-span-5">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
+        <div className="col-span-1 flex flex-col gap-4 lg:col-span-4">
           {groups?.map((each, key) => (
             <GroupCard key={key} {...each} />
           ))}
         </div>
-        <div className="col-span-1 flex flex-col gap-6 lg:col-span-3">
+        <div className="col-span-1 flex flex-col gap-4 lg:col-span-4">
           <VendorCard vendors={vendors as any} />
         </div>
-        <div className="col-span-1 flex flex-col gap-6 lg:col-span-4">
+        <div className="col-span-1 flex flex-col gap-4 lg:col-span-4">
           <UpdateCard transactions={transactions as any} />
         </div>
       </div>
