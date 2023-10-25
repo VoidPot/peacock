@@ -44,6 +44,7 @@ function TransactionForm({
     usersOptions,
   ]);
   const [fromToNote, setFromToNote] = useState([key.sender, key.receiver]);
+  const isEditMode = transaction && Object.values(transaction).length;
 
   const {
     register,
@@ -55,18 +56,20 @@ function TransactionForm({
   } = useRemixForm<FormData | any>({
     resolver: yupResolver(schema.transaction),
     mode: "onSubmit",
-    defaultValues:
-      transaction && Object.values(transaction).length
-        ? transaction
-        : { dot: new Date() },
+    defaultValues: isEditMode ? transaction : { dot: new Date() },
   });
 
   const selectedMode = watch("mode");
 
   useEffect(() => {
-    setValue("from", fromToOptions[0][0][0]);
-    setValue("to", fromToOptions[1][0][0]);
-  }, [fromToOptions, setValue]);
+    if (isEditMode && selectedMode === transaction.mode) {
+      setValue("from", transaction.from);
+      setValue("to", transaction.to);
+    } else {
+      setValue("from", fromToOptions[0][0][0]);
+      setValue("to", fromToOptions[1][0][0]);
+    }
+  }, [fromToOptions, isEditMode, selectedMode, setValue, transaction]);
 
   useEffect(() => {
     if (
