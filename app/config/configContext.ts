@@ -81,9 +81,9 @@ const message = {
 
 const configContext = {
   backup: {
-    path: `${process.cwd()}/public/`,
+    path: `./public/`,
     fileName: "peacock_backup.json",
-    filePath: `${process.cwd()}/public/peacock_backup.json`,
+    filePath: `./public/peacock_backup.json`,
   },
   user: {
     vendorType: {
