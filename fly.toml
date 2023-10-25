@@ -1,4 +1,4 @@
-app = "peacock-d3f3"
+app = "peacock"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = [ ]

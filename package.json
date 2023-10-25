@@ -1,5 +1,5 @@
 {
-  "name": "peacock-d3f3",
+  "name": "peacock",
   "private": true,
   "sideEffects": false,
   "scripts": {
@@ -20,11 +20,7 @@
     "setup": "prisma generate && prisma migrate deploy",
     "start": "cross-env NODE_ENV=production node ./build/server.js",
     "start:mocks": "cross-env NODE_ENV=production node --require ./mocks --require dotenv/config ./build/server.js",
-    "test": "vitest",
-    "test:e2e:dev": "start-server-and-test dev http://localhost:3000 \"npx cypress open\"",
     "pretest:e2e:run": "npm run build",
-    "test:e2e:run": "cross-env PORT=8811 start-server-and-test start:mocks http://localhost:8811 \"npx cypress run\"",
-    "typecheck": "tsc && tsc -p cypress",
     "validate": "run-p \"test -- --run\" lint typecheck test:e2e:run"
   },
   "prettier": {},
@@ -52,8 +48,6 @@
     "cross-env": "^7.0.3",
     "daisyui": "^3.9.3",
     "express": "^4.18.2",
-    "flowbite": "^1.8.1",
-    "flowbite-react": "^0.4.11",
     "fs-extra": "^11.1.1",
     "html2canvas": "^1.4.1",
     "isbot": "^3.7.0",
@@ -80,7 +74,6 @@
     "@faker-js/faker": "^7.6.0",
     "@remix-run/dev": "^1.19.3",
     "@remix-run/eslint-config": "^1.19.3",
-    "@testing-library/cypress": "^9.0.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.5.1",
@@ -95,17 +88,13 @@
     "@types/react": "^18.2.31",
     "@types/react-datepicker": "^4.19.1",
     "@types/react-dom": "^18.2.14",
-    "@vitejs/plugin-react": "^3.1.0",
-    "@vitest/coverage-c8": "^0.30.1",
     "autoprefixer": "^10.4.16",
     "c8": "^7.14.0",
     "cookie": "^0.5.0",
-    "cypress": "^12.17.4",
     "dotenv": "^16.3.1",
     "esbuild": "^0.17.19",
     "eslint": "^8.52.0",
     "eslint-config-prettier": "^8.10.0",
-    "eslint-plugin-cypress": "^2.15.1",
     "happy-dom": "^9.20.3",
     "msw": "^1.3.2",
     "npm-run-all": "^4.1.5",
@@ -119,8 +108,7 @@
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.2.2",
     "vite": "^4.5.0",
-    "vite-tsconfig-paths": "^3.6.0",
-    "vitest": "^0.30.1"
+    "vite-tsconfig-paths": "^3.6.0"
   },
   "engines": {
     "node": ">=14"
