@@ -67,7 +67,6 @@
     "react": "^18.2.0",
     "react-datepicker": "^4.21.0",
     "react-dom": "^18.2.0",
-    "react-hook-form": "^7.47.0",
     "react-toastify": "^9.1.3",
     "remix-hook-form": "^1.2.3",
     "remix-validated-form": "^5.1.5",
