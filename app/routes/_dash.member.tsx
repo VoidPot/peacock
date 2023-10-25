@@ -77,13 +77,16 @@ export default function MemberPage() {
           >
             <div className="border-b-solid mb-0 rounded-t-2xl border-b-0 border-b-transparent bg-white p-6 pb-0">
               <div
-                className={classNames("mb-2 flex items-center align-middle", {
-                  "justify-between": !captureMode,
-                  "justify-center": captureMode,
-                })}
+                className={classNames(
+                  "mb-2 flex flex-wrap items-center align-middle",
+                  {
+                    "justify-between": !captureMode,
+                    "justify-center": captureMode,
+                  }
+                )}
               >
                 {!captureMode && (
-                  <h6 className="m-0 text-neutral">Members Table</h6>
+                  <h6 className="mx-0 my-auto text-neutral">Members Table</h6>
                 )}
                 {captureMode && (
                   <div className="h-fit w-full pb-3 pt-2 text-center">
@@ -110,46 +113,41 @@ export default function MemberPage() {
                 )}
                 {isLoggedIn && (
                   <div
-                    className={classNames(
-                      "flex flex-col items-end justify-center md:flex-row md:items-center",
-                      {
-                        hidden: captureMode,
-                      }
-                    )}
+                    className={classNames("flex items-center justify-center", {
+                      hidden: captureMode,
+                    })}
                   >
-                    <div className="form-control">
-                      <label className="label w-fit cursor-pointer justify-center gap-2">
-                        <span className="label-text">With Deleted</span>
-                        <input
-                          type="checkbox"
-                          className="toggle-primary toggle"
-                          onChange={(e: any) =>
-                            setFetchDeleted(e.target.checked)
-                          }
-                        />
-                      </label>
-                    </div>
-                    <div className="flex">
-                      <button
-                        className={classNames(
-                          "btn-ghost btn-square btn stroke-slate-500 hover:bg-white hover:stroke-secondary",
-                          {
-                            hidden: captureMode,
-                          }
-                        )}
-                        onClick={() => captureTable()}
-                      >
-                        <Icon name="screenshot" className="h-6 w-6" />
-                      </button>
-                      <Link
-                        className="btn-ghost btn-square btn stroke-slate-500 hover:bg-white hover:stroke-secondary"
-                        to={{
-                          pathname: `/member/add`,
-                        }}
-                      >
-                        <Icon name="add-box" className="h-6 w-6" />
-                      </Link>
-                    </div>
+                    <button
+                      className={classNames(
+                        "btn btn-square btn-ghost hover:bg-white hover:fill-secondary",
+                        {
+                          "fill-red-500": fetchDeleted,
+                          "fill-slate-500": !fetchDeleted,
+                        }
+                      )}
+                      onClick={() => setFetchDeleted(!fetchDeleted)}
+                    >
+                      <Icon name="deleted" className="h-6 w-6" />
+                    </button>
+                    <button
+                      className={classNames(
+                        "btn btn-square btn-ghost stroke-slate-500 hover:bg-white hover:stroke-secondary",
+                        {
+                          hidden: captureMode,
+                        }
+                      )}
+                      onClick={() => captureTable()}
+                    >
+                      <Icon name="screenshot" className="h-6 w-6" />
+                    </button>
+                    <Link
+                      className="btn btn-square btn-ghost stroke-slate-500 hover:bg-white hover:stroke-secondary"
+                      to={{
+                        pathname: `/member/add`,
+                      }}
+                    >
+                      <Icon name="add-box" className="h-6 w-6" />
+                    </Link>
                   </div>
                 )}
               </div>
@@ -160,7 +158,7 @@ export default function MemberPage() {
                   "overflow-x-auto": !captureMode,
                 })}
               >
-                <table className="mb-0 table w-full items-center border-gray-200 align-top text-slate-500">
+                <table className="table mb-0 w-full items-center border-gray-200 align-top text-slate-500">
                   <thead className="px-4 align-bottom">
                     <tr>
                       <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-5 py-3 text-left align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
@@ -343,7 +341,7 @@ export default function MemberPage() {
                                   to={{
                                     pathname: `/member/edit/${member.id}`,
                                   }}
-                                  className="btn-ghost btn-square btn w-auto stroke-slate-500 px-2 hover:bg-white hover:stroke-secondary"
+                                  className="btn btn-square btn-ghost w-auto stroke-slate-500 px-2 hover:bg-white hover:stroke-secondary"
                                 >
                                   <Icon name="edit" className="h-4 w-4" />
                                 </Link>
@@ -351,7 +349,7 @@ export default function MemberPage() {
                                   to={{
                                     pathname: `/member/delete/${member.id}`,
                                   }}
-                                  className="btn-ghost btn-square btn w-auto stroke-slate-500 px-2 hover:bg-white hover:stroke-secondary"
+                                  className="btn btn-square btn-ghost w-auto stroke-slate-500 px-2 hover:bg-white hover:stroke-secondary"
                                 >
                                   <Icon name="delete" className="h-4 w-4" />
                                 </Link>

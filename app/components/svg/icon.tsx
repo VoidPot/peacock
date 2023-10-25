@@ -14,6 +14,7 @@ import Member from "./icon/member";
 import Trans from "./icon/trans";
 import Edit from "./icon/edit";
 import Delete from "./icon/delete";
+import Deleted from "./icon/deleted";
 import Screenshot from "./icon/screenshot";
 
 export const Icons = {
@@ -31,6 +32,7 @@ export const Icons = {
   trans: Trans,
   edit: Edit,
   delete: Delete,
+  deleted: Deleted,
   screenshot: Screenshot,
 };
 

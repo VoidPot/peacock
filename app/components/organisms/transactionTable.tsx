@@ -15,6 +15,7 @@ function TransactionTable({
   items,
   isLoggedIn,
   params,
+  fetchDeleted,
   onWithDeletedChange,
 }: {
   handleSetSearchParams: any;
@@ -24,29 +25,32 @@ function TransactionTable({
   items: Awaited<ReturnType<typeof findTransaction>>;
   isLoggedIn: Boolean;
   params: string;
-  onWithDeletedChange: React.ChangeEventHandler<HTMLInputElement>;
+  fetchDeleted: boolean;
+  onWithDeletedChange: () => {};
 }) {
   return (
     <div className="flex flex-wrap">
       <div className="flex w-full max-w-full flex-col gap-6">
         <div className="relative mb-6 flex min-w-0 flex-col break-words rounded-md bg-white bg-clip-border ">
           <div className="border-b-solid mb-0 rounded-t-2xl border-b-0 border-b-transparent bg-white p-6 pb-0">
-            <div className="mb-2 flex items-center justify-between align-middle">
-              <h6 className="m-0 text-neutral">Transaction Table</h6>
+            <div className="mb-2 flex flex-wrap items-center justify-between align-middle">
+              <h6 className="mx-0 my-auto text-neutral">Transaction Table</h6>
               {isLoggedIn && (
                 <div className="flex items-center justify-center">
-                  <div className="form-control w-52">
-                    <label className="label cursor-pointer justify-center gap-2">
-                      <span className="label-text">Deleted</span>
-                      <input
-                        type="checkbox"
-                        className="toggle-primary toggle"
-                        onChange={onWithDeletedChange}
-                      />
-                    </label>
-                  </div>
+                  <button
+                    className={classNames(
+                      "btn btn-square btn-ghost hover:bg-white hover:fill-secondary",
+                      {
+                        "fill-red-500": fetchDeleted,
+                        "fill-slate-500": !fetchDeleted,
+                      }
+                    )}
+                    onClick={onWithDeletedChange}
+                  >
+                    <Icon name="deleted" className="h-6 w-6" />
+                  </button>
                   <Link
-                    className="btn-ghost btn-square btn stroke-slate-500 hover:bg-white hover:stroke-secondary"
+                    className="btn btn-square btn-ghost stroke-slate-500 hover:bg-white hover:stroke-secondary"
                     to={{
                       pathname: `/transaction/add`,
                       search: params || "",
@@ -63,7 +67,7 @@ function TransactionTable({
                   name="from"
                   onChange={handleSelectOnChange}
                   defaultValue={queryParams.from}
-                  className="select-bordered select input-xs min-h-10 w-auto pl-4 pr-10 lg:join-item"
+                  className="select select-bordered input-xs min-h-10 w-auto pl-4 pr-10 lg:join-item"
                 >
                   <option disabled>From</option>
                   <option value={""}>From - ALL</option>
@@ -77,7 +81,7 @@ function TransactionTable({
                   name="to"
                   onChange={handleSelectOnChange}
                   defaultValue={queryParams.to}
-                  className="select-bordered select input-xs min-h-10 w-auto pl-4 pr-10 lg:join-item"
+                  className="select select-bordered input-xs min-h-10 w-auto pl-4 pr-10 lg:join-item"
                 >
                   <option disabled>To</option>
                   <option value={""}>To - ALL</option>
@@ -91,7 +95,7 @@ function TransactionTable({
                   name="mode"
                   onChange={handleSelectOnChange}
                   defaultValue={queryParams.mode}
-                  className="select-bordered select input-xs min-h-10 w-auto pl-4 pr-10 lg:join-item"
+                  className="select select-bordered input-xs min-h-10 w-auto pl-4 pr-10 lg:join-item"
                 >
                   <option disabled>Mode</option>
                   <option value={""}>Mode - ALL</option>
@@ -107,7 +111,7 @@ function TransactionTable({
                   name="type"
                   onChange={handleSelectOnChange}
                   defaultValue={queryParams.type}
-                  className="select-bordered select input-xs min-h-10 w-auto pl-4 pr-10 lg:join-item"
+                  className="select select-bordered input-xs min-h-10 w-auto pl-4 pr-10 lg:join-item"
                 >
                   <option disabled>Transaction Type</option>
                   <option value={""}>Transaction Type - ALL</option>
@@ -123,7 +127,7 @@ function TransactionTable({
                   name="sort"
                   onChange={handleSelectOnChange}
                   defaultValue={queryParams.sort}
-                  className="select-bordered select input-xs min-h-10 w-auto pl-4 pr-10 lg:join-item"
+                  className="select select-bordered input-xs min-h-10 w-auto pl-4 pr-10 lg:join-item"
                 >
                   <option disabled>Sort By</option>
                   {Object.entries(transactionConfig.sortBy).map(
@@ -138,7 +142,7 @@ function TransactionTable({
                   name="order"
                   onChange={handleSelectOnChange}
                   defaultValue={queryParams.order}
-                  className="select-bordered select input-xs min-h-10 w-auto pl-4 pr-10 lg:join-item"
+                  className="select select-bordered input-xs min-h-10 w-auto pl-4 pr-10 lg:join-item"
                 >
                   <option disabled>Order By</option>
                   {Object.entries(transactionConfig.orderby).map(
@@ -154,7 +158,7 @@ function TransactionTable({
           </div>
           <div className="flex-auto px-0 pb-2 pt-0">
             <div className="overflow-x-auto p-0">
-              <table className="mb-0 table w-full items-center border-gray-200 align-top text-slate-500">
+              <table className="table mb-0 w-full items-center border-gray-200 align-top text-slate-500">
                 <thead className="px-4 align-bottom">
                   <tr>
                     <th className="border-b-solid whitespace-nowrap border-b border-gray-200 bg-transparent px-5 py-3 text-left align-middle text-xxs font-bold uppercase tracking-none text-slate-500 opacity-70 shadow-none">
@@ -311,7 +315,7 @@ function TransactionTable({
                               pathname: `/transaction/edit/${transaction.id}`,
                               search: params || "",
                             }}
-                            className="btn-ghost btn-square btn w-auto stroke-slate-500 px-2 hover:bg-white hover:stroke-secondary"
+                            className="btn btn-square btn-ghost w-auto stroke-slate-500 px-2 hover:bg-white hover:stroke-secondary"
                           >
                             <Icon name="edit" className="h-4 w-4" />
                           </Link>
@@ -320,7 +324,7 @@ function TransactionTable({
                               pathname: `/transaction/delete/${transaction.id}`,
                               search: params || "",
                             }}
-                            className="btn-ghost btn-square btn w-auto stroke-slate-500 px-2 hover:bg-white hover:stroke-secondary"
+                            className="btn btn-square btn-ghost w-auto stroke-slate-500 px-2 hover:bg-white hover:stroke-secondary"
                           >
                             <Icon name="delete" className="h-4 w-4" />
                           </Link>
@@ -336,19 +340,19 @@ function TransactionTable({
             <div className="join whitespace-nowrap rounded border border-solid border-gray-200 bg-base-100">
               <button
                 disabled={queryParams.page <= 1}
-                className="btn-ghost btn-md join-item btn text-2xl text-slate-600"
+                className="btn btn-ghost join-item btn-md text-2xl text-slate-600"
                 onClick={() =>
                   handleSetSearchParams("page", queryParams.page - 1)
                 }
               >
                 «
               </button>
-              <span className="btn-ghost btn-md join-item btn select-none text-xs text-slate-500">
+              <span className="btn btn-ghost join-item btn-md select-none text-xs text-slate-500">
                 Page: {queryParams.page}
               </span>
               <button
                 disabled={items.length < queryParams.take}
-                className="btn-ghost btn-md join-item btn text-2xl text-slate-600"
+                className="btn btn-ghost join-item btn-md text-2xl text-slate-600"
                 onClick={() =>
                   handleSetSearchParams("page", queryParams.page + 1)
                 }

@@ -99,7 +99,8 @@ export default function TransactionPage() {
         items={items as unknown as Awaited<ReturnType<typeof findTransaction>>}
         isLoggedIn={isLoggedIn}
         params={searchParams.toString() || ""}
-        onWithDeletedChange={(e: any) => setFetchDeleted(e.target.checked)}
+        fetchDeleted={fetchDeleted}
+        onWithDeletedChange={async () => setFetchDeleted(!fetchDeleted)}
       />
     </div>
   );
