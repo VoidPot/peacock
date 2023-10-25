@@ -106,6 +106,7 @@ function UserForm({
         />
 
         {!isMember && (
+         <>
           <SelectInput
             title="Vendor Type"
             className="col-span-1 lg:col-span-3"
@@ -114,6 +115,15 @@ function UserForm({
             name="vendorType"
             errors={errors}
           />
+          <SelectInput
+            title="Vendor Status"
+            className="col-span-1 lg:col-span-3"
+            options={Object.entries(userConfig.isActive)}
+            register={register}
+            name="isActive"
+            errors={errors}
+          />
+        </>
         )}
 
         <div className="col-span-full mt-4 flex justify-between gap-2 align-middle">

@@ -49,6 +49,7 @@ export async function action({ request }: any) {
       avatar: "no_image_available.jpeg",
       type: "VENDOR",
       joinedAt: getValidDate(data.joinedAt),
+      isActive: data.isActive === "true",
     } as unknown as any;
 
     const members = await getMembers();

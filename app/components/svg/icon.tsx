@@ -16,6 +16,7 @@ import Edit from "./icon/edit";
 import Delete from "./icon/delete";
 import Deleted from "./icon/deleted";
 import Screenshot from "./icon/screenshot";
+import Active from "./icon/active";
 
 export const Icons = {
   "add-box": AddBox,
@@ -34,6 +35,7 @@ export const Icons = {
   delete: Delete,
   deleted: Deleted,
   screenshot: Screenshot,
+  active: Active,
 };
 
 interface IconProps {

@@ -136,6 +136,13 @@ export default function VendorPage() {
                               </h6>
                               <p className="mb-0 text-xs leading-tight text-slate-500">
                                 ID: {vendor.id}
+                                {vendor.isActive && (
+                                  <Icon
+                                    name="active"
+                                    className="ml-2 h-4 w-4 fill-primary"
+                                    color="primary"
+                                  />
+                                )}
                               </p>
                             </div>
                           </div>

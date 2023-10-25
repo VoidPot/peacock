@@ -35,6 +35,7 @@ export const loader = async ({ request, params }: LoaderArgs) => {
       mobileNumber: user.mobileNumber || "",
       vendorType: user.vendorType,
       joinedAt: user.joinedAt,
+      isActive: user.isActive ? "ACTIVE" : "INACTIVE",
     },
   });
 };
@@ -58,6 +59,7 @@ export async function action({ request }: any) {
       mobileNumber: data.mobileNumber || "",
       vendorType: data.vendorType || "DEFAULT",
       joinedAt: getValidDate(data.joinedAt),
+      isActive: data.isActive === "ACTIVE",
     } as unknown as any;
 
     await prisma.user.update({

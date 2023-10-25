@@ -91,6 +91,10 @@ const configContext = {
       CHIT_FUND_COMPANY: "Chit fund company",
       LOAD_BORROWER: "Load Borrower",
     },
+    isActive: {
+      ACTIVE: "Active",
+      INACTIVE: "Inactive",
+    },
   },
   transaction: {
     method: {
@@ -242,6 +246,7 @@ const configContext = {
         email: yup.string().email().optional(),
         mobileNumber: yup.string().optional(),
         vendorType: yup.string().optional(),
+        isActive: yup.string().optional(),
         // nickName: yup
         //   .string()
         //   .min(2, message.minTwo)
