@@ -70,7 +70,7 @@ export default function TransactionAddPage() {
 
   return (
     <>
-      <dialog id="my_modal_1" className="modal" open>
+      <dialog id="my_modal_1" className="modal bg-[#97acc1a3]" open>
         <div className="modal-box flex flex-col items-center justify-center gap-4 bg-white align-middle">
           <div className="flex flex-col items-center justify-center align-middle">
             <div className="mb-2 text-center">

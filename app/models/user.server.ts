@@ -69,7 +69,7 @@ export function getVendorTypeData(
 
   if (vendorType === "LOAD_BORROWER") {
     const everyMonthAmount = getDueAmount(vendor.passbook.totalInvest);
-    const returns = everyMonthAmount * monthDiff;
+    const returns = everyMonthAmount * (monthDiff + 1);
     const expectedMoney = returns + vendor.passbook.totalInvest;
     data.isActive = vendor.passbook.totalInvest > vendor.passbook.totalReturns;
 

@@ -93,7 +93,7 @@ export default function TransactionAddPage() {
 
   return (
     <>
-      <dialog id="my_modal_1" className="modal" open>
+      <dialog id="my_modal_1" className="modal bg-[#97acc1a3]" open>
         <div className="modal-box bg-white">
           <h6 className="text-center font-normal text-slate-500">
             Select users are included to the vendor profit

@@ -134,7 +134,7 @@ export default function TransactionEditPage() {
 
   return (
     <>
-      <dialog id="my_modal_1" className="modal" open>
+      <dialog id="my_modal_1" className="modal bg-[#97acc1a3]" open>
         <div className="modal-box bg-white">
           <TransactionForm
             className="z-990 p-0"

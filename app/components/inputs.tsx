@@ -50,7 +50,7 @@ export function TextInput({
         type={type}
         disabled={disabled}
         placeholder={placeholder}
-        className={classNames("input-bordered input w-full", {
+        className={classNames("input-bordered input w-full text-slate-700", {
           "input-error": Boolean(errors[name]?.message),
         })}
         defaultValue={defaultValue}
@@ -96,7 +96,7 @@ export function SelectInput({
         </label>
       )}
       <select
-        className={classNames("select-bordered select", {
+        className={classNames("select-bordered select text-slate-700", {
           "select-error": Boolean(errors[name]?.message),
         })}
         defaultValue={defaultValue || options.length ? options[0][0] : ""}
@@ -153,7 +153,7 @@ export function DatePickerInput({
         defaultValue={defaultValue || new Date()}
         render={({ field }: any) => (
           <DatePicker
-            className={classNames("input-bordered input w-full", {
+            className={classNames("input-bordered input w-full text-slate-700", {
               [className]: Boolean(className),
             })}
             placeholderText="Select date"

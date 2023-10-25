@@ -75,7 +75,7 @@ export default function TransactionPage() {
 
   return (
     <>
-      <dialog id="my_modal_1" className="modal" open>
+      <dialog id="my_modal_1" className="modal bg-[#97acc1a3]" open>
         <div className="modal-box bg-white">
           <Form method="post">
             <input name="id" defaultValue={id} className="hidden" />
