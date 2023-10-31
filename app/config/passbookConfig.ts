@@ -276,5 +276,32 @@ export const passbookConfig: PassbookConfig = {
         },
       },
     },
+    MEMBERS_REPAY_PROFIT: {
+      FROM: {
+        ADD: {
+          accountBalance: "amount",
+        },
+        SUB: {
+          profitWithdraw: "amount",
+          totalWithdraw: "amount",
+        },
+      },
+      TO: {
+        ADD: {
+          holdingAmount: "amount",
+        },
+      },
+
+      CLUB: {
+        ADD: {
+          profitWithdraw: "amount",
+          totalWithdraw: "amount",
+        },
+        SUB: {
+          accountBalance: "amount",
+          holdingAmount: "amount",
+        },
+      },
+    },
   },
 };

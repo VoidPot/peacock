@@ -46,6 +46,8 @@ export async function getMembersPassbook() {
         joinedAt$: getMonthYear(member.joinedAt),
         otherBalance,
         otherBalance$: formatMoney(otherBalance),
+        tallyBalance,
+        tallyBalance$: formatMoney(tallyBalance),
         termBalance,
         termBalance$: formatMoney(termBalance),
         totalBalance,

@@ -79,6 +79,7 @@ function TransactionForm({
         "NEW_MEMBER_PAST_TALLY",
         "INTER_CASH_TRANSFER",
         "MEMBERS_WITHDRAW_PROFIT",
+        "MEMBERS_REPAY_PROFIT",
       ].includes(selectedMode)
     ) {
       setFromToOptions([memberOptions, memberOptions]);
@@ -202,11 +203,11 @@ function TransactionForm({
         <div className="col-span-full mt-4 flex justify-between gap-2 align-middle">
           <Link
             to={cancelPath ? cancelPath : "/transaction"}
-            className="btn-outline btn-sm btn px-6"
+            className="btn btn-outline btn-sm px-6"
           >
             Cancel
           </Link>
-          <button type="submit" className="btn-primary btn-sm btn px-6">
+          <button type="submit" className="btn btn-primary btn-sm px-6">
             Submit
           </button>
         </div>

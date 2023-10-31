@@ -12,7 +12,7 @@ import {
 import { getValidatedFormData } from "remix-hook-form";
 import TransactionForm from "~/components/forms/transaction-form";
 import { prisma } from "~/db.server";
-import { formatLocalDate, getValidDate, responseData } from "~/helpers/utils";
+import { getValidDate, responseData } from "~/helpers/utils";
 import { getUserSelect } from "~/models/user.server";
 import configContext from "~/config/configContext";
 import type { Transaction } from ".prisma/client";

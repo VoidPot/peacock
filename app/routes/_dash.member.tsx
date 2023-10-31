@@ -291,9 +291,27 @@ export default function MemberPage() {
                             )}
                           >
                             {member.totalBalance$}
-                            {member.otherBalance ? (
+                            {member.tallyBalance > 0 &&
+                            !(member.profitWithdraw > 0) ? (
                               <p className="mb-0 text-xs leading-tight text-slate-500">
-                                {member.termBalance$} + {member.otherBalance$}
+                                {member.termBalance$} + {member.tallyBalance$}
+                              </p>
+                            ) : (
+                              <></>
+                            )}
+                            {!(member.tallyBalance > 0) &&
+                            member.profitWithdraw > 0 ? (
+                              <p className="mb-0 text-xs leading-tight text-slate-500">
+                                {member.termBalance$} + {member.profitWithdraw$}
+                              </p>
+                            ) : (
+                              <></>
+                            )}
+                            {member.tallyBalance > 0 &&
+                            member.profitWithdraw > 0 ? (
+                              <p className="mb-0 text-xs leading-tight text-slate-500">
+                                {member.termBalance$} + {member.profitWithdraw$}{" "}
+                                + {member.tallyBalance$}
                               </p>
                             ) : (
                               <></>
