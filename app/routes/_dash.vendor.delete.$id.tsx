@@ -83,18 +83,18 @@ export default function TransactionAddPage() {
             <input name="id" defaultValue={user.id} className="hidden" />
             <p className="text-center font-normal text-neutral">
               Are you sure you wanna delete
+              <br />
               <span className="uppercase text-secondary">
-                {" "}
                 {user.firstName} {user.lastName} - ID:{user.id}{" "}
               </span>
               ?
             </p>
 
             <div className="col-span-full mt-4 flex justify-between gap-2 align-middle ">
-              <Link to={`/vendor`} className="btn-outline btn-sm btn px-6">
+              <Link to={`/vendor`} className="btn btn-outline btn-sm px-6">
                 Cancel
               </Link>
-              <button type="submit" className="btn-error btn-sm btn px-6">
+              <button type="submit" className="btn btn-error btn-sm px-6">
                 Delete
               </button>
             </div>

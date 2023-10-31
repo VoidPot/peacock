@@ -373,9 +373,20 @@ export default function MemberPage() {
                                 </Link>
                               </>
                             ) : (
-                              <span className="text-xs font-semibold leading-tight text-error">
-                                Inactive
-                              </span>
+                              <div className="flex items-center justify-center align-middle">
+                                <span className="text-xs font-semibold leading-tight text-error">
+                                  Deleted
+                                </span>
+
+                                <Link
+                                  to={{
+                                    pathname: `/member/activate/${member.id}`,
+                                  }}
+                                  className="btn btn-square btn-ghost w-auto fill-slate-400 px-2 hover:bg-white hover:stroke-secondary"
+                                >
+                                  <Icon name="deleted" className="h-4 w-4" />
+                                </Link>
+                              </div>
                             )}
                           </td>
                         )}

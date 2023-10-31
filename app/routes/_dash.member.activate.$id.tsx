@@ -36,22 +36,25 @@ export async function action({ request }: any) {
     const formData = await request.formData();
     const id = Number(formData.get("id") || 0);
 
-    await prisma.user.delete({
+    await prisma.user.update({
       where: {
         id,
+      },
+      data: {
+        deleted: false,
       },
     });
 
     return responseData({
       success: true,
-      message: "memberDeleted",
+      message: "memberUndoDeleted",
       data: { id },
     });
   } catch (err) {
     console.error(err);
     return responseData({
       success: false,
-      message: "memberDeleteError",
+      message: "memberUndoDeleteError",
     });
   }
 }
@@ -83,7 +86,7 @@ export default function TransactionAddPage() {
           <Form method="post">
             <input name="id" defaultValue={user.id} className="hidden" />
             <p className="text-center font-normal text-neutral">
-              Are you sure you wanna delete
+              Are you sure you activate member from delete state
               <br />
               <span className="uppercase text-secondary">
                 {user.firstName} {user.lastName} - ID:{user.id}{" "}
@@ -96,7 +99,7 @@ export default function TransactionAddPage() {
                 Cancel
               </Link>
               <button type="submit" className="btn btn-error btn-sm px-6">
-                Delete
+                Activate
               </button>
             </div>
           </Form>

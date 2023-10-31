@@ -17,13 +17,13 @@ import { getUserFindFirst } from "~/models/user.server";
 export const loader = async ({ request, params }: LoaderArgs) => {
   const isLoggedIn = await getIsLoggedIn(request);
   if (!isLoggedIn) {
-    return redirect("/member");
+    return redirect("/vendor");
   }
   const id = Number(params.id || 0);
 
-  const user = await getUserFindFirst(id, "MEMBER");
+  const user = await getUserFindFirst(id, "VENDOR");
   if (!user) {
-    return redirect("/member");
+    return redirect("/vendor");
   }
 
   return json({
@@ -36,22 +36,24 @@ export async function action({ request }: any) {
     const formData = await request.formData();
     const id = Number(formData.get("id") || 0);
 
-    await prisma.user.delete({
+    await prisma.user.update({
       where: {
         id,
       },
+      data: {
+        deleted: false,
+      },
     });
-
     return responseData({
       success: true,
-      message: "memberDeleted",
+      message: "vendorUndoDeleted",
       data: { id },
     });
   } catch (err) {
     console.error(err);
     return responseData({
       success: false,
-      message: "memberDeleteError",
+      message: "vendorUndoDeleteError",
     });
   }
 }
@@ -71,7 +73,7 @@ export default function TransactionAddPage() {
       }
     }
     if (data?.success) {
-      navigate("/member");
+      navigate("/vendor");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
@@ -83,7 +85,7 @@ export default function TransactionAddPage() {
           <Form method="post">
             <input name="id" defaultValue={user.id} className="hidden" />
             <p className="text-center font-normal text-neutral">
-              Are you sure you wanna delete
+              Are you sure you activate vendor from delete state
               <br />
               <span className="uppercase text-secondary">
                 {user.firstName} {user.lastName} - ID:{user.id}{" "}
@@ -92,11 +94,11 @@ export default function TransactionAddPage() {
             </p>
 
             <div className="col-span-full mt-4 flex justify-between gap-2 align-middle ">
-              <Link to={`/member`} className="btn btn-outline btn-sm px-6">
+              <Link to={`/vendor`} className="btn btn-outline btn-sm px-6">
                 Cancel
               </Link>
               <button type="submit" className="btn btn-error btn-sm px-6">
-                Delete
+                Activate
               </button>
             </div>
           </Form>

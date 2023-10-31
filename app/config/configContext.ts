@@ -77,6 +77,10 @@ const message = {
   backupSuccess: "DB data backup successfully",
   backupError: "Error on DB data backup",
   backupDone: "DB data backup already created",
+  vendorUndoDeleted: "Vendor activated successfully",
+  vendorUndoDeleteError: "Error on vendor activation",
+  memberUndoDeleted: "Member activated successfully",
+  memberUndoDeleteError: "Error on member activation",
 };
 
 const configContext = {
