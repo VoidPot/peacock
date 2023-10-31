@@ -60,16 +60,31 @@ function TransactionForm({
   });
 
   const selectedMode = watch("mode");
+  const selectedFrom = watch("from");
+  const selectedTo = watch("to");
 
   useEffect(() => {
     if (isEditMode && selectedMode === transaction.mode) {
       setValue("from", transaction.from);
       setValue("to", transaction.to);
     } else {
-      setValue("from", fromToOptions[0][0][0]);
-      setValue("to", fromToOptions[1][0][0]);
+      const fromExist = fromToOptions[0].find(
+        ([key]) => key === Number(selectedFrom)
+      );
+      const toExist = fromToOptions[1].find(
+        ([key]) => key === Number(selectedTo)
+      );
+
+      if (!fromExist) {
+        setValue("from", fromToOptions[0][0][0]);
+      }
+
+      if (!toExist) {
+        setValue("to", fromToOptions[1][0][0]);
+      }
     }
-  }, [fromToOptions, isEditMode, selectedMode, setValue, transaction]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fromToOptions, isEditMode, transaction]);
 
   useEffect(() => {
     if (
