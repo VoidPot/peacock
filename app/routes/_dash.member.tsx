@@ -291,12 +291,12 @@ export default function MemberPage() {
                             )}
                           >
                             {member.totalBalance$}
-                            {member.tallyBalance ? (
+                            {member.otherBalance ? (
                               <p className="mb-0 text-xs leading-tight text-slate-500">
-                                {member.termBalance$} + {member.tallyBalance$}
+                                {member.termBalance$} + {member.otherBalance$}
                               </p>
                             ) : (
-                              ""
+                              <></>
                             )}
                           </span>
                         </td>

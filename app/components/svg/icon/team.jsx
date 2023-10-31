@@ -1,5 +1,3 @@
-import React from "react";
-
 function Team({ className }) {
   return (
     <svg version="1.1" id="_x32_" viewBox="0 0 512 512" className={className}>

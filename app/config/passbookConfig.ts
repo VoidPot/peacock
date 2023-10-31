@@ -85,9 +85,6 @@ export const passbookConfig: PassbookConfig = {
           totalDeposit: "amount",
           accountBalance: "amount",
         },
-        SUB: {
-          tallyBalance: "amount",
-        },
       },
       TO: {
         ADD: {

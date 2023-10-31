@@ -26,15 +26,26 @@ export async function getMembersPassbook() {
     .map((member) => {
       const club = configContext.group(members.length).club;
       const passbook = formatPassbook(member.passbook);
-      const termBalance = club.totalTermAmountPerPerson - passbook.termDeposit;
-      const totalBalance = termBalance + passbook.tallyBalance;
+
+      const fullBalance = club.totalTermAmountPerPerson + passbook.tallyBalance;
+      const totalBalance = fullBalance - passbook.accountBalance;
+
+      const termBalance =
+        club.totalTermAmountPerPerson -
+        (passbook.termDeposit - passbook.withdraw);
+
       const netAmount = passbook.accountBalance + passbook.profit;
+
+      const tallyBalance = passbook.tallyBalance - passbook.tallyDeposit;
+      const otherBalance = tallyBalance + passbook.profitWithdraw;
 
       return {
         ...member,
         ...passbook,
         id: member.id,
         joinedAt$: getMonthYear(member.joinedAt),
+        otherBalance,
+        otherBalance$: formatMoney(otherBalance),
         termBalance,
         termBalance$: formatMoney(termBalance),
         totalBalance,

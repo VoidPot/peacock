@@ -1,5 +1,3 @@
-import React from "react";
-
 import Team from "./icon/team";
 import AddBox from "./icon/add-box";
 import Shop from "./icon/shop";
